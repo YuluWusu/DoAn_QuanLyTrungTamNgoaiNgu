@@ -1,0 +1,15 @@
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\bin\Debug\DoAn_QuanLyTrungTamNgoaiNgu.exe.config
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\bin\Debug\DoAn_QuanLyTrungTamNgoaiNgu.exe
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\bin\Debug\DoAn_QuanLyTrungTamNgoaiNgu.pdb
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\DoAn_QuanLyTrungTamNgoaiNgu.csproj.AssemblyReference.cache
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\Views\TrangChu.g.cs
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\App.g.cs
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\DoAn_QuanLyTrungTamNgoaiNgu_MarkupCompile.cache
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\DoAn_QuanLyTrungTamNgoaiNgu_MarkupCompile.lref
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\Views\TrangChu.baml
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\DoAn_QuanLyTrungTamNgoaiNgu.g.resources
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\DoAn_QuanLyTrungTamNgoaiNgu.Properties.Resources.resources
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\DoAn_QuanLyTrungTamNgoaiNgu.csproj.GenerateResource.cache
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\DoAn_QuanLyTrungTamNgoaiNgu.csproj.CoreCompileInputs.cache
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\DoAn_QuanLyTrungTamNgoaiNgu.exe
+D:\2 Personal Activities\Code Folder\hk2 - nam 2\DoAn_QuanLyTrungTamNgoaiNgu\DoAn_QuanLyTrungTamNgoaiNgu\obj\Debug\DoAn_QuanLyTrungTamNgoaiNgu.pdb
