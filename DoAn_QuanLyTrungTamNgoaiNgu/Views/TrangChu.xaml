@@ -1,0 +1,219 @@
+﻿<Window x:Class="DoAn_QuanLyTrungTamNgoaiNgu.Views.TrangChu"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:DoAn_QuanLyTrungTamNgoaiNgu.ViewModels"
+        Title="Quản lý Trung tâm Ngoại ngữ"
+        Height="700" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent">
+    <Window.DataContext>
+        <vm:TrangChuViewModel/>
+    </Window.DataContext>
+    <Window.Resources>
+        <SolidColorBrush x:Key="SidebarBg"      Color="#0D3B6E"/>
+        <SolidColorBrush x:Key="SidebarHover"   Color="#1A5498"/>
+        <SolidColorBrush x:Key="SidebarActive"  Color="#1E6FB5"/>
+        <SolidColorBrush x:Key="ContentBg"      Color="#F4F6FA"/>
+        <SolidColorBrush x:Key="TopbarBg"       Color="White"/>
+        <SolidColorBrush x:Key="TextWhite"      Color="White"/>
+        <SolidColorBrush x:Key="TextMuted"      Color="#8AAAC8"/>
+        <SolidColorBrush x:Key="AccentBrush"    Color="#1E6FB5"/>
+
+        <Style x:Key="MenuItemStyle" TargetType="Button">
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Foreground" Value="#B8D4F0"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="20,0,0,0"/>
+            <Setter Property="FontSize" Value="13.5"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="bd"
+                                Background="{TemplateBinding Background}"
+                                CornerRadius="8"
+                                Margin="8,2">
+                            <ContentPresenter VerticalAlignment="Center"
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="bd" Property="Background"
+                                        Value="{StaticResource SidebarHover}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="MenuItemActiveStyle" TargetType="Button"
+               BasedOn="{StaticResource MenuItemStyle}">
+            <Setter Property="Background" Value="{StaticResource SidebarActive}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+    </Window.Resources>
+
+    <Border CornerRadius="14" Background="White" ClipToBounds="True">
+        <Border.Effect>
+            <DropShadowEffect BlurRadius="40" ShadowDepth="0"
+                              Color="#000000" Opacity="0.18"/>
+        </Border.Effect>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="{StaticResource SidebarBg}">
+                <DockPanel>
+                   
+                    <StackPanel DockPanel.Dock="Top" Margin="20,28,20,20">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                            <Border Width="36" Height="36" CornerRadius="10"
+                                    Background="#1E6FB5" Margin="0,0,10,0">
+                                <TextBlock Text="🎓" FontSize="18"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="English" FontSize="15"
+                                           FontWeight="Bold" Foreground="White"/>
+                                <TextBlock Text="CENTER" FontSize="9"
+                                           Foreground="{StaticResource TextMuted}"
+                                           />
+                            </StackPanel>
+                        </StackPanel>
+                        <Rectangle Height="1" Fill="#FFFFFF18" Margin="0,12,0,0"/>
+                    </StackPanel>
+
+                    <StackPanel DockPanel.Dock="Bottom" Margin="0,0,0,16">
+                        <Rectangle Height="1" Fill="#FFFFFF18" Margin="20,0,20,12"/>
+                        <Button Content="🚪  Đăng xuất"
+                                Style="{StaticResource MenuItemStyle}"
+                                Command="{Binding DangXuatCommand}"
+                                Foreground="#FF8888"/>
+                    </StackPanel>
+
+                    <Border DockPanel.Dock="Bottom"
+                            Margin="12,0,12,8"
+                            Padding="12,10"
+                            Background="#FFFFFF0F"
+                            CornerRadius="10">
+                        <StackPanel Orientation="Horizontal">
+                            <Border Width="36" Height="36" CornerRadius="18"
+                                    Background="{StaticResource SidebarActive}"
+                                    Margin="0,0,10,0">
+                                <TextBlock Text="👤" FontSize="16"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Text="{Binding HoTenHienThi}"
+                                           FontSize="12.5" FontWeight="SemiBold"
+                                           Foreground="White"
+                                           MaxWidth="120"
+                                           TextTrimming="CharacterEllipsis"/>
+                                <TextBlock Text="{Binding VaiTroHienThi}"
+                                           FontSize="11"
+                                           Foreground="{StaticResource TextMuted}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+
+                    
+                    <StackPanel Margin="0,4,0,0">
+                        <TextBlock Text="MENU CHÍNH" FontSize="10"
+                                   Foreground="{StaticResource TextMuted}"
+                                   Margin="28,8,0,8" FontWeight="SemiBold"/>
+
+                        <Button Content="🏠  Trang chủ"
+                                Style="{StaticResource MenuItemActiveStyle}"
+                                Command="{Binding NavTrangChu}"
+                                CommandParameter="TrangChu"/>
+                        <Button Content="👨‍🎓  Học viên"
+                                Style="{StaticResource MenuItemStyle}"
+                                Command="{Binding NavHocVien}"
+                                CommandParameter="HocVien"/>
+                        <Button Content="📚  Lớp học"
+                                Style="{StaticResource MenuItemStyle}"
+                                Command="{Binding NavLopHoc}"
+                                CommandParameter="LopHoc"/>
+                        <Button Content="📝  Đăng ký lớp"
+                                Style="{StaticResource MenuItemStyle}"
+                                Command="{Binding NavDangKyLop}"
+                                CommandParameter="DangKy"/>
+                        <Button Content="✅  Điểm danh"
+                                Style="{StaticResource MenuItemStyle}"
+                                Command="{Binding NavDiemDanh}"
+                                CommandParameter="DiemDanh"/>
+                        <Button Content="💰  Học phí"
+                                Style="{StaticResource MenuItemStyle}"
+                                Command="{Binding NavHocPhi}"
+                                CommandParameter="HocPhi"/>
+
+                        <TextBlock Text="HỆ THỐNG" FontSize="10"
+                                   Foreground="{StaticResource TextMuted}"
+                                   Margin="28,16,0,8" FontWeight="SemiBold"/>
+                        <Button Content="📊  Báo cáo"
+                                Style="{StaticResource MenuItemStyle}"
+                                Command="{Binding NavBaoCao}"
+                                CommandParameter="BaoCao"/>
+                        <Button Content="🔐  Tài khoản"
+                                Style="{StaticResource MenuItemStyle}"
+                                Command="{Binding NavTaiKhoan}"
+                                CommandParameter="TaiKhoan"/>
+                    </StackPanel>
+                </DockPanel>
+            </Border>
+
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="56"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0"
+                        Background="White"
+                        BorderBrush="#E5E7EB"
+                        BorderThickness="0,0,0,1">
+                    <Grid Margin="24,0">
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Quản lý Trung tâm Ngoại ngữ"
+                                       FontSize="14" FontWeight="Medium"
+                                       Foreground="#374151"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal"
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center">
+                            <Button Content="─" Width="36" Height="36"
+                                    Background="Transparent" BorderThickness="0"
+                                    FontSize="14" Foreground="#9CA3AF" Cursor="Hand"
+                                    Click="BtnThuNho_Click"/>
+                            <Button Content="□" Width="36" Height="36"
+                                    Background="Transparent" BorderThickness="0"
+                                    FontSize="14" Foreground="#9CA3AF" Cursor="Hand"
+                                    Click="BtnPhongTo_Click"/>
+                            <Button Content="✕" Width="36" Height="36"
+                                    Background="Transparent" BorderThickness="0"
+                                    FontSize="14" Foreground="#EF4444" Cursor="Hand"
+                                    Click="BtnDong_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <ContentPresenter Grid.Row="1"
+                                  Content="{Binding NoiDungHienTai}"
+                                  />
+            </Grid>
+        </Grid>
+    </Border>
+</Window>
