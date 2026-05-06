@@ -34,6 +34,26 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -64,18 +84,26 @@
     <Compile Include="Helpers\StringToVisibilityConverter.cs" />
     <Compile Include="Models\DangKyLop.cs" />
     <Compile Include="Models\TaiKhoan.cs" />
-    <Compile Include="ViewModels\DangKy\DangKyMoi_ViewModel.cs" />
-    <Compile Include="ViewModels\DangKy\DangKy_ViewModel.cs" />
+    <Compile Include="ViewModels\DangKyMoi_ViewModel.cs" />
+    <Compile Include="ViewModels\DangKy_ViewModel.cs" />
     <Compile Include="ViewModels\DangNhapViewModel.cs" />
+    <Compile Include="ViewModels\DanhSachHocPhiKhoaHoc_ViewModel.cs" />
+    <Compile Include="ViewModels\ThemHocPhiKhoaHoc_ViewModel.cs" />
     <Compile Include="ViewModels\TrangChuViewModel.cs" />
-    <Compile Include="Views\DangKy\UC_DangKyMoi.xaml.cs">
+    <Compile Include="Views\UC_DangKyMoi.xaml.cs">
       <DependentUpon>UC_DangKyMoi.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DangKy\UC_DanhSachDangKy.xaml.cs">
+    <Compile Include="Views\UC_DanhSachDangKy.xaml.cs">
       <DependentUpon>UC_DanhSachDangKy.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DangNhap.xaml.cs">
       <DependentUpon>DangNhap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_DanhSachHocPhi.xaml.cs">
+      <DependentUpon>UC_DanhSachHocPhi.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_ThemHocPhiKhoaHoc.xaml.cs">
+      <DependentUpon>UC_ThemHocPhiKhoaHoc.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TrangChu.xaml.cs">
       <DependentUpon>TrangChu.xaml</DependentUpon>
@@ -120,15 +148,23 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\DangKy\UC_DangKyMoi.xaml">
+    <Page Include="Views\UC_DangKyMoi.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DangKy\UC_DanhSachDangKy.xaml">
+    <Page Include="Views\UC_DanhSachDangKy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DangNhap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UC_DanhSachHocPhi.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UC_ThemHocPhiKhoaHoc.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DoAn_QuanLyTrungTamNgoaiNgu.Views.DangKy
+namespace DoAn_QuanLyTrungTamNgoaiNgu.Views
 {
     /// <summary>
-    /// Interaction logic for UC_DanhSachDangKy.xaml
+    /// Interaction logic for UC_ThemHocPhiKhoaHoc.xaml
     /// </summary>
-    public partial class UC_DanhSachDangKy : UserControl
+    public partial class UC_ThemHocPhiKhoaHoc : UserControl
     {
-        public UC_DanhSachDangKy()
+        public UC_ThemHocPhiKhoaHoc()
         {
             InitializeComponent();
         }

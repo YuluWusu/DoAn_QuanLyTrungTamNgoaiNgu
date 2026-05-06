@@ -1,7 +1,7 @@
 using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
 using DoAn_QuanLyTrungTamNgoaiNgu.Models;
+using DoAn_QuanLyTrungTamNgoaiNgu.ViewModels;
 using DoAn_QuanLyTrungTamNgoaiNgu.Views;
-using DoAn_QuanLyTrungTamNgoaiNgu.Views.DangKy;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -58,7 +58,15 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 NoiDungHienTai = vm;
              });
             NavDiemDanh = new RelayCommand(o => { /* NoiDungHienTai = new UC_DiemDanh(); */ });
-            NavHocPhi = new RelayCommand(o => { /* NoiDungHienTai = new UC_HocPhi(); */ });
+            NavHocPhi = new RelayCommand(o => {
+                NoiDungHienTai = new UC_DanhSachHocPhi();
+                var vm = new DanhSachHocPhiKhoaHoc();
+                vm.OnRequestAddKhoaHoc = () =>
+                {
+                    NoiDungHienTai = new ThemHocPhiKhoaHoc();
+                };
+                NoiDungHienTai = vm;
+            });
             NavBaoCao = new RelayCommand(o => { /* NoiDungHienTai = new UC_BaoCao(); */ });
             NavTaiKhoan = new RelayCommand(o => { /* NoiDungHienTai = new UC_TaiKhoan(); */ });
 
