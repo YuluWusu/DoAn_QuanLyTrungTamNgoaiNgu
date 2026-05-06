@@ -1,6 +1,6 @@
 ﻿using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
 using DoAn_QuanLyTrungTamNgoaiNgu.Models;
-using DoAn_QuanLyTrungTamNgoaiNgu.Views.DangKy;
+using DoAn_QuanLyTrungTamNgoaiNgu.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
