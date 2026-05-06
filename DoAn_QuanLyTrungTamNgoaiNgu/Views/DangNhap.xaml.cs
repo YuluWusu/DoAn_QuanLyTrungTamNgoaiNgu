@@ -25,7 +25,13 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Views
         }
 
         private void BtnDong_Click(object sender, RoutedEventArgs e)
-            => Application.Current.Shutdown();
+        {
+            MessageBoxResult result = MessageBox.Show(this, "Bạn có chắc chắn muốn thoát không ?", "Xác nhận thoát", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                this.Close();
+            }
+        }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {

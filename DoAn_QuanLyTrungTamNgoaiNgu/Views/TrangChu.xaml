@@ -2,7 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:DoAn_QuanLyTrungTamNgoaiNgu.ViewModels"
-        xmlns:local="clr-namespace:DoAn_QuanLyTrungTamNgoaiNgu.Views.DangKy"
+        xmlns:local="clr-namespace:DoAn_QuanLyTrungTamNgoaiNgu.Views"
         Title="Quản lý Trung tâm Ngoại ngữ"
         Height="700" Width="1200"
         WindowStartupLocation="CenterScreen"
@@ -10,7 +10,7 @@
         AllowsTransparency="True"
         Background="Transparent">
     <Window.DataContext>
-        <vm:TrangChuViewModel/>
+        <vm:VM_TrangChu/>
     </Window.DataContext>
     <Window.Resources>
         <!--Đăng ký -->
@@ -20,14 +20,20 @@
         <DataTemplate DataType="{x:Type vm:DangKyMoi_ViewModel}">
             <local:UC_DangKyMoi/>
         </DataTemplate>
-
+        <!--Học phí khóa học-->
+        <DataTemplate DataType="{x:Type vm:DanhSachHocPhiKhoaHoc}">
+            <local:UC_DanhSachHocPhi/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type vm:ThemHocPhiKhoaHoc}">
+            <local:UC_ThemHocPhiKhoaHoc/>
+        </DataTemplate>
         <SolidColorBrush x:Key="SidebarBg"      Color="#0D3B6E"/>
         <SolidColorBrush x:Key="SidebarHover"   Color="#1A5498"/>
         <SolidColorBrush x:Key="SidebarActive"  Color="#1E6FB5"/>
         <SolidColorBrush x:Key="ContentBg"      Color="#F4F6FA"/>
         <SolidColorBrush x:Key="TopbarBg"       Color="White"/>
         <SolidColorBrush x:Key="TextWhite"      Color="White"/>
-        <SolidColorBrush x:Key="TextMuted"      Color="#8AAAC8"/>
+        <SolidColorBrush x:Key="TextMuted"      Color="CornflowerBlue"/>
         <SolidColorBrush x:Key="AccentBrush"    Color="#1E6FB5"/>
 
         <Style x:Key="MenuItemStyle" TargetType="Button">
@@ -114,7 +120,7 @@
                     <Border DockPanel.Dock="Bottom"
                             Margin="12,0,12,8"
                             Padding="12,10"
-                            Background="#FFFFFF0F"
+                            Background="Yellow"
                             CornerRadius="10">
                         <StackPanel Orientation="Horizontal">
                             <Border Width="36" Height="36" CornerRadius="18"
@@ -127,7 +133,7 @@
                             <StackPanel VerticalAlignment="Center">
                                 <TextBlock Text="{Binding HoTenHienThi}"
                                            FontSize="12.5" FontWeight="SemiBold"
-                                           Foreground="White"
+                                           Foreground="DarkBlue"
                                            MaxWidth="120"
                                            TextTrimming="CharacterEllipsis"/>
                                 <TextBlock Text="{Binding VaiTroHienThi}"
@@ -192,7 +198,7 @@
                 <Border Grid.Row="0"
                         Background="White"
                         BorderBrush="#E5E7EB"
-                        BorderThickness="0,0,0,1">
+                        BorderThickness="0,0,0,1" MouseDown="Border_MouseLeftButtonDown">
                     <Grid Margin="24,0">
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                             <TextBlock Text="Quản lý Trung tâm Ngoại ngữ"

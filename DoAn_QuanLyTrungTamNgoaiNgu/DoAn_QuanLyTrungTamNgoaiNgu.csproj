@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,6 +15,8 @@
     <WarningLevel>4</WarningLevel>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,9 +37,38 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -62,20 +94,97 @@
     <Compile Include="Helpers\BaseViewModel.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\StringToVisibilityConverter.cs" />
-    <Compile Include="Models\DangKyLop.cs" />
-    <Compile Include="Models\TaiKhoan.cs" />
-    <Compile Include="ViewModels\DangKy\DangKyMoi_ViewModel.cs" />
-    <Compile Include="ViewModels\DangKy\DangKy_ViewModel.cs" />
-    <Compile Include="ViewModels\DangNhapViewModel.cs" />
-    <Compile Include="ViewModels\TrangChuViewModel.cs" />
-    <Compile Include="Views\DangKy\UC_DangKyMoi.xaml.cs">
-      <DependentUpon>UC_DangKyMoi.xaml</DependentUpon>
+    <Compile Include="Models\CAHOC.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Views\DangKy\UC_DanhSachDangKy.xaml.cs">
-      <DependentUpon>UC_DanhSachDangKy.xaml</DependentUpon>
+    <Compile Include="Models\DANGKYLOP.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\DIEMDANH.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GIAOVIEN.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\HOCVIEN.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KHOA_HOC.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LICHOC.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LOAI_KHOAHOC.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LOPHOC.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\NHANVIEN.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PHIEUTHU.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\PHONGHOC.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QuanLyTrungTamModel.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuanLyTrungTamModel.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QuanLyTrungTamModel.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QuanLyTrungTamModel.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QuanLyTrungTamModel.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QUYEN.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_CanhBaoVangNhieu_Result.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_ThongKeLopTheoKhoaHoc_Result.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TAIKHOAN.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VW_GiaoVien_SoLop.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VW_KhoaHoc_ThongKe.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\VW_TaiKhoan_Quyen.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\VM_DangNhap.cs" />
+    <Compile Include="ViewModels\VM_TrangChu.cs" />
     <Compile Include="Views\DangNhap.xaml.cs">
       <DependentUpon>DangNhap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_DanhSachHocPhi.xaml.cs">
+      <DependentUpon>UC_DanhSachHocPhi.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_ThemHocPhiKhoaHoc.xaml.cs">
+      <DependentUpon>UC_ThemHocPhiKhoaHoc.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TrangChu.xaml.cs">
       <DependentUpon>TrangChu.xaml</DependentUpon>
@@ -111,6 +220,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EntityDeploy Include="Models\QuanLyTrungTamModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>QuanLyTrungTamModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="Models\QuanLyTrungTamModel.edmx.diagram">
+      <DependentUpon>QuanLyTrungTamModel.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -120,15 +237,23 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\DangKy\UC_DangKyMoi.xaml">
+    <Page Include="Views\UC_DangKyMoi.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DangKy\UC_DanhSachDangKy.xaml">
+    <Page Include="Views\UC_DanhSachDangKy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DangNhap.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UC_DanhSachHocPhi.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UC_ThemHocPhiKhoaHoc.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -153,6 +278,29 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Models\QuanLyTrungTamModel.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>QuanLyTrungTamModel.edmx</DependentUpon>
+      <LastGenOutput>QuanLyTrungTamModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\QuanLyTrungTamModel.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>QuanLyTrungTamModel.edmx</DependentUpon>
+      <LastGenOutput>QuanLyTrungTamModel.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.2\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.5.2\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
 </Project>

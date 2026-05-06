@@ -27,21 +27,32 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Views
         }
 
         private void BtnDong_Click(object sender, RoutedEventArgs e)
-            => Application.Current.Shutdown();
+        {
+
+            MessageBoxResult result = MessageBox.Show(this, "Bạn có chắc chắn muốn thoát không ?", "Xác nhận thoát", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (result == MessageBoxResult.Yes)
+            {
+                this.Close();
+            }
+        }
 
         private void BtnThuNho_Click(object sender, RoutedEventArgs e)
-            => WindowState = WindowState.Minimized;
+        {
+            this.WindowState = WindowState.Minimized;
+        }
 
         private void BtnPhongTo_Click(object sender, RoutedEventArgs e)
-            => WindowState = WindowState == WindowState.Maximized
-                ? WindowState.Normal
-                : WindowState.Maximized;
+        {
+            if (this.WindowState == WindowState.Normal)
+                this.WindowState = WindowState.Maximized;
+            else
+                this.WindowState = WindowState.Normal;
+        }
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ButtonState == MouseButtonState.Pressed)
                 DragMove();
         }
-
     }
 }

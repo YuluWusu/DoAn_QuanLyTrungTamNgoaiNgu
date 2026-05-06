@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="aa038fb94dd745e5941364a0911b6868" Name="Diagram1">
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.CAHOC" Width="1.5" PointX="3" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.DANGKYLOP" Width="1.5" PointX="8.25" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.DIEMDANH" Width="1.5" PointX="10.5" PointY="6.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.GIAOVIEN" Width="1.5" PointX="0.75" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.HOCVIEN" Width="1.5" PointX="6" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.KHOA_HOC" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.LICHOC" Width="1.5" PointX="5.25" PointY="3.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.LOAI_KHOAHOC" Width="1.5" PointX="1.5" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.LOPHOC" Width="1.5" PointX="3" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.NHANVIEN" Width="1.5" PointX="3.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.PHIEUTHU" Width="1.5" PointX="10.5" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.PHONGHOC" Width="1.5" PointX="3" PointY="12.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.QUYEN" Width="1.5" PointX="3.75" PointY="15.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.sysdiagram" Width="1.5" PointX="7.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.TAIKHOAN" Width="1.5" PointX="6" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.VW_GiaoVien_SoLop" Width="1.5" PointX="9.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.VW_KhoaHoc_ThongKe" Width="1.5" PointX="11.75" PointY="2.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.VW_TaiKhoan_Quyen" Width="1.5" PointX="8.75" PointY="13.25" IsExpanded="true" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__LICHOC__MACA__4BAC3F29" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__DANGKYLOP__MaHV__52593CB8" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__DANGKYLOP__MALOP__534D60F1" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__DIEMDANH__5EBF139D" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__PHIEUTHU__59FA5E80" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__LOPHOC__MaGV__45F365D3" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__TAIKHOAN__MaGV__693CA210" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__KHOA_HOC__MALOAI__29572725" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__LOPHOC__MAKH__44FF419A" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__LICHOC__MALOP__49C3F6B7" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__LICHOC__MAPHONG__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__TAIKHOAN__MaNV__68487DD7" ManuallyRouted="false" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.TAIKHOAN_QUYEN" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
