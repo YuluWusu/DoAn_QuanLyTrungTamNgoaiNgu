@@ -1,5 +1,6 @@
 using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
 using DoAn_QuanLyTrungTamNgoaiNgu.Models;
+using DoAn_QuanLyTrungTamNgoaiNgu.ViewModels;
 using DoAn_QuanLyTrungTamNgoaiNgu.Views;
 using System;
 using System.Windows;
@@ -24,8 +25,8 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         public string HoTenHienThi => TaiKhoanHienTai?.HoTenNguoiDung ?? "Người dùng";
         public string VaiTroHienThi => TaiKhoanHienTai?.VaiTro == "GiaoVien" ? "Giáo viên" : "Nhân viên";
 
-        private UserControl _noiDungHienTai;
-        public UserControl NoiDungHienTai
+        private object _noiDungHienTai;
+        public object NoiDungHienTai
         {
             get => _noiDungHienTai;
             set => SetProperty(ref _noiDungHienTai, value);
@@ -47,9 +48,25 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             NavTrangChu = new RelayCommand(o => { NoiDungHienTai = new UC_TrangChu(); });
             NavHocVien = new RelayCommand(o => { /* NoiDungHienTai = new UC_HocVien(); */ });
             NavLopHoc = new RelayCommand(o => { /* NoiDungHienTai = new UC_LopHoc(); */ });
-            NavDangKyLop = new RelayCommand(o => { /* NoiDungHienTai = new UC_DangKy(); */ });
+            NavDangKyLop = new RelayCommand(o => {
+                NoiDungHienTai = new UC_DanhSachDangKy();
+                var vm = new DangKyViewModel();
+                vm.OnRequestAddRegistration= () =>
+                {
+                    NoiDungHienTai = new DangKyMoi_ViewModel();
+                };
+                NoiDungHienTai = vm;
+             });
             NavDiemDanh = new RelayCommand(o => { /* NoiDungHienTai = new UC_DiemDanh(); */ });
-            NavHocPhi = new RelayCommand(o => { /* NoiDungHienTai = new UC_HocPhi(); */ });
+            NavHocPhi = new RelayCommand(o => {
+                NoiDungHienTai = new UC_DanhSachHocPhi();
+                var vm = new DanhSachHocPhiKhoaHoc();
+                vm.OnRequestAddKhoaHoc = () =>
+                {
+                    NoiDungHienTai = new ThemHocPhiKhoaHoc();
+                };
+                NoiDungHienTai = vm;
+            });
             NavBaoCao = new RelayCommand(o => { /* NoiDungHienTai = new UC_BaoCao(); */ });
             NavTaiKhoan = new RelayCommand(o => { /* NoiDungHienTai = new UC_TaiKhoan(); */ });
 
