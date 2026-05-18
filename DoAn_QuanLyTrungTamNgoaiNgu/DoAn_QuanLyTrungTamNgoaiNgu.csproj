@@ -189,15 +189,6 @@
     <Compile Include="Views\TrangChu.xaml.cs">
       <DependentUpon>TrangChu.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UC_HocVien.xaml.cs">
-      <DependentUpon>UC_HocVien.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UC_SuaThongTin.xaml.cs">
-      <DependentUpon>UC_SuaThongTin.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\UC_ThemHocVien.xaml.cs">
-      <DependentUpon>UC_ThemHocVien.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\UC_TrangChu.xaml.cs">
       <DependentUpon>UC_TrangChu.xaml</DependentUpon>
     </Compile>
@@ -260,18 +251,6 @@
     <Page Include="Views\TrangChu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\UC_HocVien.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\UC_SuaThongTin.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Views\UC_ThemHocVien.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UC_TrangChu.xaml">
       <SubType>Designer</SubType>

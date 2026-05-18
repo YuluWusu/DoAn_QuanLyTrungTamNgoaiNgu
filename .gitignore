@@ -416,6 +416,10 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
-tree.md
+DoAn_QuanLyTrungTamNgoaiNgu/App.config
+DoAn_QuanLyTrungTamNgoaiNgu/bin/
+DoAn_QuanLyTrungTamNgoaiNgu/obj/
 s.md
+tree.md
 word
+.vs
