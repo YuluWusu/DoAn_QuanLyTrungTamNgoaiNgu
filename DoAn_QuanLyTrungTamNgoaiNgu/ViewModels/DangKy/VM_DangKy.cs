@@ -13,36 +13,36 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 {
         public class DangKyViewModel : BaseViewModel
     {
-        private ObservableCollection<DangKyLop> _listDangKy;
-        public ObservableCollection<DangKyLop> ListDangKy 
+        private ObservableCollection<DANGKYLOP> _listDangKy;
+        public ObservableCollection<DANGKYLOP> ListDangKy 
         { 
             get => _listDangKy; 
             set { _listDangKy = value; OnPropertyChanged(); } 
         }
         public Action OnRequestAddRegistration { get; set; }
 
-        private DangKyLop _selectedItem;
-        public DangKyLop SelectedItem
+        private DANGKYLOP _selectedItem;
+        public DANGKYLOP SelectedItem
         {
             get => _selectedItem;
             set { _selectedItem = value; OnPropertyChanged(); }
         }
 
         // Commands để thực hiện các thao tác
-        public ICommand FilterCommand { get; set; }
-        public ICommand AddCommand { get; set; }
-        public ICommand EditCommand { get; set; }
-        public ICommand DeleteCommand { get; set; }
+        public RelayCommand FilterCommand { get;}
+        public RelayCommand AddCommand { get; }
+        public RelayCommand  EditCommand { get; }
+        public RelayCommand DeleteCommand { get; }
 
         public DangKyViewModel()
         {
-            ListDangKy = new ObservableCollection<DangKyLop>();
-            FilterCommand = new RelayCommand(_ => new DangKyLop());
+            ListDangKy = new ObservableCollection<DANGKYLOP>();
+            FilterCommand = new RelayCommand(_ => new DANGKYLOP());
             AddCommand = new RelayCommand((p) => {
                 OnRequestAddRegistration?.Invoke();
             });
-             EditCommand = new RelayCommand(_=>new DangKyLop());
-            DeleteCommand = new RelayCommand(_ => new DangKyLop());
+             EditCommand = new RelayCommand(_=>new DANGKYLOP());
+            DeleteCommand = new RelayCommand(_ => new DANGKYLOP());
         }
     }
         }

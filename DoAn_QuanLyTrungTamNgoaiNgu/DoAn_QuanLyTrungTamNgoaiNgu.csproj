@@ -175,6 +175,10 @@
     <Compile Include="Models\VW_TaiKhoan_Quyen.cs">
       <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="ViewModels\DangKy\DangKyMoi_ViewModel.cs" />
+    <Compile Include="ViewModels\DangKy\VM_DangKy.cs" />
+    <Compile Include="ViewModels\HocPhi\DanhSachHocPhiKhoaHoc_ViewModel.cs" />
+    <Compile Include="ViewModels\HocPhi\ThemHocPhiKhoaHoc_ViewModel.cs" />
     <Compile Include="ViewModels\VM_DangNhap.cs" />
     <Compile Include="ViewModels\VM_TrangChu.cs" />
     <Compile Include="Views\DangNhap.xaml.cs">
