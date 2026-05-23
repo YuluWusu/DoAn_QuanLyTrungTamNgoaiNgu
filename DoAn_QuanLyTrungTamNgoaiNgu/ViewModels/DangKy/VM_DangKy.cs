@@ -33,11 +33,31 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             set { _selectedItem = value; OnPropertyChanged(); }
         }
 
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set 
+            { 
+                _isEditing = value; 
+                OnPropertyChanged(); 
+                OnPropertyChanged(nameof(IsReadOnly));
+                OnPropertyChanged(nameof(IsOtherButtonsEnabled));
+                OnPropertyChanged(nameof(EditButtonText));
+            }
+        }
+
+        public bool IsReadOnly => !IsEditing;
+        public bool IsOtherButtonsEnabled => !IsEditing;
+
+        public string EditButtonText => IsEditing ? "Xác nhận sửa" : "Sửa thông tin";
+
         // Commands để thực hiện các thao tác
         public RelayCommand FilterCommand { get; }
         public RelayCommand AddCommand { get; }
         public RelayCommand EditCommand { get; }
         public RelayCommand DeleteCommand { get; }
+        public RelayCommand RefreshCommand { get; }
 
         public VM_DangKy()
         {
@@ -46,8 +66,9 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 LoadData();
                 FilterCommand = new RelayCommand(_ => ExecuteFilter());
                 AddCommand = new RelayCommand((p) => { OnRequestAddRegistration?.Invoke(); });
-                EditCommand = new RelayCommand(_ => { /* Logic Edit */ });
+                EditCommand = new RelayCommand(_ => ExecuteEdit());
                 DeleteCommand = new RelayCommand(_ => ExecuteDelete());
+                RefreshCommand = new RelayCommand(_ => ExecuteRefresh());
             }
             catch (Exception ex)
             {
@@ -76,6 +97,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 
         private void ExecuteFilter()
         {
+            if (IsEditing) return; // Do not filter while editing
             try
             {
                 var query = DataProvider.Ins.DB.DANGKYLOPs
@@ -98,11 +120,68 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             }
         }
 
+        private void ExecuteEdit()
+        {
+            if (SelectedItem == null && !IsEditing)
+            {
+                MessageBox.Show("Vui lòng chọn đăng ký cần sửa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            if (!IsEditing)
+            {
+                IsEditing = true;
+            }
+            else
+            {
+                SaveChangesToDatabase();
+                IsEditing = false;
+                MessageBox.Show("Đã lưu các chỉnh sửa thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        public void SaveChangesToDatabase()
+        {
+            try
+            {
+                DataProvider.Ins.DB.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi lưu cơ sở dữ liệu: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void CancelEdits()
+        {
+            IsEditing = false;
+            // Hủy các thay đổi trong DbContext cho các thực thể đang theo dõi
+            var changedEntries = DataProvider.Ins.DB.ChangeTracker.Entries()
+                .Where(x => x.State == EntityState.Modified);
+            foreach (var entry in changedEntries)
+            {
+                entry.CurrentValues.SetValues(entry.OriginalValues);
+                entry.State = EntityState.Unchanged;
+            }
+            LoadData();
+        }
+
+        private void ExecuteRefresh()
+        {
+            if (IsEditing)
+            {
+                var result = MessageBox.Show("Bạn đang trong chế độ chỉnh sửa. Nếu làm mới, các thay đổi chưa lưu sẽ bị hủy. Bạn có muốn tiếp tục?", "Xác nhận làm mới", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No) return;
+            }
+            CancelEdits();
+        }
+
         private void ExecuteDelete()
         {
+            if (IsEditing) return; // Do not delete while editing
             if (SelectedItem == null)
             {
-                MessageBox.Show("Vui lòng chọn đăng ký để xóa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show("Vui lòng chọn để xóa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
