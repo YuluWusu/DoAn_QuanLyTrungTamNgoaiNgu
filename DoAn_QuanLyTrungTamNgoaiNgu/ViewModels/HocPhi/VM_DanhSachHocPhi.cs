@@ -32,6 +32,25 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             set { _selectedKhoaHoc = value; OnPropertyChanged(); }
         }
 
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set 
+            { 
+                _isEditing = value; 
+                OnPropertyChanged(); 
+                OnPropertyChanged(nameof(IsReadOnly));
+                OnPropertyChanged(nameof(IsOtherButtonsEnabled));
+                OnPropertyChanged(nameof(EditButtonText));
+            }
+        }
+
+        public bool IsReadOnly => !IsEditing;
+        public bool IsOtherButtonsEnabled => !IsEditing;
+
+        public string EditButtonText => IsEditing ? "Xác nhận sửa" : "Sửa thông tin";
+
         // Bộ lọc
         private LOAI_KHOAHOC _filterLoaiKH;
         public LOAI_KHOAHOC FilterLoaiKH
@@ -58,6 +77,8 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         public RelayCommand AddCommand { get; set; }
         public RelayCommand EditCommand { get; set; }
         public RelayCommand DeleteCommand { get; set; }
+        public RelayCommand ClearFilterCommand { get; set; }
+        public RelayCommand RefreshCommand { get; set; }
 
         // Action điều hướng (Sẽ được gán tại TrangChuViewModel)
         public Action OnRequestAddKhoaHoc { get; set; }
@@ -75,6 +96,8 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 
             EditCommand = new RelayCommand(p => ExecuteEdit());
             DeleteCommand = new RelayCommand(p => ExecuteDelete());
+            ClearFilterCommand = new RelayCommand(p => ExecuteClearFilter());
+            RefreshCommand = new RelayCommand(p => ExecuteRefresh());
         }
 
         private void LoadData()
@@ -86,6 +109,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 
         private void ExecuteFilter()
         {
+            if (IsEditing) return;
             var query = DataProvider.Ins.DB.KHOA_HOC.AsQueryable();
             
             if (FilterLoaiKH != null) 
@@ -100,18 +124,74 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             ListKhoaHoc = new ObservableCollection<KHOA_HOC>(query.Include("LOAI_KHOAHOC").ToList());
         }
 
+        private void ExecuteClearFilter()
+        {
+            if (IsEditing) return;
+            FilterLoaiKH = null;
+            FilterSoBuoi = null;
+            FilterHocPhi = null;
+            ExecuteFilter();
+        }
+
+        private void ExecuteRefresh()
+        {
+            if (IsEditing)
+            {
+                var result = MessageBox.Show("Bạn đang trong chế độ chỉnh sửa. Nếu làm mới, các thay đổi chưa lưu sẽ bị hủy. Bạn có muốn tiếp tục?", "Xác nhận làm mới", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No) return;
+            }
+            CancelEdits();
+        }
+
         private void ExecuteEdit()
         {
-            if (SelectedKhoaHoc == null)
+            if (SelectedKhoaHoc == null && !IsEditing)
             {
                 MessageBox.Show("Vui lòng chọn khóa học cần sửa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-            // Add edit logic or navigation here
+
+            if (!IsEditing)
+            {
+                IsEditing = true;
+            }
+            else
+            {
+                SaveChangesToDatabase();
+                IsEditing = false;
+                MessageBox.Show("Đã lưu các chỉnh sửa thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        public void SaveChangesToDatabase()
+        {
+            try
+            {
+                DataProvider.Ins.DB.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi khi lưu cơ sở dữ liệu: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void CancelEdits()
+        {
+            IsEditing = false;
+            // Hủy các thay đổi trong DbContext cho các thực thể đang theo dõi
+            var changedEntries = DataProvider.Ins.DB.ChangeTracker.Entries()
+                .Where(x => x.State == EntityState.Modified);
+            foreach (var entry in changedEntries)
+            {
+                entry.CurrentValues.SetValues(entry.OriginalValues);
+                entry.State = EntityState.Unchanged;
+            }
+            LoadData();
         }
 
         private void ExecuteDelete()
         {
+            if (IsEditing) return;
             if (SelectedKhoaHoc == null)
             {
                 MessageBox.Show("Vui lòng chọn khóa học cần xóa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
