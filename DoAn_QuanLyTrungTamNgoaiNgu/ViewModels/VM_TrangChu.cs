@@ -1,4 +1,4 @@
-﻿using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
+using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
 using DoAn_QuanLyTrungTamNgoaiNgu.Models;
 using DoAn_QuanLyTrungTamNgoaiNgu.Views;
 using System.Linq;
@@ -53,8 +53,10 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         {
             DangXuatCommand = new RelayCommand<object>((p) => true, (p) =>
             {
-            MessageBoxResult result = MessageBox.Show("Bạn có muốn đăng xuất tài khoản này không?",
-        "Xác nhận đăng xuất", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (!CanNavigateAway()) return;
+
+                MessageBoxResult result = MessageBox.Show("Bạn có muốn đăng xuất tài khoản này không?",
+            "Xác nhận đăng xuất", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
                     DangNhap loginWin = new DangNhap();
@@ -72,9 +74,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             });
             data = new QL_TRUNGTAM_TIENGANH();
             NoiDungHienTai = new UC_TrangChu();
-            NavTrangChu = new RelayCommand<object>((p) => true, (p) => { NoiDungHienTai = new UC_TrangChu(); });
-
-            NavTrangChu = new RelayCommand<object>((p) => true, (p) => { NoiDungHienTai = new UC_TrangChu(); });
+            NavTrangChu = new RelayCommand<object>((p) => true, (p) => { NavigateTo(new UC_TrangChu()); });
 
             // 3. Nút Đăng ký lớp
             NavDangKyLop = new RelayCommand<object>((p) => true, (p) => 
@@ -86,11 +86,11 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 {
                     var vmDangKyMoi = new VM_DangKyMoi();
                     // Bắt sự kiện khi bấm nút "Quay lại" hoặc "Hủy" trong form thêm mới
-                    vmDangKyMoi.RequestNavigateBack = () => NoiDungHienTai = vmDangKy;
-                    NoiDungHienTai = vmDangKyMoi;
+                    vmDangKyMoi.RequestNavigateBack = () => NavigateTo(vmDangKy);
+                    NavigateTo(vmDangKyMoi);
                 };
         
-                NoiDungHienTai = vmDangKy; 
+                NavigateTo(vmDangKy); 
             });
             NavHocPhi = new RelayCommand<object>((p) => true, (p) => 
             { 
@@ -101,12 +101,73 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 {
                     var vmThemHocPhi = new VM_ThemHocPhi();
                     // Bắt sự kiện khi bấm nút "Quay lại" trong form thêm khóa học
-                    vmThemHocPhi.RequestNavigateBack = () => NoiDungHienTai = vmDanhSachHocPhi;
-                    NoiDungHienTai = vmThemHocPhi; 
+                    vmThemHocPhi.RequestNavigateBack = () => NavigateTo(vmDanhSachHocPhi);
+                    NavigateTo(vmThemHocPhi); 
                 };
         
-                NoiDungHienTai = vmDanhSachHocPhi; 
+                NavigateTo(vmDanhSachHocPhi); 
             });
+        }
+
+        private void NavigateTo(object newContent)
+        {
+            if (CanNavigateAway())
+            {
+                NoiDungHienTai = newContent;
+            }
+        }
+
+        private bool CanNavigateAway()
+        {
+            if (NoiDungHienTai is VM_DangKy vmDangKy && vmDangKy.IsEditing)
+            {
+                var result = MessageBox.Show("Bạn đang trong chế độ chỉnh sửa Đăng ký. Bạn có muốn LƯU các thay đổi trước khi chuyển trang không?\n\n- Chọn 'Yes' để lưu và chuyển trang.\n- Chọn 'No' để hủy thay đổi và chuyển trang.\n- Chọn 'Cancel' để ở lại.", "Xác nhận chuyển trang", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    vmDangKy.SaveChangesToDatabase();
+                    return true;
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    vmDangKy.CancelEdits();
+                    return true;
+                }
+                return false; // Cancel
+            }
+
+            if (NoiDungHienTai is VM_DanhSachHocPhi vmHocPhi && vmHocPhi.IsEditing)
+            {
+                var result = MessageBox.Show("Bạn đang trong chế độ chỉnh sửa Khóa học. Bạn có muốn LƯU các thay đổi trước khi chuyển trang không?\n\n- Chọn 'Yes' để lưu và chuyển trang.\n- Chọn 'No' để hủy thay đổi và chuyển trang.\n- Chọn 'Cancel' để ở lại.", "Xác nhận chuyển trang", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    vmHocPhi.SaveChangesToDatabase();
+                    return true;
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    vmHocPhi.CancelEdits();
+                    return true;
+                }
+                return false; // Cancel
+            }
+
+            if (NoiDungHienTai is VM_DangKyMoi vmDangKyMoi && vmDangKyMoi.IsEditing)
+            {
+                var result = MessageBox.Show("Bạn đang trong chế độ chỉnh sửa bảng Đăng ký của form thêm mới. Bạn có muốn LƯU các thay đổi trước khi chuyển trang không?\n\n- Chọn 'Yes' để lưu và chuyển trang.\n- Chọn 'No' để hủy thay đổi và chuyển trang.\n- Chọn 'Cancel' để ở lại.", "Xác nhận chuyển trang", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+                if (result == MessageBoxResult.Yes)
+                {
+                    vmDangKyMoi.SaveChangesToDatabase();
+                    return true;
+                }
+                else if (result == MessageBoxResult.No)
+                {
+                    vmDangKyMoi.CancelEdits();
+                    return true;
+                }
+                return false; // Cancel
+            }
+
+            return true;
         }
         public void LoadThongTinNguoiDung(string maTK)
         {
