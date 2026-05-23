@@ -178,10 +178,10 @@
     <Compile Include="Models\VW_TaiKhoan_Quyen.cs">
       <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\DangKy\DangKyMoi_ViewModel.cs" />
+    <Compile Include="ViewModels\DangKy\VM_DangKyMoi.cs" />
     <Compile Include="ViewModels\DangKy\VM_DangKy.cs" />
-    <Compile Include="ViewModels\HocPhi\DanhSachHocPhiKhoaHoc_ViewModel.cs" />
-    <Compile Include="ViewModels\HocPhi\ThemHocPhiKhoaHoc_ViewModel.cs" />
+    <Compile Include="ViewModels\HocPhi\VM_DanhSachHocPhi.cs" />
+    <Compile Include="ViewModels\HocPhi\VM_ThemHocPhi.cs" />
     <Compile Include="ViewModels\VM_DangNhap.cs" />
     <Compile Include="ViewModels\VM_TrangChu.cs" />
     <Compile Include="Views\DangNhap.xaml.cs">
@@ -196,7 +196,7 @@
     <Compile Include="Views\HocPhiView\UC_DanhSachHocPhi.xaml.cs">
       <DependentUpon>UC_DanhSachHocPhi.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UC_ThemHocPhiKhoaHoc.xaml.cs">
+    <Compile Include="Views\HocPhiView\UC_ThemHocPhiKhoaHoc.xaml.cs">
       <DependentUpon>UC_ThemHocPhiKhoaHoc.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TrangChu.xaml.cs">
@@ -241,11 +241,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\UC_DangKyMoi.xaml">
+    <Page Include="Views\DangKyView\UC_DangKyMoi.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UC_DanhSachDangKy.xaml">
+    <Page Include="Views\DangKyView\UC_DanhSachDangKy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -253,11 +253,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UC_DanhSachHocPhi.xaml">
+    <Page Include="Views\HocPhiView\UC_DanhSachHocPhi.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\UC_ThemHocPhiKhoaHoc.xaml">
+    <Page Include="Views\HocPhiView\UC_ThemHocPhiKhoaHoc.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
