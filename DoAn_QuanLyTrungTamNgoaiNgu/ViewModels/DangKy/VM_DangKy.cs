@@ -4,6 +4,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
+using System.Data.Entity;
 
 namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 {
