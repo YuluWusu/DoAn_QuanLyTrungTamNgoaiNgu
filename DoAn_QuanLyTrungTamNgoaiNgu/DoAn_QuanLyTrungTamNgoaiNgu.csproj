@@ -92,6 +92,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Helpers\BaseViewModel.cs" />
+    <Compile Include="Helpers\DataProvider.cs" />
+    <Compile Include="Helpers\EnumToBooleanConverter.cs" />
+    <Compile Include="Helpers\IDGenerator.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\StringToVisibilityConverter.cs" />
     <Compile Include="Models\CAHOC.cs">
@@ -184,7 +187,13 @@
     <Compile Include="Views\DangNhap.xaml.cs">
       <DependentUpon>DangNhap.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\UC_DanhSachHocPhi.xaml.cs">
+    <Compile Include="Views\DangKyView\UC_DanhSachDangKy.xaml.cs">
+      <DependentUpon>UC_DanhSachDangKy.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DangKyView\UC_DangKyMoi.xaml.cs">
+      <DependentUpon>UC_DangKyMoi.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HocPhiView\UC_DanhSachHocPhi.xaml.cs">
       <DependentUpon>UC_DanhSachHocPhi.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UC_ThemHocPhiKhoaHoc.xaml.cs">

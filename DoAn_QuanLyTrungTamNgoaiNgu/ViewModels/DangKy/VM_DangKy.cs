@@ -40,39 +40,61 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 
         public VM_DangKy()
         {
-            LoadData();
-
-            FilterCommand = new RelayCommand(_ => ExecuteFilter());
-            
-            AddCommand = new RelayCommand((p) => {
-                OnRequestAddRegistration?.Invoke();
-            });
-            
-            EditCommand = new RelayCommand(_ => { /* Logic Edit nếu cần */ });
-            
-            DeleteCommand = new RelayCommand(_ => ExecuteDelete());
+            try
+            {
+                LoadData();
+                FilterCommand = new RelayCommand(_ => ExecuteFilter());
+                AddCommand = new RelayCommand((p) => { OnRequestAddRegistration?.Invoke(); });
+                EditCommand = new RelayCommand(_ => { /* Logic Edit */ });
+                DeleteCommand = new RelayCommand(_ => ExecuteDelete());
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.ToString(), "Lỗi khởi tạo VM_DangKy");
+            }
         }
 
         public void LoadData()
         {
             // Load từ DB với Include để hiển thị thông tin liên quan nếu cần
-            var list = DataProvider.Ins.DB.DANGKYLOPs
-                .Include("HOCVIEN")
-                .Include("LOPHOC")
-                .ToList();
-            ListDangKy = new ObservableCollection<DANGKYLOP>(list);
+            try
+            {
+                // Phải Include rõ ràng 2 bảng liên kết vì LazyLoading đã bị tắt
+                var list = DataProvider.Ins.DB.DANGKYLOPs
+                                .Include(x => x.HOCVIEN)
+                                .Include(x => x.LOPHOC)
+                                 .ToList();
+
+                ListDangKy = new ObservableCollection<DANGKYLOP>(list);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Lỗi tải dữ liệu Đăng Ký: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void ExecuteFilter()
         {
-            var query = DataProvider.Ins.DB.DANGKYLOPs.AsQueryable();
-            if (!string.IsNullOrWhiteSpace(FilterSearchQuery))
+            try
             {
-                string search = FilterSearchQuery.ToLower();
-                query = query.Where(x => x.MaHV.ToLower().Contains(search) 
-                                      || x.MALOP.ToLower().Contains(search));
+                var query = DataProvider.Ins.DB.DANGKYLOPs
+                                .Include(x => x.HOCVIEN)
+                                .Include(x => x.LOPHOC)
+                                .AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(FilterSearchQuery))
+                {
+                    string search = FilterSearchQuery.ToLower();
+                    query = query.Where(x => x.MaHV.ToLower().Contains(search)
+                                          || x.MALOP.ToLower().Contains(search));
+                }
+
+                ListDangKy = new ObservableCollection<DANGKYLOP>(query.ToList());
             }
-            ListDangKy = new ObservableCollection<DANGKYLOP>(query.Include("HOCVIEN").Include("LOPHOC").ToList());
+            catch (Exception ex)
+            {
+                MessageBox.Show("Lỗi khi lọc: " + ex.Message);
+            }
         }
 
         private void ExecuteDelete()
