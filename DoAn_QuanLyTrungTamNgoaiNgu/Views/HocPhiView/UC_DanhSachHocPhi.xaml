@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="DoAn_QuanLyTrungTamNgoaiNgu.Views.UC_DanhSachHocPhi"
+<UserControl x:Class="DoAn_QuanLyTrungTamNgoaiNgu.Views.UC_DanhSachHocPhi"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -52,8 +52,26 @@
                     </Border>
                 </StackPanel>
 
-                <Button Content="Lọc Dữ Liệu" Width="120" Height="42" Margin="0,25,0,0" 
-                        Background="#2D3748" Foreground="White" FontWeight="Bold" BorderThickness="0" Command="{Binding FilterCommand}">
+                <Button Content="Lọc Dữ Liệu" Width="120" Height="42" Margin="0,25,10,0" 
+                        Background="#2D3748" Foreground="White" FontWeight="Bold" BorderThickness="0" Command="{Binding FilterCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <Button Content="Xóa bộ lọc" Width="120" Height="42" Margin="0,25,10,0" 
+                        Background="Transparent" BorderBrush="#2D3748" BorderThickness="1" Foreground="#2D3748" FontWeight="Bold" Command="{Binding ClearFilterCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}">
+                    <Button.Resources>
+                        <Style TargetType="Border">
+                            <Setter Property="CornerRadius" Value="8"/>
+                        </Style>
+                    </Button.Resources>
+                </Button>
+
+                <Button Content="Làm mới" Width="120" Height="42" Margin="0,25,0,0" 
+                        Background="#1E6FB5" Foreground="White" FontWeight="Bold" BorderThickness="0" Command="{Binding RefreshCommand}">
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="8"/>
@@ -62,106 +80,109 @@
                 </Button>
             </StackPanel>
         </Border>
-
-        <!-- 3. DataGrid Khóa Học (Đã chỉnh sửa giống file UC_HocVien) -->
-        <Border Grid.Row="2" Background="White" CornerRadius="12" Padding="10" ClipToBounds="True">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="10" ShadowDepth="1" Color="#000000" Opacity="0.05"/>
-            </Border.Effect>
-            <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True"
-                      HeadersVisibility="Column" GridLinesVisibility="None" RowHeight="55"
-                      BorderThickness="0" Background="Transparent" SelectionMode="Single" 
-                      ItemsSource="{Binding ListKhoaHoc}" SelectedItem="{Binding SelectedKhoaHoc}">
-
-                <DataGrid.ColumnHeaderStyle>
-                    <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="Background" Value="#F9FAFB"/>
-                        <Setter Property="Foreground" Value="#6B7280"/>
-                        <Setter Property="FontWeight" Value="SemiBold"/>
-                        <Setter Property="Padding" Value="15,12"/>
-                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                        <Setter Property="BorderBrush" Value="#F3F4F6"/>
-                    </Style>
-                </DataGrid.ColumnHeaderStyle>
-
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="MÃ KH" Binding="{Binding MAKH}" Width="100">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Margin" Value="15,0"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Foreground" Value="#6B7280"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="TÊN KHÓA HỌC" Binding="{Binding TENKH}" Width="2*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Margin" Value="15,0"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="FontWeight" Value="Medium"/>
-                                <Setter Property="Foreground" Value="#374151"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="LOẠI KHÓA HỌC" Binding="{Binding LOAI_KHOAHOC.TENLOAI}" Width="1.5*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Margin" Value="15,0"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Foreground" Value="#4B5563"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="SỐ BUỔI" Binding="{Binding SOBUOI}" Width="100">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Margin" Value="15,0"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Foreground" Value="#4B5563"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-
-                    <DataGridTextColumn Header="HỌC PHÍ GỐC" Binding="{Binding HOCPHI_GD, StringFormat={}{0:N0} VNĐ}" Width="1.5*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="Margin" Value="15,0"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                                <Setter Property="Foreground" Value="#4B5563"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Border>
-
-        <!-- 4. Nút Thao tác -->
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-            <Button Content="Xóa" Width="100" Height="42" Background="Transparent" Foreground="#E53E3E" 
-                    BorderBrush="#FED7D7" BorderThickness="1" Margin="0,0,10,0" FontWeight="SemiBold" Command="{Binding DeleteCommand}">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="8"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-
-            <Button Content="Sửa thông tin" Width="120" Height="42" Background="White" Foreground="#D69E2E" 
-                    BorderBrush="#FEFCBF" BorderThickness="1" Margin="0,0,20,0" FontWeight="SemiBold" Command="{Binding EditCommand}">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="8"/>
-                    </Style>
-                </Button.Resources>
-            </Button>
-
-            <!-- Nút gọi Emit sang màn hình thêm -->
-            <Button Command="{Binding AddCommand}" Content="+ THÊM KHÓA HỌC" Width="160" Height="42" 
-                    Background="#1E6FB5" Foreground="White" FontWeight="Bold" BorderThickness="0">
+ 
+         <!-- 3. DataGrid Khóa Học (Đã chỉnh sửa giống file UC_HocVien) -->
+         <Border Grid.Row="2" Background="White" CornerRadius="12" Padding="10" ClipToBounds="True">
+             <Border.Effect>
+                 <DropShadowEffect BlurRadius="10" ShadowDepth="1" Color="#000000" Opacity="0.05"/>
+             </Border.Effect>
+             <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="{Binding IsReadOnly}"
+                       HeadersVisibility="Column" GridLinesVisibility="None" RowHeight="55"
+                       BorderThickness="0" Background="Transparent" SelectionMode="Single" 
+                       ItemsSource="{Binding ListKhoaHoc}" SelectedItem="{Binding SelectedKhoaHoc}">
+ 
+                 <DataGrid.ColumnHeaderStyle>
+                     <Style TargetType="DataGridColumnHeader">
+                         <Setter Property="Background" Value="#F9FAFB"/>
+                         <Setter Property="Foreground" Value="#6B7280"/>
+                         <Setter Property="FontWeight" Value="SemiBold"/>
+                         <Setter Property="Padding" Value="15,12"/>
+                         <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                         <Setter Property="BorderBrush" Value="#F3F4F6"/>
+                     </Style>
+                 </DataGrid.ColumnHeaderStyle>
+ 
+                 <DataGrid.Columns>
+                     <DataGridTextColumn Header="MÃ KH" Binding="{Binding MAKH}" IsReadOnly="True" Width="100">
+                         <DataGridTextColumn.ElementStyle>
+                             <Style TargetType="TextBlock">
+                                 <Setter Property="Margin" Value="15,0"/>
+                                 <Setter Property="VerticalAlignment" Value="Center"/>
+                                 <Setter Property="Foreground" Value="#6B7280"/>
+                             </Style>
+                         </DataGridTextColumn.ElementStyle>
+                     </DataGridTextColumn>
+ 
+                     <DataGridTextColumn Header="TÊN KHÓA HỌC" Binding="{Binding TENKH, UpdateSourceTrigger=PropertyChanged}" Width="2*">
+                         <DataGridTextColumn.ElementStyle>
+                             <Style TargetType="TextBlock">
+                                 <Setter Property="Margin" Value="15,0"/>
+                                 <Setter Property="VerticalAlignment" Value="Center"/>
+                                 <Setter Property="FontWeight" Value="Medium"/>
+                                 <Setter Property="Foreground" Value="#374151"/>
+                             </Style>
+                         </DataGridTextColumn.ElementStyle>
+                     </DataGridTextColumn>
+ 
+                     <DataGridTextColumn Header="LOẠI KHÓA HỌC" Binding="{Binding LOAI_KHOAHOC.TENLOAI}" IsReadOnly="True" Width="1.5*">
+                         <DataGridTextColumn.ElementStyle>
+                             <Style TargetType="TextBlock">
+                                 <Setter Property="Margin" Value="15,0"/>
+                                 <Setter Property="VerticalAlignment" Value="Center"/>
+                                 <Setter Property="Foreground" Value="#4B5563"/>
+                             </Style>
+                         </DataGridTextColumn.ElementStyle>
+                     </DataGridTextColumn>
+ 
+                     <DataGridTextColumn Header="SỐ BUỔI" Binding="{Binding SOBUOI, UpdateSourceTrigger=PropertyChanged}" Width="100">
+                         <DataGridTextColumn.ElementStyle>
+                             <Style TargetType="TextBlock">
+                                 <Setter Property="Margin" Value="15,0"/>
+                                 <Setter Property="VerticalAlignment" Value="Center"/>
+                                 <Setter Property="Foreground" Value="#4B5563"/>
+                             </Style>
+                         </DataGridTextColumn.ElementStyle>
+                     </DataGridTextColumn>
+ 
+                     <DataGridTemplateColumn Header="HỌC PHÍ GỐC" Width="1.5*">
+                         <DataGridTemplateColumn.CellTemplate>
+                             <DataTemplate>
+                                 <TextBlock Text="{Binding HOCPHI_GD, StringFormat={}{0:N0} VNĐ}" VerticalAlignment="Center" Margin="15,0" Foreground="#4B5563"/>
+                             </DataTemplate>
+                         </DataGridTemplateColumn.CellTemplate>
+                         <DataGridTemplateColumn.CellEditingTemplate>
+                             <DataTemplate>
+                                 <TextBox Text="{Binding HOCPHI_GD, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="5,2"/>
+                             </DataTemplate>
+                         </DataGridTemplateColumn.CellEditingTemplate>
+                     </DataGridTemplateColumn>
+                 </DataGrid.Columns>
+             </DataGrid>
+         </Border>
+ 
+         <!-- 4. Nút Thao tác -->
+         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+             <Button Content="Xóa" Width="100" Height="42" Background="Transparent" Foreground="#E53E3E" 
+                     BorderBrush="#FED7D7" BorderThickness="1" Margin="0,0,10,0" FontWeight="SemiBold" Command="{Binding DeleteCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}">
+                 <Button.Resources>
+                     <Style TargetType="Border">
+                         <Setter Property="CornerRadius" Value="8"/>
+                     </Style>
+                 </Button.Resources>
+             </Button>
+ 
+             <Button Content="{Binding EditButtonText}" Width="120" Height="42" Background="White" Foreground="#D69E2E" 
+                     BorderBrush="#FEFCBF" BorderThickness="1" Margin="0,0,20,0" FontWeight="SemiBold" Command="{Binding EditCommand}">
+                 <Button.Resources>
+                     <Style TargetType="Border">
+                         <Setter Property="CornerRadius" Value="8"/>
+                     </Style>
+                 </Button.Resources>
+             </Button>
+ 
+             <!-- Nút gọi Emit sang màn hình thêm -->
+             <Button Command="{Binding AddCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}" Content="+ THÊM KHÓA HỌC" Width="160" Height="42" 
+                     Background="#1E6FB5" Foreground="White" FontWeight="Bold" BorderThickness="0">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="8"/>
