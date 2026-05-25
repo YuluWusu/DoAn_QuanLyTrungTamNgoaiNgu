@@ -70,7 +70,7 @@
                     </Button.Resources>
                 </Button>
 
-
+            </StackPanel>
         </Border>
  
          <!-- 3. DataGrid Khóa Học (Đã chỉnh sửa giống file UC_HocVien) -->
