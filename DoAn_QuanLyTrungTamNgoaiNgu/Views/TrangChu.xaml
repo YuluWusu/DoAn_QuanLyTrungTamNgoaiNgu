@@ -14,17 +14,17 @@
     </Window.DataContext>
     <Window.Resources>
         <!--Đăng ký -->
-        <DataTemplate DataType="{x:Type vm:DangKyViewModel}">
+        <DataTemplate DataType="{x:Type vm:VM_DangKy}">
             <local:UC_DanhSachDangKy/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:DangKyMoi_ViewModel}">
+        <DataTemplate DataType="{x:Type vm:VM_DangKyMoi}">
             <local:UC_DangKyMoi/>
         </DataTemplate>
         <!--Học phí khóa học-->
-        <DataTemplate DataType="{x:Type vm:DanhSachHocPhiKhoaHoc}">
+        <DataTemplate DataType="{x:Type vm:VM_DanhSachHocPhi}">
             <local:UC_DanhSachHocPhi/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:ThemHocPhiKhoaHoc}">
+        <DataTemplate DataType="{x:Type vm:VM_ThemHocPhi}">
             <local:UC_ThemHocPhiKhoaHoc/>
         </DataTemplate>
         <SolidColorBrush x:Key="SidebarBg"      Color="#0D3B6E"/>

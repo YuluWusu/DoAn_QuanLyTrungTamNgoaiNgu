@@ -1,16 +1,14 @@
-﻿using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
+using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
+using DoAn_QuanLyTrungTamNgoaiNgu.Models;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
 namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 {
-    public class ThemHocPhiKhoaHoc : BaseViewModel
+    public class VM_ThemHocPhi : BaseViewModel
     {
         private string _maKH;
         public string MaKH
@@ -40,26 +38,26 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             set { _hocPhi = value; OnPropertyChanged(); }
         }
 
-        //private LoaiKhoaHoc _selectedLoaiKH;
-        //public LoaiKhoaHoc SelectedLoaiKH
-        //{
-        //    get => _selectedLoaiKH;
-        //    set { _selectedLoaiKH = value; OnPropertyChanged(); }
-        //}
+        private LOAI_KHOAHOC _selectedLoaiKH;
+        public LOAI_KHOAHOC SelectedLoaiKH
+        {
+            get => _selectedLoaiKH;
+            set { _selectedLoaiKH = value; OnPropertyChanged(); }
+        }
 
-        //private ObservableCollection<LoaiKhoaHoc> _listLoaiKhoaHoc;
-        //public ObservableCollection<LoaiKhoaHoc> ListLoaiKhoaHoc
-        //{
-        //    get => _listLoaiKhoaHoc;
-        //    set { _listLoaiKhoaHoc = value; OnPropertyChanged(); }
-        //}
+        private ObservableCollection<LOAI_KHOAHOC> _listLoaiKhoaHoc;
+        public ObservableCollection<LOAI_KHOAHOC> ListLoaiKhoaHoc
+        {
+            get => _listLoaiKhoaHoc;
+            set { _listLoaiKhoaHoc = value; OnPropertyChanged(); }
+        }
 
-        //private ObservableCollection<KhoaHoc> _listKhoaHoc;
-        //public ObservableCollection<KhoaHoc> ListKhoaHoc
-        //{
-        //    get => _listKhoaHoc;
-        //    set { _listKhoaHoc = value; OnPropertyChanged(); }
-        //}
+        private ObservableCollection<KHOA_HOC> _listKhoaHoc;
+        public ObservableCollection<KHOA_HOC> ListKhoaHoc
+        {
+            get => _listKhoaHoc;
+            set { _listKhoaHoc = value; OnPropertyChanged(); }
+        }
 
         public ICommand CancelCommand { get; set; }
         public ICommand RefreshCommand { get; set; }
@@ -68,7 +66,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         // Gọi về TrangChuViewModel để quay lại màn hình danh sách
         public Action RequestNavigateBack { get; set; }
 
-        public ThemHocPhiKhoaHoc()
+        public VM_ThemHocPhi()
         {
             LoadData();
 
@@ -79,22 +77,43 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 
         private void LoadData()
         {
-            //ListLoaiKhoaHoc = new ObservableCollection<LoaiKhoaHoc>();
-            //ListKhoaHoc = new ObservableCollection<KhoaHoc>();
+            ListLoaiKhoaHoc = new ObservableCollection<LOAI_KHOAHOC>(DataProvider.Ins.DB.LOAI_KHOAHOC.ToList());
+            ListKhoaHoc = new ObservableCollection<KHOA_HOC>(DataProvider.Ins.DB.KHOA_HOC.ToList());
+            GenerateMaKH();
+        }
+
+        private void GenerateMaKH()
+        {
+            var maxMaKH = DataProvider.Ins.DB.KHOA_HOC.OrderByDescending(x => x.MAKH).Select(x => x.MAKH).FirstOrDefault();
+            if (string.IsNullOrEmpty(maxMaKH))
+            {
+                MaKH = "KH001";
+            }
+            else
+            {
+                if (maxMaKH.StartsWith("KH") && int.TryParse(maxMaKH.Substring(2), out int num))
+                {
+                    MaKH = $"KH{(num + 1):D3}";
+                }
+                else
+                {
+                    MaKH = "KH001";
+                }
+            }
         }
 
         private void ExecuteRefresh()
         {
-            MaKH = string.Empty;
+            GenerateMaKH();
             TenKH = string.Empty;
-            //SelectedLoaiKH = null;
+            SelectedLoaiKH = null;
             SoBuoi = 0;
             HocPhi = 0;
         }
 
         private void ExecuteSave()
         {
-            if (string.IsNullOrWhiteSpace(MaKH) || string.IsNullOrWhiteSpace(TenKH))/*|| SelectedLoaiKH == null)*/
+            if (string.IsNullOrWhiteSpace(MaKH) || string.IsNullOrWhiteSpace(TenKH) || SelectedLoaiKH == null)
             {
                 MessageBox.Show("Vui lòng điền đầy đủ các thông tin bắt buộc (*).", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
@@ -106,15 +125,12 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 return;
             }
 
-            // 2. Logic gọi Stored Procedure: SP_ThemKhoaHoc
             try
             {
-                // Thực thi DataProvider.Ins.DB.SP_ThemKhoaHoc(MaKH, TenKH, SoBuoi, HocPhi, SelectedLoaiKH.MALOAI_KH)
+                DataProvider.Ins.DB.SP_ThemKhoaHoc(MaKH, TenKH, SoBuoi, HocPhi, SelectedLoaiKH.MALOAI_KH);
 
                 MessageBox.Show($"Đã thêm thành công khóa học: {TenKH}!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                // Có thể làm mới danh sách tham chiếu sau khi lưu
-                // LoadData(); 
                 RequestNavigateBack?.Invoke();
             }
             catch (Exception ex)
