@@ -208,14 +208,25 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             {
                 try
                 {
-                    DataProvider.Ins.DB.KHOA_HOC.Remove(SelectedKhoaHoc);
-                    DataProvider.Ins.DB.SaveChanges();
-                    ListKhoaHoc.Remove(SelectedKhoaHoc);
-                    MessageBox.Show("Đã xóa thành công!");
+                    // Lấy chính xác đối tượng đang được track từ DbContext để tránh lỗi detached entity
+                    var dbItem = DataProvider.Ins.DB.KHOA_HOC.Find(SelectedKhoaHoc.MAKH);
+                    if (dbItem != null)
+                    {
+                        DataProvider.Ins.DB.KHOA_HOC.Remove(dbItem);
+                        DataProvider.Ins.DB.SaveChanges();
+                        ListKhoaHoc.Remove(SelectedKhoaHoc);
+                        MessageBox.Show("Đã xóa thành công!");
+                    }
+                    else
+                    {
+                        MessageBox.Show("Không tìm thấy khóa học này trong CSDL. Vui lòng làm mới danh sách.", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        LoadData();
+                    }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Lỗi khi xóa (Có thể khóa học này đã có lớp học): " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    LoadData(); // Đồng bộ lại UI nếu có lỗi xảy ra
                 }
             }
         }
