@@ -221,6 +221,7 @@ using DoAn_QuanLyTrungTamNgoaiNgu.Models;
                  
                  // Làm mới danh sách sau khi thêm thành công
                  LoadData();
+                 SelectedItem = ListDangKy.FirstOrDefault(x => x.MaHV == dangKyLop.MaHV && x.MALOP == dangKyLop.MALOP);
                  ExecuteRefreshForm();
              }
              catch (Exception ex)
