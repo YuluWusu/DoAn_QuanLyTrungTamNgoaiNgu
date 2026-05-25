@@ -127,7 +127,18 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 
             try
             {
-                DataProvider.Ins.DB.SP_ThemKhoaHoc(MaKH, TenKH, SoBuoi, HocPhi, SelectedLoaiKH.MALOAI_KH);
+                var newKhoaHoc = new KHOA_HOC
+                {
+                    MAKH = MaKH,
+                    TENKH = TenKH,
+                    SOBUOI = SoBuoi,
+                    HOCPHI_GD = HocPhi,
+                    MALOAI_KH = SelectedLoaiKH.MALOAI_KH,
+                    LOAI_KHOAHOC = SelectedLoaiKH
+                };
+
+                DataProvider.Ins.DB.KHOA_HOC.Add(newKhoaHoc);
+                DataProvider.Ins.DB.SaveChanges();
 
                 MessageBox.Show($"Đã thêm thành công khóa học: {TenKH}!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
 
