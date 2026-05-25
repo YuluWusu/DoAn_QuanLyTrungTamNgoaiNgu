@@ -67,30 +67,8 @@ using DoAn_QuanLyTrungTamNgoaiNgu.Models;
              set { _trangThai = value; OnPropertyChanged(); }
          }
 
-         private bool _isEditing;
-         public bool IsEditing
-         {
-             get => _isEditing;
-             set 
-             { 
-                 _isEditing = value; 
-                 OnPropertyChanged(); 
-                 OnPropertyChanged(nameof(IsReadOnly));
-                 OnPropertyChanged(nameof(IsOtherButtonsEnabled));
-                 OnPropertyChanged(nameof(EditButtonText));
-             }
-         }
-
-         public bool IsReadOnly => !IsEditing;
-         public bool IsOtherButtonsEnabled => !IsEditing;
-
-         public string EditButtonText => IsEditing ? "Xác nhận sửa" : "Sửa thông tin";
- 
          public ICommand CancelCommand { get; set; }
          public ICommand SaveCommand { get; set; }
-         public ICommand EditCommand { get; set; }
-         public ICommand RefreshFormCommand { get; set; }
-         public ICommand RefreshTableCommand { get; set; }
          public Action RequestNavigateBack { get; set; }
  
          public VM_DangKyMoi()
@@ -100,9 +78,6 @@ using DoAn_QuanLyTrungTamNgoaiNgu.Models;
              
              CancelCommand = new RelayCommand(p => RequestNavigateBack?.Invoke());
              SaveCommand = new RelayCommand(p => ExecuteSave());
-             EditCommand = new RelayCommand(p => ExecuteEdit());
-             RefreshFormCommand = new RelayCommand(p => ExecuteRefreshForm());
-             RefreshTableCommand = new RelayCommand(p => ExecuteRefreshTable());
          }
  
          private void LoadData()
@@ -124,73 +99,16 @@ using DoAn_QuanLyTrungTamNgoaiNgu.Models;
              }
          }
 
-         private void ExecuteRefreshForm()
+         private void ClearForm()
          {
              SelectedHocVien = null;
              SelectedLopHoc = null;
              HocPhi = 0;
              TrangThai = "Cho dong tien";
          }
-
-         private void ExecuteRefreshTable()
-         {
-             if (IsEditing)
-             {
-                 var result = MessageBox.Show("Bạn đang trong chế độ chỉnh sửa. Nếu làm mới, các thay đổi chưa lưu sẽ bị hủy. Bạn có muốn tiếp tục?", "Xác nhận làm mới", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                 if (result == MessageBoxResult.No) return;
-             }
-             CancelEdits();
-         }
-
-         private void ExecuteEdit()
-         {
-             if (SelectedItem == null && !IsEditing)
-             {
-                 MessageBox.Show("Vui lòng chọn đăng ký cần sửa trong bảng bên phải!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
-                 return;
-             }
-
-             if (!IsEditing)
-             {
-                 IsEditing = true;
-             }
-             else
-             {
-                 SaveChangesToDatabase();
-                 IsEditing = false;
-                 MessageBox.Show("Đã lưu các chỉnh sửa thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
-             }
-         }
-
-         public void SaveChangesToDatabase()
-         {
-             try
-             {
-                 DataProvider.Ins.DB.SaveChanges();
-             }
-             catch (Exception ex)
-             {
-                 MessageBox.Show($"Lỗi khi lưu cơ sở dữ liệu: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
-             }
-         }
-
-         public void CancelEdits()
-         {
-             IsEditing = false;
-             // Hủy các thay đổi trong DbContext cho các thực thể đang theo dõi
-             var changedEntries = DataProvider.Ins.DB.ChangeTracker.Entries()
-                 .Where(x => x.State == EntityState.Modified);
-             foreach (var entry in changedEntries)
-             {
-                 entry.CurrentValues.SetValues(entry.OriginalValues);
-                 entry.State = EntityState.Unchanged;
-             }
-             LoadData();
-         }
  
          private void ExecuteSave()
          {
-             if (IsEditing) return; // Không cho phép thêm mới khi đang sửa bảng
              if (SelectedHocVien == null || SelectedLopHoc == null)
              {
                  MessageBox.Show("Vui lòng chọn Học viên và Lớp học.", "Cảnh báo", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -211,7 +129,9 @@ using DoAn_QuanLyTrungTamNgoaiNgu.Models;
                      MALOP = SelectedLopHoc.MALOP,
                      NGAYDK = DateTime.Now,
                      HOCPHI = HocPhi,
-                     TRANGTHAI = TrangThai
+                     TRANGTHAI = TrangThai,
+                     HOCVIEN = SelectedHocVien,
+                     LOPHOC = SelectedLopHoc
                  };
  
                  DataProvider.Ins.DB.DANGKYLOPs.Add(dangKyLop);
@@ -222,7 +142,7 @@ using DoAn_QuanLyTrungTamNgoaiNgu.Models;
                  // Làm mới danh sách sau khi thêm thành công
                  LoadData();
                  SelectedItem = ListDangKy.FirstOrDefault(x => x.MaHV == dangKyLop.MaHV && x.MALOP == dangKyLop.MALOP);
-                 ExecuteRefreshForm();
+                 ClearForm();
              }
              catch (Exception ex)
              {

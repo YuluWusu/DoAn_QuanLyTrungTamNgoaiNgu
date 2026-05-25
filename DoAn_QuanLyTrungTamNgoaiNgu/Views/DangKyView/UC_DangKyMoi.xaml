@@ -36,16 +36,14 @@
                     <ComboBox Height="40" VerticalContentAlignment="Center" Margin="0,0,0,15"
                               ItemsSource="{Binding ListHocVien}"
                               SelectedItem="{Binding SelectedHocVien}"
-                              DisplayMemberPath="HoTen"
-                              IsEnabled="{Binding IsOtherButtonsEnabled}"/>
+                              DisplayMemberPath="HoTen"/>
 
                     <!-- Chọn Lớp Học -->
                     <TextBlock Text="Chọn Lớp Học *" FontWeight="SemiBold" Margin="0,0,0,5"/>
                     <ComboBox Height="40" VerticalContentAlignment="Center" Margin="0,0,0,15"
                               ItemsSource="{Binding ListLopHoc}"
                               SelectedItem="{Binding SelectedLopHoc}"
-                              DisplayMemberPath="TENLOP"
-                              IsEnabled="{Binding IsOtherButtonsEnabled}"/>
+                              DisplayMemberPath="TENLOP"/>
 
                     <!-- Ngày Đăng Ký -->
                     <TextBlock Text="Ngày Đăng Ký (Tự động cập nhật)" FontWeight="SemiBold" Margin="0,0,0,5"/>
@@ -55,15 +53,13 @@
                     <!-- Học Phí -->
                     <TextBlock Text="Học Phí (VNĐ)" FontWeight="SemiBold" Margin="0,0,0,5"/>
                     <TextBox Height="40" VerticalContentAlignment="Center" Padding="10,0" Margin="0,0,0,15" 
-                             Text="{Binding HocPhi, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"
-                             IsEnabled="{Binding IsOtherButtonsEnabled}"/>
+                             Text="{Binding HocPhi, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0:N0}}"/>
 
                     <!-- Trạng Thái Ban Đầu -->
                     <TextBlock Text="Trạng Thái Ban Đầu" FontWeight="SemiBold" Margin="0,0,0,5"/>
                     <ComboBox Height="40" VerticalContentAlignment="Center" Margin="0,0,0,15"
                               SelectedValuePath="Content"
-                              SelectedValue="{Binding TrangThai, UpdateSourceTrigger=PropertyChanged}"
-                              IsEnabled="{Binding IsOtherButtonsEnabled}">
+                              SelectedValue="{Binding TrangThai, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBoxItem Content="Cho dong tien"/>
                         <ComboBoxItem Content="Dang hoc"/>
                     </ComboBox>
@@ -95,7 +91,7 @@
                 <Border Grid.Row="1" Background="White" CornerRadius="10" BorderBrush="#E2E8F0" BorderThickness="1" ClipToBounds="True">
                     <DataGrid AutoGenerateColumns="False" 
                               CanUserAddRows="False" 
-                              IsReadOnly="{Binding IsReadOnly}"
+                              IsReadOnly="True"
                               ItemsSource="{Binding ListDangKy}"
                               SelectedItem="{Binding SelectedItem}"
                               HeadersVisibility="Column"
@@ -126,11 +122,6 @@
                                         <TextBlock Text="{Binding NGAYDK, StringFormat=dd/MM/yyyy}" VerticalAlignment="Center" Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellEditingTemplate>
-                                    <DataTemplate>
-                                        <DatePicker SelectedDate="{Binding NGAYDK, UpdateSourceTrigger=PropertyChanged}"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>
 
                             <DataGridTemplateColumn Header="Học Phí" Width="110">
@@ -139,14 +130,9 @@
                                         <TextBlock Text="{Binding HOCPHI, StringFormat={}{0:N0} VNĐ}" VerticalAlignment="Center" Margin="5,0"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellEditingTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding HOCPHI, UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" Padding="5,2"/>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>
                             
-                            <DataGridTemplateColumn Header="Trạng Tư" Width="120">
+                            <DataGridTemplateColumn Header="Trạng Thái" Width="120">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
                                         <Border CornerRadius="4" Padding="6,2" HorizontalAlignment="Left" Background="#EDF2F7">
@@ -154,14 +140,6 @@
                                         </Border>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
-                                <DataGridTemplateColumn.CellEditingTemplate>
-                                    <DataTemplate>
-                                        <ComboBox SelectedValue="{Binding TRANGTHAI, UpdateSourceTrigger=PropertyChanged}" SelectedValuePath="Content" Height="25" VerticalContentAlignment="Center">
-                                            <ComboBoxItem Content="Cho dong tien"/>
-                                            <ComboBoxItem Content="Dang hoc"/>
-                                        </ComboBox>
-                                    </DataTemplate>
-                                </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
@@ -172,8 +150,8 @@
 
         <!-- Nút lưu -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-            <Button Content="Hủy bỏ" Command="{Binding CancelCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}" Width="100" Height="40" Background="Transparent" BorderBrush="#CBD5E0" Margin="0,0,10,0"/>
-            <Button Content="Xác nhận Đăng ký" Command="{Binding SaveCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}" Width="160" Height="40" Background="#3182CE" Foreground="White" FontWeight="Bold" BorderThickness="0">
+            <Button Content="Hủy bỏ" Command="{Binding CancelCommand}" Width="100" Height="40" Background="Transparent" BorderBrush="#CBD5E0" Margin="0,0,10,0"/>
+            <Button Content="Xác nhận Đăng ký" Command="{Binding SaveCommand}" Width="160" Height="40" Background="#3182CE" Foreground="White" FontWeight="Bold" BorderThickness="0">
                 <Button.Resources>
                     <Style TargetType="Border">
                         <Setter Property="CornerRadius" Value="6"/>

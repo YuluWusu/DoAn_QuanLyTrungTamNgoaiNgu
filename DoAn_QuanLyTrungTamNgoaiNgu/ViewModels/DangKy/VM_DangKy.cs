@@ -203,6 +203,13 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             {
                 try
                 {
+                    // Delete related DIEMDANHs to satisfy foreign key constraint
+                    var relatedDiemDanhs = DataProvider.Ins.DB.DIEMDANHs.Where(x => x.MaHV == SelectedItem.MaHV && x.MALOP == SelectedItem.MALOP).ToList();
+                    if (relatedDiemDanhs.Any())
+                    {
+                        DataProvider.Ins.DB.DIEMDANHs.RemoveRange(relatedDiemDanhs);
+                    }
+
                     DataProvider.Ins.DB.DANGKYLOPs.Remove(SelectedItem);
                     DataProvider.Ins.DB.SaveChanges();
                     ListDangKy.Remove(SelectedItem);
