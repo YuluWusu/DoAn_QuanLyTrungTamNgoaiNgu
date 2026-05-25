@@ -100,7 +100,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             RefreshCommand = new RelayCommand(p => ExecuteRefresh());
         }
 
-        private void LoadData()
+        public void LoadData()
         {
             ListLoaiKhoaHoc = new ObservableCollection<LOAI_KHOAHOC>(DataProvider.Ins.DB.LOAI_KHOAHOC.ToList());
             var query = DataProvider.Ins.DB.KHOA_HOC.Include("LOAI_KHOAHOC").ToList();

@@ -70,15 +70,7 @@
                     </Button.Resources>
                 </Button>
 
-                <Button Content="Làm mới" Width="120" Height="42" Margin="0,25,0,0" 
-                        Background="#1E6FB5" Foreground="White" FontWeight="Bold" BorderThickness="0" Command="{Binding RefreshCommand}">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="8"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-            </StackPanel>
+
         </Border>
  
          <!-- 3. DataGrid Khóa Học (Đã chỉnh sửa giống file UC_HocVien) -->

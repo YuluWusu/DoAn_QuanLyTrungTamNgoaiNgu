@@ -101,7 +101,11 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 {
                     var vmThemHocPhi = new VM_ThemHocPhi();
                     // Bắt sự kiện khi bấm nút "Quay lại" trong form thêm khóa học
-                    vmThemHocPhi.RequestNavigateBack = () => NavigateTo(vmDanhSachHocPhi);
+                    vmThemHocPhi.RequestNavigateBack = () => 
+                    {
+                        vmDanhSachHocPhi.LoadData();
+                        NavigateTo(vmDanhSachHocPhi);
+                    };
                     NavigateTo(vmThemHocPhi); 
                 };
         
