@@ -52,6 +52,13 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             set { _listLoaiKhoaHoc = value; OnPropertyChanged(); }
         }
 
+        private ObservableCollection<KHOA_HOC> _listKhoaHoc;
+        public ObservableCollection<KHOA_HOC> ListKhoaHoc
+        {
+            get => _listKhoaHoc;
+            set { _listKhoaHoc = value; OnPropertyChanged(); }
+        }
+
         public ICommand CancelCommand { get; set; }
         public ICommand RefreshCommand { get; set; }
         public ICommand SaveCommand { get; set; }
@@ -71,6 +78,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         private void LoadData()
         {
             ListLoaiKhoaHoc = new ObservableCollection<LOAI_KHOAHOC>(DataProvider.Ins.DB.LOAI_KHOAHOC.ToList());
+            ListKhoaHoc = new ObservableCollection<KHOA_HOC>(DataProvider.Ins.DB.KHOA_HOC.ToList());
         }
 
         private void ExecuteRefresh()
