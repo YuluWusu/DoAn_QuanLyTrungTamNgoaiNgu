@@ -162,7 +162,7 @@
  
                  <!-- Các nút hành động -->
                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                     <Button Content="Xóa đăng ký" Command="{Binding DeleteCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}" Width="130" Height="45" Background="Transparent" Foreground="#E53E3E" 
+                     <Button Content="Hủy/Xóa đăng ký" Command="{Binding DeleteCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}" Width="130" Height="45" Background="Transparent" Foreground="#E53E3E" 
                          BorderBrush="#FED7D7" BorderThickness="1" Margin="0,0,10,0" FontWeight="SemiBold">
                          <Button.Resources>
                              <Style TargetType="Border">

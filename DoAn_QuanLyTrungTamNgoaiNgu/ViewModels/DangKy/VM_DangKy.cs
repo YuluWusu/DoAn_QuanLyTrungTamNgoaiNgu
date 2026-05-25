@@ -197,27 +197,33 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 return;
             }
 
-            var result = MessageBox.Show($"Bạn có chắc chắn muốn xóa đăng ký của HV {SelectedItem.MaHV} cho Lớp {SelectedItem.MALOP}?",
+            var result = MessageBox.Show($"Bạn có chắc chắn muốn Hủy/Xóa đăng ký của HV {SelectedItem.MaHV} cho Lớp {SelectedItem.MALOP}?",
                                          "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Question);
             if (result == MessageBoxResult.Yes)
             {
                 try
                 {
-                    // Delete related DIEMDANHs to satisfy foreign key constraint
+                    // Check for related DIEMDANH records
                     var relatedDiemDanhs = DataProvider.Ins.DB.DIEMDANHs.Where(x => x.MaHV == SelectedItem.MaHV && x.MALOP == SelectedItem.MALOP).ToList();
                     if (relatedDiemDanhs.Any())
                     {
-                        DataProvider.Ins.DB.DIEMDANHs.RemoveRange(relatedDiemDanhs);
+                        // Has dependencies, perform soft-delete by setting status to 'Huy'
+                        SelectedItem.TRANGTHAI = "Huy";
+                        DataProvider.Ins.DB.SaveChanges();
+                        MessageBox.Show("Học viên đã có dữ liệu điểm danh nên không thể xóa hoàn toàn khỏi cơ sở dữ liệu.\nTrạng thái đăng ký đã được chuyển thành 'Hủy'.", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
-
-                    DataProvider.Ins.DB.DANGKYLOPs.Remove(SelectedItem);
-                    DataProvider.Ins.DB.SaveChanges();
-                    ListDangKy.Remove(SelectedItem);
-                    MessageBox.Show("Đã xóa thành công!");
+                    else
+                    {
+                        // Safe to hard-delete
+                        DataProvider.Ins.DB.DANGKYLOPs.Remove(SelectedItem);
+                        DataProvider.Ins.DB.SaveChanges();
+                        ListDangKy.Remove(SelectedItem);
+                        MessageBox.Show("Đã xóa đăng ký thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Lỗi khi xóa (Có thể do dữ liệu ràng buộc): " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Lỗi khi xóa/hủy (Có thể do dữ liệu ràng buộc): " + ex.Message, "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
