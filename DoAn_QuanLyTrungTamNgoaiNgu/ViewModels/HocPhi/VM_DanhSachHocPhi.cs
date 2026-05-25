@@ -157,21 +157,25 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             }
             else
             {
-                SaveChangesToDatabase();
-                IsEditing = false;
-                MessageBox.Show("Đã lưu các chỉnh sửa thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                if (SaveChangesToDatabase())
+                {
+                    IsEditing = false;
+                    MessageBox.Show("Đã lưu các chỉnh sửa thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
         }
 
-        public void SaveChangesToDatabase()
+        public bool SaveChangesToDatabase()
         {
             try
             {
                 DataProvider.Ins.DB.SaveChanges();
+                return true;
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Lỗi khi lưu cơ sở dữ liệu: {ex.Message}", "Lỗi", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
             }
         }
 

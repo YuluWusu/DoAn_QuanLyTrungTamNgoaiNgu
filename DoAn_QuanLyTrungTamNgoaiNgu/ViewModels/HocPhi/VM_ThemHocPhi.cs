@@ -79,11 +79,32 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         {
             ListLoaiKhoaHoc = new ObservableCollection<LOAI_KHOAHOC>(DataProvider.Ins.DB.LOAI_KHOAHOC.ToList());
             ListKhoaHoc = new ObservableCollection<KHOA_HOC>(DataProvider.Ins.DB.KHOA_HOC.ToList());
+            GenerateMaKH();
+        }
+
+        private void GenerateMaKH()
+        {
+            var maxMaKH = DataProvider.Ins.DB.KHOA_HOC.OrderByDescending(x => x.MAKH).Select(x => x.MAKH).FirstOrDefault();
+            if (string.IsNullOrEmpty(maxMaKH))
+            {
+                MaKH = "KH001";
+            }
+            else
+            {
+                if (maxMaKH.StartsWith("KH") && int.TryParse(maxMaKH.Substring(2), out int num))
+                {
+                    MaKH = $"KH{(num + 1):D3}";
+                }
+                else
+                {
+                    MaKH = "KH001";
+                }
+            }
         }
 
         private void ExecuteRefresh()
         {
-            MaKH = string.Empty;
+            GenerateMaKH();
             TenKH = string.Empty;
             SelectedLoaiKH = null;
             SoBuoi = 0;
