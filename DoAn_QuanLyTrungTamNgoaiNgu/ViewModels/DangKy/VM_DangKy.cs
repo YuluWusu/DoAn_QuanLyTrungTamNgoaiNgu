@@ -24,6 +24,13 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             set { _filterSearchQuery = value; OnPropertyChanged(); }
         }
 
+        private string _filterTrangThai = "-- Tất cả --";
+        public string FilterTrangThai
+        {
+            get => _filterTrangThai;
+            set { _filterTrangThai = value; OnPropertyChanged(); }
+        }
+
         public Action OnRequestAddRegistration { get; set; }
 
         private DANGKYLOP _selectedItem;
@@ -110,6 +117,11 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                     string search = FilterSearchQuery.ToLower();
                     query = query.Where(x => x.MaHV.ToLower().Contains(search)
                                           || x.MALOP.ToLower().Contains(search));
+                }
+
+                if (!string.IsNullOrEmpty(FilterTrangThai) && FilterTrangThai != "-- Tất cả --")
+                {
+                    query = query.Where(x => x.TRANGTHAI == FilterTrangThai);
                 }
 
                 ListDangKy = new ObservableCollection<DANGKYLOP>(query.ToList());

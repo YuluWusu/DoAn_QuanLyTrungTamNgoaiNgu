@@ -43,13 +43,13 @@
 
                 <StackPanel Margin="20,0,0,0" Width="200">
                     <TextBlock Text="Trạng thái đăng ký" FontSize="12" FontWeight="Bold" Foreground="#4A5568" Margin="0,0,0,8"/>
-                    <ComboBox Height="40" VerticalContentAlignment="Center" SelectedIndex="0">
+                    <ComboBox Height="40" VerticalContentAlignment="Center" SelectedValue="{Binding FilterTrangThai}" SelectedValuePath="Content">
                         <ComboBoxItem Content="-- Tất cả --"/>
-                        <ComboBoxItem Content="Chờ đóng tiền"/>
-                        <ComboBoxItem Content="Đang học"/>
-                        <ComboBoxItem Content="Bảo lưu"/>
-                        <ComboBoxItem Content="Hoàn thành"/>
-                        <ComboBoxItem Content="Hủy"/>
+                        <ComboBoxItem Content="Cho dong tien"/>
+                        <ComboBoxItem Content="Dang hoc"/>
+                        <ComboBoxItem Content="Bao luu"/>
+                        <ComboBoxItem Content="Hoan thanh"/>
+                        <ComboBoxItem Content="Huy"/>
                     </ComboBox>
                 </StackPanel>
 
@@ -162,7 +162,7 @@
  
                  <!-- Các nút hành động -->
                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                     <Button Content="Hủy/Xóa đăng ký" Command="{Binding DeleteCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}" Width="130" Height="45" Background="Transparent" Foreground="#E53E3E" 
+                     <Button Content="Xóa đăng ký" Command="{Binding DeleteCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}" Width="130" Height="45" Background="Transparent" Foreground="#E53E3E" 
                          BorderBrush="#FED7D7" BorderThickness="1" Margin="0,0,10,0" FontWeight="SemiBold">
                          <Button.Resources>
                              <Style TargetType="Border">
