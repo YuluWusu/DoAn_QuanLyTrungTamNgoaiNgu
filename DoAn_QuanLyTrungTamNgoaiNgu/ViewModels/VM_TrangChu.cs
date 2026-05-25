@@ -155,22 +155,6 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 return false; // Cancel
             }
 
-            if (NoiDungHienTai is VM_DangKyMoi vmDangKyMoi && vmDangKyMoi.IsEditing)
-            {
-                var result = MessageBox.Show("Bạn đang trong chế độ chỉnh sửa bảng Đăng ký của form thêm mới. Bạn có muốn LƯU các thay đổi trước khi chuyển trang không?\n\n- Chọn 'Yes' để lưu và chuyển trang.\n- Chọn 'No' để hủy thay đổi và chuyển trang.\n- Chọn 'Cancel' để ở lại.", "Xác nhận chuyển trang", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
-                if (result == MessageBoxResult.Yes)
-                {
-                    vmDangKyMoi.SaveChangesToDatabase();
-                    return true;
-                }
-                else if (result == MessageBoxResult.No)
-                {
-                    vmDangKyMoi.CancelEdits();
-                    return true;
-                }
-                return false; // Cancel
-            }
-
             return true;
         }
         public void LoadThongTinNguoiDung(string maTK)
