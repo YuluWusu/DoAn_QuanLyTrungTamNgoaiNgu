@@ -1,4 +1,4 @@
-﻿CREATE DATABASE QL_TRUNGTAM_TIENGANH
+CREATE DATABASE QL_TRUNGTAM_TIENGANH
 GO
 USE QL_TRUNGTAM_TIENGANH
 GO
@@ -111,7 +111,7 @@ CREATE TABLE DANGKYLOP
     PRIMARY KEY (MaHV, MALOP),
     FOREIGN KEY (MaHV)  REFERENCES HOCVIEN(MaHV),
     FOREIGN KEY (MALOP) REFERENCES LOPHOC(MALOP)
-)	
+)
 GO
 
 CREATE TABLE PHIEUTHU
@@ -178,7 +178,7 @@ GO
 CREATE TABLE TAIKHOAN_QUYEN
 (
     MATK    CHAR(6) NOT NULL,
-    MAQUYEN CHAR(5) NOT NULL,	
+    MAQUYEN CHAR(5) NOT NULL,
     PRIMARY KEY (MATK, MAQUYEN),
     FOREIGN KEY (MATK)    REFERENCES TAIKHOAN(MATK),
     FOREIGN KEY (MAQUYEN) REFERENCES QUYEN(MAQUYEN)
@@ -742,6 +742,8 @@ GO
 -- Procedure: Hủy lớp (cập nhật TRANGTHAI, xóa lịch tương lai)
 -- Function: Kiểm tra phòng còn trống theo ca + ngày
 -- Trigger: Khi NGAYKETTHUC đến → tự cập nhật TRANGTHAI = N'Đã kết thúc'
+-- Procedure bổ sung: SP_MoLopMoi (Tự động tính ngày bế giảng và sinh lịch học theo thứ trong tuần)
+-- View bổ sung: VW_DanhSachDiemDanh (Tổng hợp danh sách học viên kèm trạng thái điểm danh theo ngày)
 -- ============================================================
 
 CREATE OR ALTER FUNCTION FN_KiemTraPhongTrong
@@ -856,7 +858,81 @@ BEGIN
       AND L.TRANGTHAI   = N'Dang mo';
 END
 GO
+CREATE OR ALTER PROCEDURE SP_MoLopMoi
+    @MaLop     CHAR(5),
+    @TenLop    NVARCHAR(50),
+    @MaKH      CHAR(5),
+    @MaGV      CHAR(6),
+    @NgayBatDau DATE,
+    @MaPhong   CHAR(5),
+    @MaCa      CHAR(5),
+    @T2 BIT, @T3 BIT, @T4 BIT,
+    @T5 BIT, @T6 BIT, @T7 BIT, @CN BIT
+AS
+BEGIN
+    SET NOCOUNT ON;
 
+    DECLARE @SoBuoi INT;
+    SELECT @SoBuoi = SOBUOI FROM KHOA_HOC WHERE MAKH = @MaKH;
+    IF @SoBuoi IS NULL
+    BEGIN
+        PRINT N'Khoa hoc khong ton tai.';
+        RETURN;
+    END
+
+    INSERT INTO LOPHOC (MALOP, TENLOP, MAKH, MaGV, NGAYBATDAU, NGAYKETTHUC, TRANGTHAI)
+    VALUES (@MaLop, @TenLop, @MaKH, @MaGV, @NgayBatDau, @NgayBatDau, N'Dang mo');
+
+    DECLARE @Dem     INT  = 0;
+    DECLARE @NgayCoi DATE = @NgayBatDau;
+    DECLARE @NgayCuoi DATE = NULL;
+    DECLARE @MaxLoop INT  = 730;
+
+    WHILE @Dem < @SoBuoi AND @MaxLoop > 0
+    BEGIN
+        DECLARE @TenThu NVARCHAR(20) = DATENAME(WEEKDAY, @NgayCoi);
+			IF (@TenThu = 'Monday'   AND @T2=1)
+			OR (@TenThu = 'Tuesday'  AND @T3=1)
+			OR (@TenThu = 'Wednesday'AND @T4=1)
+			OR (@TenThu = 'Thursday' AND @T5=1)
+			OR (@TenThu = 'Friday'   AND @T6=1)
+			OR (@TenThu = 'Saturday' AND @T7=1)
+			OR (@TenThu = 'Sunday'   AND @CN=1)
+        BEGIN
+            IF dbo.FN_KiemTraPhongTrong(@MaPhong, @MaCa, @NgayCoi) = 1
+            BEGIN
+                INSERT INTO LICHOC (MALOP, NGAYHOC, MAPHONG, MACA)
+                VALUES (@MaLop, @NgayCoi, @MaPhong, @MaCa);
+                SET @Dem    = @Dem + 1;
+                SET @NgayCuoi = @NgayCoi;
+            END
+            ELSE
+                PRINT N'Phong bi trung ngay ' + CONVERT(NVARCHAR(10), @NgayCoi, 103);
+        END
+        SET @NgayCoi  = DATEADD(DAY, 1, @NgayCoi);
+        SET @MaxLoop  = @MaxLoop - 1;
+    END
+
+    UPDATE LOPHOC
+    SET NGAYKETTHUC = ISNULL(@NgayCuoi, @NgayBatDau)
+    WHERE MALOP = @MaLop;
+
+    PRINT N'Da tao lop ' + @MaLop + N' voi ' + CAST(@Dem AS VARCHAR) + N' buoi.';
+END
+GO
+CREATE OR ALTER VIEW VW_DanhSachDiemDanh
+AS
+SELECT
+    DK.MaHV,
+    HV.HoTen,
+    DK.MALOP,
+    DD.NGAYDD,
+    ISNULL(DD.TRANGTHAI, N'Co mat') AS TRANGTHAI,
+    DD.GHICHU
+FROM DANGKYLOP DK
+JOIN HOCVIEN HV ON DK.MaHV = HV.MaHV
+LEFT JOIN DIEMDANH DD ON DK.MaHV = DD.MaHV AND DK.MALOP = DD.MALOP
+GO
 
 -- ============================================================
 -- Hồng Vũ
