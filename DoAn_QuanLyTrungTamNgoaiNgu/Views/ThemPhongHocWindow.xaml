@@ -1,0 +1,41 @@
+<Window x:Class="DoAn_QuanLyTrungTamNgoaiNgu.Views.ThemPhongHocWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="clr-namespace:DoAn_QuanLyTrungTamNgoaiNgu.ViewModels"
+        Title="Thêm Phòng Học" Height="300" Width="400"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        x:Name="WindowAddPhongHoc">
+    <Window.DataContext>
+        <vm:VM_ThemPhongHoc/>
+    </Window.DataContext>
+    <Grid Background="#F1F5F9" Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="THÊM PHÒNG HỌC" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10" Foreground="#1E293B"/>
+
+        <StackPanel Grid.Row="1" Margin="20,10">
+            <TextBlock Text="Tên Phòng:" FontSize="13" Foreground="#64748B" Margin="0,0,0,5" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding TenPhong, UpdateSourceTrigger=PropertyChanged}" Height="35" Padding="5,0" VerticalContentAlignment="Center" FontSize="14">
+                <TextBox.BorderBrush>
+                    <SolidColorBrush Color="#E2E8F0"/>
+                </TextBox.BorderBrush>
+            </TextBox>
+
+            <TextBlock Text="Số ghế ngồi:" FontSize="13" Foreground="#64748B" Margin="0,15,0,5" FontWeight="SemiBold"/>
+            <TextBox Text="{Binding SoGheNgoi, UpdateSourceTrigger=PropertyChanged}" Height="35" Padding="5,0" VerticalContentAlignment="Center" FontSize="14">
+                <TextBox.BorderBrush>
+                    <SolidColorBrush Color="#E2E8F0"/>
+                </TextBox.BorderBrush>
+            </TextBox>
+        </StackPanel>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="20,10,20,20">
+            <Button Content="Hủy" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=WindowAddPhongHoc}" Width="80" Height="35" Background="White" Foreground="#64748B" Margin="0,0,10,0"/>
+            <Button Content="Lưu" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=WindowAddPhongHoc}" Width="100" Height="35" Background="#4F46E5" Foreground="White" FontWeight="Bold"/>
+        </StackPanel>
+    </Grid>
+</Window>
