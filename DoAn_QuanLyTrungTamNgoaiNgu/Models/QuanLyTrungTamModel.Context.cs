@@ -45,6 +45,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Models
         public virtual DbSet<VW_GiaoVien_SoLop> VW_GiaoVien_SoLop { get; set; }
         public virtual DbSet<VW_KhoaHoc_ThongKe> VW_KhoaHoc_ThongKe { get; set; }
         public virtual DbSet<VW_TaiKhoan_Quyen> VW_TaiKhoan_Quyen { get; set; }
+        public virtual DbSet<VW_DanhSachDiemDanh> VW_DanhSachDiemDanh { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
