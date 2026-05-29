@@ -12,19 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DoAn_QuanLyTrungTamNgoaiNgu.ViewModels;
 
 namespace DoAn_QuanLyTrungTamNgoaiNgu.Views
 {
     /// <summary>
-    /// Interaction logic for UC_DiemDanh.xaml
+    /// Interaction logic for UC_HocVien.xaml
     /// </summary>
-    public partial class UC_DiemDanh : UserControl
+    public partial class UC_HocVien : UserControl
     {
-        public UC_DiemDanh()
+        public UC_HocVien()
         {
             InitializeComponent();
-            this.DataContext = new VM_DiemDanh();
         }
     }
 }

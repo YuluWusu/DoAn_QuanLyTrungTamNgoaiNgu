@@ -9,9 +9,6 @@
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="1280">
 
-    <UserControl.DataContext>
-        <vm:VM_DiemDanh/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <helpers:EnumToBooleanConverter x:Key="EnumToBooleanConverter" />
 
@@ -27,7 +24,7 @@
         <SolidColorBrush x:Key="DangerBrush"       Color="#EF4444"/>
         <SolidColorBrush x:Key="DangerLightBrush"  Color="#FEE2E2"/>
 
-        <SolidColorBrush x:Key="WarningBrush"      Color="#F59E0B"/>
+        <SolidColorBrush x:Key="WarningBrush"      Color="#473C04"/>
         <SolidColorBrush x:Key="WarningLightBrush" Color="#FEF3C7"/>
 
         <SolidColorBrush x:Key="SurfaceBrush"      Color="#FFFFFF"/>
@@ -187,11 +184,11 @@
 
         <Style x:Key="ModernDataGridCell" TargetType="DataGridCell">
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="14,0"/>
+            <Setter Property="Padding" Value="16,0"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="DataGridCell">
-                        <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                        <Border Padding="0" Background="{TemplateBinding Background}">
                             <ContentPresenter VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -212,14 +209,38 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
                         <Border x:Name="Pill" Background="{StaticResource SuccessLightBrush}"
-                                CornerRadius="20" Padding="12,4" Margin="3,0">
+                                CornerRadius="20" Padding="5,5" Margin="3,0">
                             <TextBlock x:Name="Label" Text="✔ Có mặt"
                                        Foreground="{StaticResource SuccessBrush}"
-                                       FontSize="11" FontWeight="SemiBold"/>
+                                       FontSize="10" FontWeight="SemiBold"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
                                 <Setter TargetName="Pill" Property="Background" Value="{StaticResource SuccessBrush}"/>
+                                <Setter TargetName="Label" Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Pill" Property="Opacity" Value="0.85"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style x:Key="AttendancePill_AbsentExcused" TargetType="RadioButton">
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="Pill" Background="{StaticResource PrimaryLightBrush}"
+                        CornerRadius="20" Padding="5,5" Margin="3,0">
+                            <TextBlock x:Name="Label" Text="📋 Vắng CP"
+                               Foreground="{StaticResource PrimaryBrush}"
+                               FontSize="10" FontWeight="SemiBold"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="Pill" Property="Background" Value="{StaticResource PrimaryBrush}"/>
                                 <Setter TargetName="Label" Property="Foreground" Value="White"/>
                             </Trigger>
                             <Trigger Property="IsMouseOver" Value="True">
@@ -236,11 +257,13 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
+                        <!-- Phải có x:Name="Pill" ở đây -->
                         <Border x:Name="Pill" Background="{StaticResource DangerLightBrush}"
-                                CornerRadius="20" Padding="12,4" Margin="3,0">
-                            <TextBlock x:Name="Label" Text="✘ Vắng"
-                                       Foreground="{StaticResource DangerBrush}"
-                                       FontSize="11" FontWeight="SemiBold"/>
+                        CornerRadius="20" Padding="5,5" Margin="3,0">
+                            <!-- Phải có x:Name="Label" ở đây -->
+                            <TextBlock x:Name="Label" Text="✘ Vắng KP"
+                               Foreground="{StaticResource DangerBrush}"
+                               FontSize="10" FontWeight="SemiBold"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
@@ -262,10 +285,10 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="RadioButton">
                         <Border x:Name="Pill" Background="{StaticResource WarningLightBrush}"
-                                CornerRadius="20" Padding="12,4" Margin="3,0">
+                                CornerRadius="20" Padding="5,5" Margin="3,0">
                             <TextBlock x:Name="Label" Text="⏱ Trễ"
                                        Foreground="{StaticResource WarningBrush}"
-                                       FontSize="11" FontWeight="SemiBold"/>
+                                       FontSize="10" FontWeight="SemiBold"/>
                         </Border>
                         <ControlTemplate.Triggers>
                             <Trigger Property="IsChecked" Value="True">
@@ -324,7 +347,7 @@
                 </StackPanel>
 
                 <!-- Filter controls -->
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="471,0,4,0" Grid.ColumnSpan="2">
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="300,0,4,0" Grid.ColumnSpan="2">
                     <TextBlock Text="Lớp:" FontSize="13" Foreground="{StaticResource TextSecondaryBrush}"
                                VerticalAlignment="Center" Margin="0,0,8,0"/>
                     <ComboBox Style="{StaticResource ModernComboBox}"
@@ -377,13 +400,7 @@
                         <!-- Legend pills -->
                         <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                             <Border Background="{StaticResource SuccessLightBrush}" CornerRadius="20" Padding="8,3" Margin="4,0">
-                                <TextBlock Text="✔ Có mặt" Foreground="{StaticResource SuccessBrush}" FontSize="10" FontWeight="SemiBold"/>
-                            </Border>
-                            <Border Background="{StaticResource DangerLightBrush}" CornerRadius="20" Padding="8,3" Margin="4,0">
-                                <TextBlock Text="✘ Vắng" Foreground="{StaticResource DangerBrush}" FontSize="10" FontWeight="SemiBold"/>
-                            </Border>
-                            <Border Background="{StaticResource WarningLightBrush}" CornerRadius="20" Padding="8,3" Margin="4,0">
-                                <TextBlock Text="⏱ Trễ" Foreground="{StaticResource WarningBrush}" FontSize="10" FontWeight="SemiBold"/>
+                                <TextBlock Text="Đặt Button" Foreground="{StaticResource SuccessBrush}" FontSize="10" FontWeight="SemiBold"/>
                             </Border>
                         </StackPanel>
                     </Grid>
@@ -404,7 +421,7 @@
                           Margin="0">
                     <DataGrid.Columns>
                         <!-- STT -->
-                        <DataGridTextColumn Header="#" Binding="{Binding MaHV}" Width="46" IsReadOnly="True">
+                        <DataGridTextColumn Header="#" Binding="{Binding MaHV}" Width="74" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
@@ -415,7 +432,7 @@
                         </DataGridTextColumn>
 
                         <!-- Họ tên -->
-                        <DataGridTextColumn Header="HỌ VÀ TÊN" Binding="{Binding HoTen}" Width="*" IsReadOnly="True">
+                        <DataGridTextColumn Header="HỌ VÀ TÊN" Binding="{Binding HoTen}" Width="150" IsReadOnly="True">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
@@ -427,21 +444,43 @@
                         </DataGridTextColumn>
 
                         <!-- Trạng thái -->
-                        <DataGridTemplateColumn Header="TRẠNG THÁI" Width="260">
+                        <DataGridTemplateColumn Header="TRẠNG THÁI" Width="320">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0">
+
                                         <RadioButton Style="{StaticResource AttendancePill_Present}"
-                             IsChecked="{Binding TRANGTHAI, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter='Co mat'}"
-                             GroupName="{Binding MaHV}"/>
+             IsChecked="{Binding TRANGTHAI, 
+                 Converter={StaticResource EnumToBooleanConverter}, 
+                 ConverterParameter='Co mat', 
+                 Mode=TwoWay,
+                 UpdateSourceTrigger=PropertyChanged}"
+             GroupName="{Binding MaHV}"/>
 
                                         <RadioButton Style="{StaticResource AttendancePill_Absent}"
-                             IsChecked="{Binding TRANGTHAI, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter='Vang CP'}"
-                             GroupName="{Binding MaHV}"/>
+             IsChecked="{Binding TRANGTHAI, 
+                 Converter={StaticResource EnumToBooleanConverter}, 
+                 ConverterParameter='Vang KP', 
+                 Mode=TwoWay,
+                 UpdateSourceTrigger=PropertyChanged}"
+             GroupName="{Binding MaHV}"/>
+
+                                        <RadioButton Style="{StaticResource AttendancePill_AbsentExcused}"
+             IsChecked="{Binding TRANGTHAI, 
+                 Converter={StaticResource EnumToBooleanConverter}, 
+                 ConverterParameter='Vang CP', 
+                 Mode=TwoWay,
+                 UpdateSourceTrigger=PropertyChanged}"
+             GroupName="{Binding MaHV}"/>
 
                                         <RadioButton Style="{StaticResource AttendancePill_Late}"
-                             IsChecked="{Binding TRANGTHAI, Converter={StaticResource EnumToBooleanConverter}, ConverterParameter='Tre'}"
-                             GroupName="{Binding MaHV}"/>
+             IsChecked="{Binding TRANGTHAI, 
+                 Converter={StaticResource EnumToBooleanConverter}, 
+                 ConverterParameter='Tre', 
+                 Mode=TwoWay,
+                 UpdateSourceTrigger=PropertyChanged}"
+             GroupName="{Binding MaHV}"/>
+
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
@@ -498,24 +537,24 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Tổng vắng -->
-                    <Border Grid.Column="0" Background="{StaticResource DangerLightBrush}"
+                    <Border Grid.Column="0" BorderBrush="Black" BorderThickness="2" Background="{StaticResource DangerLightBrush}"
                             CornerRadius="10" Padding="12,10" Margin="0,0,6,0">
                         <StackPanel>
                             <TextBlock Text="TỔNG VẮNG" FontSize="10" FontWeight="SemiBold"
                                        Foreground="{StaticResource DangerBrush}" Opacity="0.75"/>
-                            <TextBlock Text="{Binding TotalAbsentCount, FallbackValue='—'}"
+                            <TextBlock Text="{Binding TongVangKP, FallbackValue='—'}"
                                        FontSize="22" FontWeight="Bold"
                                        Foreground="{StaticResource DangerBrush}" Margin="0,2,0,0"/>
                         </StackPanel>
                     </Border>
 
                     <!-- Tổng trễ -->
-                    <Border Grid.Column="1" Background="{StaticResource WarningLightBrush}"
+                    <Border Grid.Column="1" BorderBrush="Black" BorderThickness="2" Background="{StaticResource WarningLightBrush}"
                             CornerRadius="10" Padding="12,10" Margin="6,0,0,0">
                         <StackPanel>
                             <TextBlock Text="TỔNG TRỄ" FontSize="10" FontWeight="SemiBold"
-                                       Foreground="{StaticResource WarningBrush}" Opacity="0.75"/>
-                            <TextBlock Text="{Binding TotalLateCount, FallbackValue='—'}"
+                                       Foreground="{StaticResource WarningBrush}" Opacity="0.75"/>    
+                            <TextBlock Text="{Binding TongTre, FallbackValue='—'}"
                                        FontSize="22" FontWeight="Bold"
                                        Foreground="{StaticResource WarningBrush}" Margin="0,2,0,0"/>
                         </StackPanel>
@@ -525,14 +564,14 @@
                 <!-- Summary DataGrid -->
                 <DataGrid Grid.Row="2"
                           Style="{StaticResource ModernDataGrid}"
-                          ItemsSource="{Binding AttendanceSummaryList}"
+                          ItemsSource="{Binding DiemDanhList}"
                           ColumnHeaderStyle="{StaticResource ModernColumnHeader}"
                           RowStyle="{StaticResource ModernDataGridRow}"
                           CellStyle="{StaticResource ModernDataGridCell}"
                           IsReadOnly="True"
                           Margin="0">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="HỌC VIÊN" Binding="{Binding StudentName}" Width="*">
+                        <DataGridTextColumn Header="HỌC VIÊN" Binding="{Binding HoTenHS}" Width="150">
                             <DataGridTextColumn.ElementStyle>
                                 <Style TargetType="TextBlock">
                                     <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
@@ -542,30 +581,45 @@
                             </DataGridTextColumn.ElementStyle>
                         </DataGridTextColumn>
 
-                        <DataGridTemplateColumn Header="VẮNG" Width="64">
+                        <DataGridTemplateColumn Header="VẮNG KP" Width="75">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border Background="{StaticResource DangerLightBrush}"
-                                            CornerRadius="6" Padding="6,3"
+                                            CornerRadius="6" Padding="3,3"
                                             HorizontalAlignment="Center" Margin="8,0">
-                                        <TextBlock Text="{Binding AbsentCount}"
+                                        <TextBlock Text="{Binding VangKP}"
                                                    Foreground="{StaticResource DangerBrush}"
-                                                   FontWeight="Bold" FontSize="12"
+                                                   FontWeight="Bold" FontSize="15"
                                                    HorizontalAlignment="Center"/>
                                     </Border>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn Header="TRỄ" Width="56">
+                        <DataGridTemplateColumn Header="VẮNG CP" Width="75">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Background="{StaticResource PrimaryLightBrush}"
+                    CornerRadius="6" Padding="6,3"
+                    HorizontalAlignment="Center" Margin="8,0">
+                                        <TextBlock Text="{Binding VangCP}"
+                           Foreground="{StaticResource PrimaryBrush}"
+                           FontWeight="Bold" FontSize="15"
+                           HorizontalAlignment="Center"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="TRỄ" Width="50">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border Background="{StaticResource WarningLightBrush}"
-                                            CornerRadius="6" Padding="6,3"
-                                            HorizontalAlignment="Center" Margin="8,0">
-                                        <TextBlock Text="{Binding LateCount}"
+                                            CornerRadius="6" Padding="3,3"
+                                            HorizontalAlignment="Center" Margin="5,0">
+                                        <TextBlock Text="{Binding Tre}"
                                                    Foreground="{StaticResource WarningBrush}"
-                                                   FontWeight="Bold" FontSize="12"
+                                                   FontWeight="Bold" FontSize="15"
                                                    HorizontalAlignment="Center"/>
                                     </Border>
                                 </DataTemplate>

@@ -40,6 +40,49 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 OnPropertyChanged();
             }
         }
+        private string _activeTab = "TrangChu";
+        public string ActiveTab
+        {
+            get => _activeTab;
+            set
+            {
+                _activeTab = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private Visibility _menuHocVien = Visibility.Visible;
+        public Visibility MenuHocVien { get => _menuHocVien; set { _menuHocVien = value; OnPropertyChanged(); } }
+
+        private Visibility _menuLopHoc = Visibility.Visible;
+        public Visibility MenuLopHoc { get => _menuLopHoc; set { _menuLopHoc = value; OnPropertyChanged(); } }
+
+        private Visibility _menuDangKy = Visibility.Visible;
+        public Visibility MenuDangKy { get => _menuDangKy; set { _menuDangKy = value; OnPropertyChanged(); } }
+
+        private Visibility _menuDiemDanh = Visibility.Visible;
+        public Visibility MenuDiemDanh { get => _menuDiemDanh; set { _menuDiemDanh = value; OnPropertyChanged(); } }
+
+        private Visibility _menuHocPhi = Visibility.Visible;
+        public Visibility MenuHocPhi { get => _menuHocPhi; set { _menuHocPhi = value; OnPropertyChanged(); } }
+
+        private Visibility _menuBaoCao = Visibility.Visible;
+        public Visibility MenuBaoCao { get => _menuBaoCao; set { _menuBaoCao = value; OnPropertyChanged(); } }
+
+        private Visibility _menuTaiKhoan = Visibility.Visible;
+        public Visibility MenuTaiKhoan { get => _menuTaiKhoan; set { _menuTaiKhoan = value; OnPropertyChanged(); } }
+
+        private int _soHocVien;
+        public int SoHocVien { get => _soHocVien; set { _soHocVien = value; OnPropertyChanged(); } }
+
+        private int _soLop;
+        public int SoLop { get => _soLop; set { _soLop = value; OnPropertyChanged(); } }
+
+        private decimal _doanhThu;
+        public decimal DoanhThu { get => _doanhThu; set { _doanhThu = value; OnPropertyChanged(); } }
+
+        private int _soGiaoVien;
+        public int SoGiaoVien { get => _soGiaoVien; set { _soGiaoVien = value; OnPropertyChanged(); } }
         public ICommand NavTrangChu {  get; set; }
         public ICommand NavHocVien { get; set; }
         public ICommand NavLopHoc { get; set; }
@@ -56,7 +99,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 if (!CanNavigateAway()) return;
 
                 MessageBoxResult result = MessageBox.Show("Bạn có muốn đăng xuất tài khoản này không?",
-            "Xác nhận đăng xuất", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                "Xác nhận đăng xuất", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.Yes)
                 {
                     DangNhap loginWin = new DangNhap();
@@ -74,33 +117,43 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             });
             data = new QL_TRUNGTAM_TIENGANH();
             NoiDungHienTai = new UC_TrangChu();
-            NavTrangChu = new RelayCommand<object>((p) => true, (p) => { NavigateTo(new UC_TrangChu()); });
+            ActiveTab = "TrangChu";
+            LoadDashboardData();
+            NavTrangChu = new RelayCommand<object>((p) => true, (p) => { NavigateTo(new UC_TrangChu(), "TrangChu"); });
+            NavLopHoc = new RelayCommand<object>((p) => true, (p) => { NavigateTo(new UC_LopHoc(), "LopHoc"); });
+            NavDiemDanh = new RelayCommand<object>((p) => true, (p) => { NavigateTo(new UC_DiemDanh(), "DiemDanh"); });
+            NavTaiKhoan = new RelayCommand<object>((p) => 
+            {
+                string vaiTro = UserSession.VaiTro ?? VaiTroHienThi ?? "";
+                return vaiTro == "Quản lý" || vaiTro == "Admin" || vaiTro == "Quan ly";
+            }, (p) => { NavigateTo(new UC_TaiKhoan(), "TaiKhoan"); });
+            NavHocVien = new RelayCommand<object>((p) => true, (p) => { NavigateTo(new UC_HocVien(), "HocVien"); });
+            NavBaoCao = new RelayCommand<object>((p) => true, (p) => { MessageBox.Show("Tính năng Báo cáo thống kê đang được phát triển!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information); });
 
-            // 3. Nút Đăng ký lớp
             NavDangKyLop = new RelayCommand<object>((p) => true, (p) => 
             { 
                 var vmDangKy = new VM_DangKy();
         
-                // Bắt sự kiện khi bấm nút "+ THÊM ĐĂNG KÝ" trong UC_DanhSachDangKy
+
                 vmDangKy.OnRequestAddRegistration = () => 
                 {
                     var vmDangKyMoi = new VM_DangKyMoi();
-                    // Bắt sự kiện khi bấm nút "Quay lại" hoặc "Hủy" trong form thêm mới
+                    
                     vmDangKyMoi.RequestNavigateBack = () => NavigateTo(vmDangKy);
                     NavigateTo(vmDangKyMoi);
                 };
         
-                NavigateTo(vmDangKy); 
+                NavigateTo(vmDangKy, "DangKy"); 
             });
             NavHocPhi = new RelayCommand<object>((p) => true, (p) => 
             { 
                 var vmDanhSachHocPhi = new VM_DanhSachHocPhi();
         
-                // Bắt sự kiện khi bấm nút "+ THÊM KHÓA HỌC" trong UC_DanhSachHocPhi
+                
                 vmDanhSachHocPhi.OnRequestAddKhoaHoc = () =>
                 {
                     var vmThemHocPhi = new VM_ThemHocPhi();
-                    // Bắt sự kiện khi bấm nút "Quay lại" trong form thêm khóa học
+                    
                     vmThemHocPhi.RequestNavigateBack = () => 
                     {
                         vmDanhSachHocPhi.LoadData();
@@ -109,15 +162,19 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                     NavigateTo(vmThemHocPhi); 
                 };
         
-                NavigateTo(vmDanhSachHocPhi); 
+                NavigateTo(vmDanhSachHocPhi, "HocPhi"); 
             });
         }
 
-        private void NavigateTo(object newContent)
+        private void NavigateTo(object newContent, string tabName = null)
         {
             if (CanNavigateAway())
             {
                 NoiDungHienTai = newContent;
+                if (!string.IsNullOrEmpty(tabName))
+                {
+                    ActiveTab = tabName;
+                }
             }
         }
 
@@ -172,6 +229,47 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                     HoTenHienThi = tk.GIAOVIEN.TenGV;
                     VaiTroHienThi = "Giáo viên";
                 }
+
+                // Cài đặt phân quyền RBAC
+                string vaiTro = VaiTroHienThi ?? "";
+                if (vaiTro.Contains("Lễ tân") || vaiTro.Contains("Le tan"))
+                {
+                    MenuDiemDanh = Visibility.Collapsed;
+                    MenuBaoCao = Visibility.Collapsed;
+                    MenuTaiKhoan = Visibility.Collapsed;
+                }
+                else if (vaiTro.Contains("Kế toán") || vaiTro.Contains("Ke toan"))
+                {
+                    MenuHocVien = Visibility.Collapsed;
+                    MenuLopHoc = Visibility.Collapsed;
+                    MenuDangKy = Visibility.Collapsed;
+                    MenuDiemDanh = Visibility.Collapsed;
+                    MenuTaiKhoan = Visibility.Collapsed;
+                }
+                else if (vaiTro.Contains("Giáo viên") || vaiTro.Contains("Giao vien"))
+                {
+                    MenuHocVien = Visibility.Collapsed;
+                    MenuDangKy = Visibility.Collapsed;
+                    MenuHocPhi = Visibility.Collapsed;
+                    MenuBaoCao = Visibility.Collapsed;
+                    MenuTaiKhoan = Visibility.Collapsed;
+                }
+            }
+        }
+
+        public void LoadDashboardData()
+        {
+            using (var db = new QL_TRUNGTAM_TIENGANH())
+            {
+                SoHocVien = db.HOCVIENs.Count(x => x.TrangThai.Contains("hoc") || x.TrangThai.Contains("học"));
+                SoLop = db.LOPHOCs.Count(x => x.TRANGTHAI.Contains("mo") || x.TRANGTHAI.Contains("mở"));
+                
+                int currentMonth = System.DateTime.Now.Month;
+                int currentYear = System.DateTime.Now.Year;
+                var dt = db.PHIEUTHUs.Where(x => x.NGAYTHU.Month == currentMonth && x.NGAYTHU.Year == currentYear).Sum(x => (decimal?)x.SOTIEN);
+                DoanhThu = dt ?? 0;
+
+                SoGiaoVien = db.GIAOVIENs.Count();
             }
         }
     }

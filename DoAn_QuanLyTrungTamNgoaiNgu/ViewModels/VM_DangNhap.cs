@@ -1,4 +1,4 @@
-﻿using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
+using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
 using DoAn_QuanLyTrungTamNgoaiNgu.Models;
 using DoAn_QuanLyTrungTamNgoaiNgu.Views;
 using System;
@@ -48,6 +48,20 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                         ThongBaoLoi = "Tài khoản đang bị khóa!";
                         return;
                     } 
+                    UserSession.MaTK = acc.MATK;
+                    if (acc.MaNV != null)
+                    {
+                        UserSession.MaNV = acc.MaNV;
+                        UserSession.HoTen = acc.NHANVIEN.HoTen;
+                        UserSession.VaiTro = acc.NHANVIEN.ChucVu;
+                    }
+                    else if (acc.MaGV != null)
+                    {
+                        UserSession.MaGV = acc.MaGV;
+                        UserSession.HoTen = acc.GIAOVIEN.TenGV;
+                        UserSession.VaiTro = "Giáo viên";
+                    }
+
                     TrangChu main = new TrangChu();
                     
                     var vm = main.DataContext as VM_TrangChu;

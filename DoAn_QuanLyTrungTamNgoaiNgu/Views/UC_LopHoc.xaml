@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="DoAn_QuanLyTrungTamNgoaiNgu.Views.UC_LopHoc"
+<UserControl x:Class="DoAn_QuanLyTrungTamNgoaiNgu.Views.UC_LopHoc"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -10,22 +10,17 @@
              mc:Ignorable="d" 
              d:DesignHeight="750" d:DesignWidth="1280">
 
-    <UserControl.DataContext>
-        <vm:VM_LopHoc/>
-    </UserControl.DataContext>
     <UserControl.Resources>
         <Style TargetType="{x:Type Calendar}">
             <Setter Property="VirtualizingStackPanel.IsVirtualizing" Value="False"/>
             <Setter Property="ScrollViewer.CanContentScroll" Value="False"/>
         </Style>
 
-        <!-- ===== EFFECTS ===== -->
         <DropShadowEffect x:Key="SoftShadow"  BlurRadius="18" ShadowDepth="3" Opacity="0.07" Color="#0F172A"/>
         <DropShadowEffect x:Key="HoverShadow" BlurRadius="30" ShadowDepth="6" Opacity="0.13" Color="#2563EB"/>
         <DropShadowEffect x:Key="SidebarShadow" BlurRadius="20" ShadowDepth="4" Opacity="0.08" Color="#0F172A"/>
         <DropShadowEffect x:Key="BadgeShadow"  BlurRadius="8"  ShadowDepth="1" Opacity="0.12" Color="#16A34A"/>
 
-        <!-- ===== GRADIENTS ===== -->
         <LinearGradientBrush x:Key="PrimaryGradient" StartPoint="0,0" EndPoint="1,1">
             <GradientStop Color="#1D4ED8" Offset="0"/>
             <GradientStop Color="#3B82F6" Offset="1"/>
@@ -46,7 +41,6 @@
             <GradientStop Color="#6366F1" Offset="1"/>
         </LinearGradientBrush>
 
-        <!-- ===== CARD STYLE ===== -->
         <Style x:Key="ClassCardStyle" TargetType="Border">
             <Setter Property="Background" Value="White"/>
             <Setter Property="CornerRadius" Value="18"/>
@@ -85,7 +79,6 @@
             </Style.Triggers>
         </Style>
 
-        <!-- ===== PRIMARY BUTTON ===== -->
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="{StaticResource PrimaryGradient}"/>
             <Setter Property="Foreground" Value="White"/>
@@ -114,7 +107,6 @@
             </Setter>
         </Style>
 
-        <!-- ===== OUTLINE BUTTON ===== -->
         <Style x:Key="OutlineButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="#3B82F6"/>
@@ -140,7 +132,6 @@
             </Setter>
         </Style>
 
-        <!-- ===== ICON BUTTON ===== -->
         <Style x:Key="IconButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="#F1F5F9"/>
             <Setter Property="Foreground" Value="#475569"/>
@@ -166,7 +157,6 @@
             </Setter>
         </Style>
 
-        <!-- ===== EVENT CARD STYLE ===== -->
         <Style x:Key="EventCardStyle" TargetType="Border">
             <Setter Property="CornerRadius" Value="12"/>
             <Setter Property="Padding" Value="14,12"/>
@@ -174,12 +164,11 @@
             <Setter Property="Cursor" Value="Hand"/>
         </Style>
 
-        <!-- ===== SEARCH BOX ===== -->
         <Style x:Key="SearchBoxStyle" TargetType="TextBox">
             <Setter Property="Background" Value="White"/>
             <Setter Property="Foreground" Value="#1E293B"/>
             <Setter Property="FontSize" Value="13"/>
-            <Setter Property="Padding" Value="42,10,14,10"/>
+            <Setter Property="Padding" Value="0"/>
             <Setter Property="BorderBrush" Value="#E2E8F0"/>
             <Setter Property="BorderThickness" Value="1.5"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -191,8 +180,10 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="12">
                             <Grid>
-                                <TextBlock Text="🔍" FontSize="14" VerticalAlignment="Center"
-                                           Margin="14,0,0,0" IsHitTestVisible="False"/>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
                                 <ScrollViewer x:Name="PART_ContentHost" Margin="{TemplateBinding Padding}"
                                               VerticalAlignment="Center"/>
                             </Grid>
@@ -209,23 +200,18 @@
 
     </UserControl.Resources>
 
-    <!-- ===== ROOT ===== -->
     <Grid Background="#F0F4F8">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="270"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!-- ══════════════════════════════════
-             SIDEBAR
-        ══════════════════════════════════════ -->
         <Border Background="{StaticResource SidebarGradient}"
                 BorderBrush="#E8EEFB" BorderThickness="0,0,1.5,0"
                 Effect="{StaticResource SidebarShadow}">
             <DockPanel>
 
                 <Separator DockPanel.Dock="Top" Background="#EEF2FF" Margin="20,0"/>
-                <!-- Calendar -->
                 <Border DockPanel.Dock="Top" Padding="20,16,20,0">
                     <StackPanel>
                         <DockPanel Margin="0,0,0,8">
@@ -234,15 +220,11 @@
                             <Button DockPanel.Dock="Right" Content="›" Style="{StaticResource IconButtonStyle}"
                                     HorizontalAlignment="Right"/>
                         </DockPanel>
-                        <Viewbox Stretch="Uniform" HorizontalAlignment="Left" MaxWidth="230">
-                            <custom:NoAutomationCalendar BorderThickness="0" Background="Transparent"/>
-                        </Viewbox>
                     </StackPanel>
                 </Border>
 
                 <Separator DockPanel.Dock="Top" Background="#EEF2FF" Margin="20,14"/>
 
-                <!-- Events Section -->
                 <ScrollViewer DockPanel.Dock="Top" VerticalScrollBarVisibility="Hidden" Padding="20,0,20,0">
                     <StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,12">
@@ -250,7 +232,7 @@
                             <TextBlock Text="LỚP HỌC ĐANG MỞ" FontSize="10" FontWeight="Bold" Foreground="#94A3B8" VerticalAlignment="Center"/>
                         </StackPanel>
 
-                        <ItemsControl ItemsSource="{Binding ListLopHoc}">
+                        <ItemsControl ItemsSource="{Binding ListLopHocDangMo}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Style="{StaticResource EventCardStyle}" Background="#EFF6FF">
@@ -283,7 +265,6 @@
                     </StackPanel>
                 </ScrollViewer>
 
-                <!-- Bottom Stats -->
                 <Border DockPanel.Dock="Bottom" Height="75" Margin="20,16" Padding="16,14"
                         Background="{StaticResource PrimaryGradient}" CornerRadius="16">
                     <Grid>
@@ -315,9 +296,6 @@
             </DockPanel>
         </Border>
 
-        <!-- ══════════════════════════════════
-             MAIN CONTENT
-        ══════════════════════════════════════ -->
         <Grid Grid.Column="1" Margin="36,28,36,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -325,7 +303,6 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <!-- ── Header ── -->
             <Grid Margin="0,0,0,24">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -340,13 +317,21 @@
                                FontSize="13" Foreground="#64748B" Margin="0,4,0,0"/>
                 </StackPanel>
 
-                <!-- Action buttons -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal"
                             VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                    <Button Height="42" Style="{StaticResource OutlineButtonStyle}"
+                        Margin="0,0,8,0"
+                        Command="{Binding XoaLocNgay}">
+                        <TextBlock Text="📅 Tất cả ngày" FontSize="13" FontWeight="SemiBold" Foreground="#475569"/>
+                    </Button>
                     <Button Content="Danh sách lớp"
                             Style="{StaticResource OutlineButtonStyle}"
-                            Height="42" Margin="0,0,12,0"/>
-                    <Button Height="42" Style="{StaticResource PrimaryButtonStyle}">
+                            Height="42" Margin="0,0,12,0"
+                            Command="{Binding HienTatCa}"
+                            Visibility="Hidden"/>
+                            
+                    <Button Height="42" Style="{StaticResource PrimaryButtonStyle}"
+                            Command="{Binding AddCommand}">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock Text="＋" FontSize="16" FontWeight="Bold"
                                        VerticalAlignment="Center" Margin="0,0,6,0"/>
@@ -356,7 +341,6 @@
                 </StackPanel>
             </Grid>
 
-            <!-- ── Toolbar: Search + Filter ── -->
             <Grid Grid.Row="1" Margin="0,0,0,20">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -364,58 +348,56 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBox Style="{StaticResource SearchBoxStyle}" Height="42"
-                         Text="" MaxWidth="400" HorizontalAlignment="Left" Width="340"/>
+                         MaxWidth="400" Width="340"
+                         Padding="5"
+                         Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource SearchBoxStyle}"/>
+                    </TextBox.Resources>
+                </TextBox>
 
                 <StackPanel Grid.Column="1" Orientation="Horizontal">
-                    <!-- Filter Badge -->
-                    <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1.5"
-                            CornerRadius="12" Padding="14,0" Margin="0,0,10,0" Height="42"
-                            Cursor="Hand">
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Text="⚙" FontSize="14" Foreground="#64748B" Margin="0,0,6,0"/>
-                            <TextBlock Text="Bộ lọc" FontSize="13" FontWeight="SemiBold" Foreground="#475569"/>
-                        </StackPanel>
-                    </Border>
-                    <!-- View toggle -->
-                    <Border Background="White" BorderBrush="#E2E8F0" BorderThickness="1.5"
-                            CornerRadius="12" Padding="6" Height="42">
+                    <Button Height="42" Style="{StaticResource OutlineButtonStyle}"
+                            Margin="0,0,8,0"
+                            Command="{Binding LocTheoTrangThai}"
+                            CommandParameter="Dang mo">
                         <StackPanel Orientation="Horizontal">
-                            <Border Background="{StaticResource PrimaryGradient}" CornerRadius="8"
-                                    Width="30" Height="30" Cursor="Hand">
-                                <TextBlock Text="☰" FontSize="14" Foreground="White"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <Border CornerRadius="8" Width="30" Height="30" Margin="4,0,0,0" Cursor="Hand">
-                                <TextBlock Text="⊞" FontSize="15" Foreground="#94A3B8"
-                                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
+                            <Ellipse Width="7" Height="7" Fill="#16A34A" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="Đang mở" FontSize="13" FontWeight="SemiBold" Foreground="#475569"/>
                         </StackPanel>
-                    </Border>
+                    </Button>
+                    <Button Height="42" Style="{StaticResource OutlineButtonStyle}"
+                            Margin="0,0,8,0"
+                            Command="{Binding LocTheoTrangThai}"
+                            CommandParameter="Da ket thuc">
+                        <StackPanel Orientation="Horizontal">
+                            <Ellipse Width="7" Height="7" Fill="#94A3B8" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                            <TextBlock Text="Đã kết thúc" FontSize="13" FontWeight="SemiBold" Foreground="#475569"/>
+                        </StackPanel>
+                    </Button>
+                    <Button Height="42" Style="{StaticResource OutlineButtonStyle}"
+                            Command="{Binding HienTatCa}">
+                        <TextBlock Text="Tất cả" FontSize="13" FontWeight="SemiBold" Foreground="#475569"/>
+                    </Button>
                 </StackPanel>
             </Grid>
 
-            <!-- ── List ── -->
             <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Hidden"
                           Padding="0,0,4,20">
-                <ItemsControl ItemsSource="{Binding ListLopHoc}" Width="938">
+                <ItemsControl ItemsSource="{Binding FilteredList}" Width="938">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border Style="{StaticResource ClassCardStyle}">
+                                <StackPanel>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <!-- Accent bar + Mã lớp -->
                                         <ColumnDefinition Width="110"/>
-                                        <!-- Tên lớp + badges -->
                                         <ColumnDefinition Width="*"/>
-                                        <!-- Giáo viên -->
                                         <ColumnDefinition Width="250"/>
-                                        <!-- Progress -->
                                         <ColumnDefinition Width="200"/>
-                                        <!-- Actions -->
                                         <ColumnDefinition Width="80"/>
                                     </Grid.ColumnDefinitions>
 
-                                    <!-- Col 0: Mã lớp với accent pill -->
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
                                         <Border Width="4" CornerRadius="2" Background="{StaticResource AccentGradient}"
                                                 Margin="0,0,12,0">
@@ -432,7 +414,6 @@
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <!-- Col 1: Tên lớp + badges -->
                                     <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="8,0">
                                         <TextBlock Text="{Binding TENLOP}" FontSize="16"
                                                    FontWeight="Bold" Foreground="#0F172A"/>
@@ -462,7 +443,6 @@
                                         </StackPanel>
                                     </StackPanel>
 
-                                    <!-- Col 2: Giáo viên -->
                                     <Border Grid.Column="2" Background="#F8FAFC" CornerRadius="14"
                                             Padding="14,10" VerticalAlignment="Center">
                                         <StackPanel Orientation="Horizontal">
@@ -480,10 +460,9 @@
                                         </StackPanel>
                                     </Border>
 
-                                    <!-- Col 3: Học viên / tiến độ -->
                                     <StackPanel Grid.Column="3" VerticalAlignment="Center" HorizontalAlignment="Center">
                                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                            <TextBlock Text="{Binding HOCVIENs.Count, FallbackValue='0'}" 
+                                            <TextBlock Text="{Binding DANGKYLOPs.Count, FallbackValue='0'}" 
                    FontSize="16" FontWeight="Bold" Foreground="#0F172A"/>
                                             <TextBlock Text=" / " FontSize="16" FontWeight="Bold" Foreground="#0F172A"/>
                                             <TextBlock Text="{Binding SISO_TOIDA, FallbackValue='30'}" 
@@ -494,19 +473,36 @@
                HorizontalAlignment="Center" Margin="0,2,0,6"/>
                                     </StackPanel>
 
-                                    <!-- Col 4: Actions -->
                                     <StackPanel Grid.Column="4" Orientation="Horizontal"
                                                 HorizontalAlignment="Right" VerticalAlignment="Center">
                                         <Button Style="{StaticResource IconButtonStyle}"
-                                                ToolTip="Chỉnh sửa" Margin="0,0,6,0">
+                                                ToolTip="Chỉnh sửa" Margin="0,0,6,0"
+                                                Command="{Binding DataContext.EditCommand,
+                                                    RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}">
                                             <TextBlock Text="✏" FontSize="14"/>
                                         </Button>
                                         <Button Style="{StaticResource IconButtonStyle}"
-                                                ToolTip="Thêm tùy chọn">
-                                            <TextBlock Text="⋯" FontSize="16" FontWeight="Bold"/>
+                                                ToolTip="Xóa lớp"
+                                                Command="{Binding DataContext.CancelCommand,
+                                                    RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                                CommandParameter="{Binding}">
+                                            <TextBlock Text="🚫" FontSize="13"/>
                                         </Button>
                                     </StackPanel>
                                 </Grid>
+                                <Expander Header="Chi tiết học viên" Margin="0,15,0,0" Foreground="#3B82F6" FontSize="12" FontWeight="SemiBold">
+                                    <DataGrid ItemsSource="{Binding DANGKYLOPs}" AutoGenerateColumns="False" 
+                                              HeadersVisibility="None" Background="#F8FAFC" BorderThickness="0" Margin="0,10,0,0" IsReadOnly="True"
+                                              RowBackground="Transparent" AlternatingRowBackground="#EEF2FF" GridLinesVisibility="None">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Binding="{Binding HOCVIEN.HoTen}" Width="200" />
+                                            <DataGridTextColumn Binding="{Binding HOCVIEN.SDT}" Width="150" />
+                                            <DataGridTextColumn Binding="{Binding TRANGTHAI}" Width="150" />
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Expander>
+                                </StackPanel>
                             </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>

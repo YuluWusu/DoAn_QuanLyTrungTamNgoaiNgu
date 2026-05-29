@@ -1,4 +1,6 @@
-﻿using DoAn_QuanLyTrungTamNgoaiNgu.ViewModels;
+﻿using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
+using DoAn_QuanLyTrungTamNgoaiNgu.Models;
+using DoAn_QuanLyTrungTamNgoaiNgu.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -22,9 +24,43 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Views
 {
     public partial class UC_LopHoc : UserControl
     {
+        private VM_LopHoc _vm;
         public UC_LopHoc()
         {
             InitializeComponent();
+            _vm = new VM_LopHoc();
+            this.DataContext = _vm;
+
+            _vm.OnEditRequested += OnEditRequested;
+            _vm.OnCancelRequested += OnCancelRequested;
+        }
+
+        private void OnEditRequested(LOPHOC item)
+        {
+            var malop = item?.MALOP; 
+
+            var dlg = new EditLopHoc(malop)
+            {
+                Owner = Window.GetWindow(this)
+            };
+            if (dlg.ShowDialog() == true)
+                _vm.LoadData();
+        }
+
+        private void OnCancelRequested(LOPHOC item)
+        {
+            var confirm = MessageBox.Show(
+                $"Hủy lớp {item.TENLOP}?\nLịch học tương lai sẽ bị xóa.",
+                "Xác nhận", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if (confirm != MessageBoxResult.Yes) return;
+
+            DataProvider.Ins.DB.Database.ExecuteSqlCommand(
+                "EXEC SP_HuyLop @MaLop",
+                new System.Data.SqlClient.SqlParameter("@MaLop", item.MALOP));
+
+            item.TRANGTHAI = "Huy";
+            CommandManager.InvalidateRequerySuggested();
+            _vm.ApplyFilter(); 
         }
 
     }
@@ -37,5 +73,9 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.CustomControls
         {
             return null;
         }
+    }
+    public class SearchBox : Control
+    {
+
     }
 }

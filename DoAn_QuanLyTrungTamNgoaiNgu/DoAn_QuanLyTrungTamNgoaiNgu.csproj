@@ -97,6 +97,7 @@
     <Compile Include="Helpers\IDGenerator.cs" />
     <Compile Include="Helpers\RelayCommand.cs" />
     <Compile Include="Helpers\StringToVisibilityConverter.cs" />
+    <Compile Include="Helpers\UserSession.cs" />
     <Compile Include="Models\CAHOC.cs">
       <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
     </Compile>
@@ -169,6 +170,9 @@
     <Compile Include="Models\TAIKHOAN.cs">
       <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\VW_DanhSachDiemDanh.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\VW_GiaoVien_SoLop.cs">
       <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
     </Compile>
@@ -178,29 +182,55 @@
     <Compile Include="Models\VW_TaiKhoan_Quyen.cs">
       <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="ViewModels\DangKy\VM_DangKyMoi.cs" />
-    <Compile Include="ViewModels\DangKy\VM_DangKy.cs" />
-    <Compile Include="ViewModels\HocPhi\VM_DanhSachHocPhi.cs" />
-    <Compile Include="ViewModels\HocPhi\VM_ThemHocPhi.cs" />
+    <Compile Include="ViewModels\VM_DangKyMoi.cs" />
+    <Compile Include="ViewModels\VM_DangKy.cs" />
+    <Compile Include="ViewModels\VM_DanhSachHocPhi.cs" />
+    <Compile Include="ViewModels\VM_HocVien.cs" />
+    <Compile Include="ViewModels\VM_ThemHocPhi.cs" />
     <Compile Include="ViewModels\VM_DangNhap.cs" />
+    <Compile Include="ViewModels\VM_DiemDanh.cs" />
+    <Compile Include="ViewModels\VM_LopHoc.cs" />
+    <Compile Include="ViewModels\VM_TaiKhoan.cs" />
     <Compile Include="ViewModels\VM_TrangChu.cs" />
+    <Compile Include="ViewModels\VM_DanhSachDiemDanh.Extended.cs" />
     <Compile Include="Views\DangNhap.xaml.cs">
       <DependentUpon>DangNhap.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DangKyView\UC_DanhSachDangKy.xaml.cs">
+    <Compile Include="Views\UC_DanhSachDangKy.xaml.cs">
       <DependentUpon>UC_DanhSachDangKy.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DangKyView\UC_DangKyMoi.xaml.cs">
+    <Compile Include="Views\UC_DangKyMoi.xaml.cs">
       <DependentUpon>UC_DangKyMoi.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\HocPhiView\UC_DanhSachHocPhi.xaml.cs">
+    <Compile Include="Views\EditLopHoc.xaml.cs">
+      <DependentUpon>EditLopHoc.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_DanhSachHocPhi.xaml.cs">
       <DependentUpon>UC_DanhSachHocPhi.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\HocPhiView\UC_ThemHocPhiKhoaHoc.xaml.cs">
+    <Compile Include="Views\UC_HocVien.xaml.cs">
+      <DependentUpon>UC_HocVien.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_SuaThongTinHV.xaml.cs">
+      <DependentUpon>UC_SuaThongTinHV.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_ThemHocPhiKhoaHoc.xaml.cs">
       <DependentUpon>UC_ThemHocPhiKhoaHoc.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\TrangChu.xaml.cs">
       <DependentUpon>TrangChu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_DiemDanh.xaml.cs">
+      <DependentUpon>UC_DiemDanh.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_LopHoc.xaml.cs">
+      <DependentUpon>UC_LopHoc.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_TaiKhoan.xaml.cs">
+      <DependentUpon>UC_TaiKhoan.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_ThemHocVien.xaml.cs">
+      <DependentUpon>UC_ThemHocVien.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UC_TrangChu.xaml.cs">
       <DependentUpon>UC_TrangChu.xaml</DependentUpon>
@@ -241,11 +271,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\DangKyView\UC_DangKyMoi.xaml">
+    <Page Include="Views\UC_DangKyMoi.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DangKyView\UC_DanhSachDangKy.xaml">
+    <Page Include="Views\UC_DanhSachDangKy.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -253,17 +283,45 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\HocPhiView\UC_DanhSachHocPhi.xaml">
+    <Page Include="Views\EditLopHoc.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UC_DanhSachHocPhi.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\HocPhiView\UC_ThemHocPhiKhoaHoc.xaml">
+    <Page Include="Views\UC_HocVien.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UC_SuaThongTinHV.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UC_ThemHocPhiKhoaHoc.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\TrangChu.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\UC_DiemDanh.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UC_LopHoc.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UC_TaiKhoan.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UC_ThemHocVien.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\UC_TrangChu.xaml">
       <SubType>Designer</SubType>

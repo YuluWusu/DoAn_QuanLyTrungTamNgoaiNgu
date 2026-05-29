@@ -13,7 +13,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-
 namespace DoAn_QuanLyTrungTamNgoaiNgu.Views
 {
     /// <summary>
@@ -24,6 +23,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Views
         public TrangChu()
         {
             InitializeComponent();
+
         }
 
         private void BtnDong_Click(object sender, RoutedEventArgs e)

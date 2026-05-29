@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="DoAn_QuanLyTrungTamNgoaiNgu.Views.UC_TrangChu"
+<UserControl x:Class="DoAn_QuanLyTrungTamNgoaiNgu.Views.UC_TrangChu"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
@@ -64,9 +64,8 @@
                         </Border>
                         <TextBlock Text="Học viên" FontSize="12"
                                    Foreground="#6B7280"/>
-                        <TextBlock Text="—" FontSize="28"
-                                   FontWeight="Bold" Foreground="#1E6FB5"
-                                   x:Name="tbSoHocVien"/>
+                        <TextBlock Text="{Binding SoHocVien}" FontSize="28"
+                                   FontWeight="Bold" Foreground="#1E6FB5"/>
                         <TextBlock Text="đang học" FontSize="11"
                                    Foreground="#10B981"/>
                     </StackPanel>
@@ -88,9 +87,8 @@
                         </Border>
                         <TextBlock Text="Lớp đang mở" FontSize="12"
                                    Foreground="#6B7280"/>
-                        <TextBlock Text="—" FontSize="28"
-                                   FontWeight="Bold" Foreground="#059669"
-                                   x:Name="tbSoLop"/>
+                        <TextBlock Text="{Binding SoLop}" FontSize="28"
+                                   FontWeight="Bold" Foreground="#059669"/>
                         <TextBlock Text="lớp học" FontSize="11"
                                    Foreground="#6B7280"/>
                     </StackPanel>
@@ -112,9 +110,8 @@
                         </Border>
                         <TextBlock Text="Học phí tháng này" FontSize="12"
                                    Foreground="#6B7280"/>
-                        <TextBlock Text="—" FontSize="22"
-                                   FontWeight="Bold" Foreground="#D97706"
-                                   x:Name="tbDoanhThu"/>
+                        <TextBlock Text="{Binding DoanhThu, StringFormat={}{0:N0}}" FontSize="22"
+                                   FontWeight="Bold" Foreground="#D97706"/>
                         <TextBlock Text="VNĐ" FontSize="11"
                                    Foreground="#6B7280"/>
                     </StackPanel>
@@ -136,9 +133,8 @@
                         </Border>
                         <TextBlock Text="Giáo viên" FontSize="12"
                                    Foreground="#6B7280"/>
-                        <TextBlock Text="—" FontSize="28"
-                                   FontWeight="Bold" Foreground="#DB2777"
-                                   x:Name="tbSoGiaoVien"/>
+                        <TextBlock Text="{Binding SoGiaoVien}" FontSize="28"
+                                   FontWeight="Bold" Foreground="#DB2777"/>
                         <TextBlock Text="đang dạy" FontSize="11"
                                    Foreground="#6B7280"/>
                     </StackPanel>
@@ -150,7 +146,10 @@
                        Margin="0,0,0,14"/>
 
             <UniformGrid Columns="3" Margin="0,0,0,28">
-                <Border Style="{StaticResource QuickCard}" Margin="0,0,14,0">
+                <Border Style="{StaticResource QuickCard}" Margin="0,0,14,0" Visibility="{Binding MenuDangKy}">
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" Command="{Binding NavDangKyLop}" CommandParameter="DangKy" />
+                    </Border.InputBindings>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="📝" FontSize="24" Margin="0,0,14,0"
                                    VerticalAlignment="Center"/>
@@ -162,7 +161,10 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource QuickCard}" Margin="0,0,14,0">
+                <Border Style="{StaticResource QuickCard}" Margin="0,0,14,0" Visibility="{Binding MenuDiemDanh}">
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" Command="{Binding NavDiemDanh}" CommandParameter="DiemDanh" />
+                    </Border.InputBindings>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="✅" FontSize="24" Margin="0,0,14,0"
                                    VerticalAlignment="Center"/>
@@ -174,7 +176,10 @@
                         </StackPanel>
                     </StackPanel>
                 </Border>
-                <Border Style="{StaticResource QuickCard}">
+                <Border Style="{StaticResource QuickCard}" Visibility="{Binding MenuHocPhi}">
+                    <Border.InputBindings>
+                        <MouseBinding MouseAction="LeftClick" Command="{Binding NavHocPhi}" CommandParameter="HocPhi" />
+                    </Border.InputBindings>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="💳" FontSize="24" Margin="0,0,14,0"
                                    VerticalAlignment="Center"/>
