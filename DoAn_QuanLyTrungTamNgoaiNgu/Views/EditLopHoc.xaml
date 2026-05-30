@@ -108,118 +108,127 @@
 
     <Border Margin="24" Background="White" CornerRadius="20"
             Effect="{StaticResource CardShadow}">
-        <StackPanel Margin="28,24">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="28,24">
 
-            <TextBlock x:Name="txbHeader" Text="Tạo lớp mới" FontSize="18" FontWeight="Bold"
-               Foreground="#0F172A" Margin="0,0,0,4"/>
-            <TextBlock x:Name="txbMaLop" FontSize="12" Foreground="#94A3B8" Margin="0,0,0,20"/>
+                <TextBlock x:Name="txbHeader" Text="Tạo lớp mới" FontSize="18" FontWeight="Bold"
+                   Foreground="#0F172A" Margin="0,0,0,4"/>
+                <TextBlock x:Name="txbMaLop" FontSize="12" Foreground="#94A3B8" Margin="0,0,0,20"/>
 
-            <StackPanel x:Name="pnlTaoMoi" Visibility="Collapsed">
+                <StackPanel x:Name="pnlTaoMoi" Visibility="Collapsed">
 
-                <Grid Margin="0,0,0,16">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="12"/>
-                        <ColumnDefinition Width="2*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Mã lớp" Style="{StaticResource LabelStyle}"/>
-                        <TextBox x:Name="txtMaLop" Style="{StaticResource InputStyle}"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Tên lớp" Style="{StaticResource LabelStyle}"/>
-                        <TextBox x:Name="txtTenLopMoi" Style="{StaticResource InputStyle}"/>
-                    </StackPanel>
-                </Grid>
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Mã lớp" Style="{StaticResource LabelStyle}"/>
+                            <TextBox x:Name="txtMaLop" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Tên lớp" Style="{StaticResource LabelStyle}"/>
+                            <TextBox x:Name="txtTenLopMoi" Style="{StaticResource InputStyle}"/>
+                        </StackPanel>
+                    </Grid>
 
-                <Grid Margin="0,0,0,16">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="12"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Khóa học" Style="{StaticResource LabelStyle}"/>
-                        <ComboBox x:Name="cboKhoaHoc" Style="{StaticResource ComboStyle}"
-                          DisplayMemberPath="TENKH" SelectedValuePath="MAKH"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Sĩ số tối đa" Style="{StaticResource LabelStyle}"/>
-                        <TextBox x:Name="txtSiSo" Style="{StaticResource InputStyle}" Text="20"/>
-                    </StackPanel>
-                </Grid>
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="120"/>
+                            
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Khóa học" Style="{StaticResource LabelStyle}"/>
+                            <ComboBox x:Name="cboKhoaHoc" Style="{StaticResource ComboStyle}"
+                              DisplayMemberPath="TENKH" SelectedValuePath="MAKH"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Sĩ số tối đa" Style="{StaticResource LabelStyle}"/>
+                            <TextBox x:Name="txtSiSo" Style="{StaticResource InputStyle}" Text="20"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="4">
+                            <TextBlock Text="Số buổi học" Style="{StaticResource LabelStyle}"/>
+                            <TextBox x:Name="txtSoBuoi" Style="{StaticResource InputStyle}" />
+                        </StackPanel>
+                    </Grid>
 
-                <Grid Margin="0,0,0,16">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="12"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Giáo viên phụ trách" Style="{StaticResource LabelStyle}"/>
-                        <ComboBox x:Name="cboGiaoVienMoi" Style="{StaticResource ComboStyle}"
-                          DisplayMemberPath="TenGV" SelectedValuePath="MaGV"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Ngày bắt đầu" Style="{StaticResource LabelStyle}"/>
-                        <DatePicker x:Name="dpNgayBatDau" Height="40" FontSize="13"
-                            BorderBrush="#E2E8F0" BorderThickness="1.5"
-                            SelectedDate="{x:Static sys:DateTime.Today}"/>
-                    </StackPanel>
-                </Grid>
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Giáo viên phụ trách" Style="{StaticResource LabelStyle}"/>
+                            <ComboBox x:Name="cboGiaoVienMoi" Style="{StaticResource ComboStyle}"
+                              DisplayMemberPath="TenGV" SelectedValuePath="MaGV"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Ngày bắt đầu" Style="{StaticResource LabelStyle}"/>
+                            <DatePicker x:Name="dpNgayBatDau" Height="40" FontSize="13"
+                                BorderBrush="#E2E8F0" BorderThickness="1.5"
+                                SelectedDate="{x:Static sys:DateTime.Today}"/>
+                        </StackPanel>
+                    </Grid>
 
-                <Grid Margin="0,0,0,16">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="12"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0">
-                        <TextBlock Text="Phòng học" Style="{StaticResource LabelStyle}"/>
-                        <ComboBox x:Name="cboPhong" Style="{StaticResource ComboStyle}"
-                          DisplayMemberPath="TENPHONG" SelectedValuePath="MAPHONG"/>
-                    </StackPanel>
-                    <StackPanel Grid.Column="2">
-                        <TextBlock Text="Ca học" Style="{StaticResource LabelStyle}"/>
-                        <ComboBox x:Name="cboCa" Style="{StaticResource ComboStyle}"
-                          DisplayMemberPath="TENCA" SelectedValuePath="MACA"/>
-                    </StackPanel>
-                </Grid>
+                    <Grid Margin="0,0,0,16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="12"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0">
+                            <TextBlock Text="Phòng học" Style="{StaticResource LabelStyle}"/>
+                            <ComboBox x:Name="cboPhong" Style="{StaticResource ComboStyle}"
+                              DisplayMemberPath="TENPHONG" SelectedValuePath="MAPHONG"/>
+                        </StackPanel>
+                        <StackPanel Grid.Column="2">
+                            <TextBlock Text="Ca học" Style="{StaticResource LabelStyle}"/>
+                            <ComboBox x:Name="cboCa" Style="{StaticResource ComboStyle}"
+                              DisplayMemberPath="TENCA" SelectedValuePath="MACA"/>
+                        </StackPanel>
+                    </Grid>
 
-                <TextBlock Text="Ngày học trong tuần" Style="{StaticResource LabelStyle}"/>
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
-                    <CheckBox x:Name="chkT2" Content="T2" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                    <CheckBox x:Name="chkT3" Content="T3" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                    <CheckBox x:Name="chkT4" Content="T4" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                    <CheckBox x:Name="chkT5" Content="T5" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                    <CheckBox x:Name="chkT6" Content="T6" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                    <CheckBox x:Name="chkT7" Content="T7" Margin="0,0,12,0" VerticalAlignment="Center"/>
-                    <CheckBox x:Name="chkCN" Content="CN" VerticalAlignment="Center"/>
+                    <TextBlock Text="Ngày học trong tuần" Style="{StaticResource LabelStyle}"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+                        <CheckBox x:Name="chkT2" Content="T2" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="chkT3" Content="T3" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="chkT4" Content="T4" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="chkT5" Content="T5" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="chkT6" Content="T6" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="chkT7" Content="T7" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                        <CheckBox x:Name="chkCN" Content="CN" VerticalAlignment="Center"/>
+                    </StackPanel>
+
                 </StackPanel>
 
+                <StackPanel x:Name="pnlChinhSua" Visibility="Collapsed">
+                    <TextBlock Text="Tên lớp" Style="{StaticResource LabelStyle}"/>
+                    <TextBox x:Name="txtTenLop" Style="{StaticResource InputStyle}" Margin="0,0,0,16"/>
+                    <TextBlock Text="Giáo viên phụ trách" Style="{StaticResource LabelStyle}"/>
+                    <ComboBox x:Name="cboGiaoVien" Style="{StaticResource ComboStyle}"
+                      DisplayMemberPath="TenGV" SelectedValuePath="MaGV"
+                      Margin="0,0,0,24"/>
+                </StackPanel>
+
+                <Grid Margin="0,8,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btnCancel" Content="Hủy" Style="{StaticResource SecondaryBtn}"
+                    Padding="0" Click="btnCancel_Click"/>
+                    <Button x:Name="btnSave" Grid.Column="2" Content="Lưu"
+                    Style="{StaticResource PrimaryBtn}" Padding="0" Click="btnSave_Click"/>
+                </Grid>
+
             </StackPanel>
-
-            <StackPanel x:Name="pnlChinhSua" Visibility="Collapsed">
-                <TextBlock Text="Tên lớp" Style="{StaticResource LabelStyle}"/>
-                <TextBox x:Name="txtTenLop" Style="{StaticResource InputStyle}" Margin="0,0,0,16"/>
-                <TextBlock Text="Giáo viên phụ trách" Style="{StaticResource LabelStyle}"/>
-                <ComboBox x:Name="cboGiaoVien" Style="{StaticResource ComboStyle}"
-                  DisplayMemberPath="TenGV" SelectedValuePath="MaGV"
-                  Margin="0,0,0,24"/>
-            </StackPanel>
-
-            <Grid Margin="0,8,0,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="12"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Button x:Name="btnCancel" Content="Hủy" Style="{StaticResource SecondaryBtn}"
-                Padding="0" Click="btnCancel_Click"/>
-                <Button x:Name="btnSave" Grid.Column="2" Content="Lưu"
-                Style="{StaticResource PrimaryBtn}" Padding="0" Click="btnSave_Click"/>
-            </Grid>
-
-        </StackPanel>
+        </ScrollViewer>
     </Border>
 </Window>

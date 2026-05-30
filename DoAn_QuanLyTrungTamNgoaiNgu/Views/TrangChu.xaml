@@ -9,7 +9,8 @@
         WindowStyle="None"
         WindowState="Maximized"
         AllowsTransparency="True"
-        Background="Transparent">
+        Background="Transparent" Icon="pack://application:,,,/Logo HUIT-01.ico"
+        >
     <Window.DataContext>
         <vm:VM_TrangChu/>
     </Window.DataContext>
@@ -166,22 +167,7 @@
                             </Button.Style>
                         </Button>
 
-                        <Button Content="👨‍🎓  Học viên"
-                                Visibility="{Binding MenuHocVien}"
-                                Command="{Binding NavHocVien}"
-                                CommandParameter="HocVien">
-                            <Button.Style>
-                                <Style TargetType="Button" BasedOn="{StaticResource MenuItemStyle}">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding DataContext.ActiveTab, RelativeSource={RelativeSource AncestorType=Window}}" Value="HocVien">
-                                            <Setter Property="Background" Value="{StaticResource SidebarActive}"/>
-                                            <Setter Property="Foreground" Value="White"/>
-                                            <Setter Property="FontWeight" Value="SemiBold"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </Button>
+                        
 
                         <Button Content="📚  Lớp học"
                                 Visibility="{Binding MenuLopHoc}"
@@ -234,10 +220,35 @@
                             </Button.Style>
                         </Button>
 
+                        
+
+                        <TextBlock Text="DANH MỤC" FontSize="10"
+                                   Visibility="{Binding MenuTaiKhoan}"
+                                   Foreground="{StaticResource TextMuted}"
+                                   Margin="28,16,0,8" FontWeight="SemiBold"/>
+
+                        <Button Content="👨‍🎓  Học viên"
+                            Visibility="{Binding MenuHocVien}"
+                            Command="{Binding NavHocVien}"
+                            CommandParameter="HocVien">
+                            <Button.Style>
+                                <Style TargetType="Button" BasedOn="{StaticResource MenuItemStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext.ActiveTab, RelativeSource={RelativeSource AncestorType=Window}}" Value="HocVien">
+                                            <Setter Property="Background" Value="{StaticResource SidebarActive}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+
+
                         <Button Content="💰  Khoá học"
-                                Visibility="{Binding MenuHocPhi}"
-                                Command="{Binding NavHocPhi}"
-                                CommandParameter="HocPhi">
+                            Visibility="{Binding MenuHocPhi}"
+                            Command="{Binding NavHocPhi}"
+                            CommandParameter="HocPhi">      
                             <Button.Style>
                                 <Style TargetType="Button" BasedOn="{StaticResource MenuItemStyle}">
                                     <Style.Triggers>
@@ -251,24 +262,35 @@
                             </Button.Style>
                         </Button>
 
-                        <TextBlock Text="DANH MỤC" FontSize="10"
-                                   Visibility="{Binding MenuTaiKhoan}"
-                                   Foreground="{StaticResource TextMuted}"
-                                   Margin="28,16,0,8" FontWeight="SemiBold"/>
-
                         <Button Content="🗂️  Loại Khóa Học"
-                                Visibility="{Binding MenuTaiKhoan}"
+                                Visibility="{Binding MenuLoaiKH}"
                                 Command="{Binding NavThemLoaiKH}">
                             <Button.Style>
-                                <Style TargetType="Button" BasedOn="{StaticResource MenuItemStyle}"/>
+                                <Style TargetType="Button" BasedOn="{StaticResource MenuItemStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext.ActiveTab, RelativeSource={RelativeSource AncestorType=Window}}" Value="ThemLoaiKH">
+                                            <Setter Property="Background" Value="{StaticResource SidebarActive}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
                             </Button.Style>
                         </Button>
 
                         <Button Content="🏫  Phòng Học"
-                                Visibility="{Binding MenuTaiKhoan}"
+                                Visibility="{Binding MenuPhongHoc}"
                                 Command="{Binding NavThemPhongHoc}">
                             <Button.Style>
-                                <Style TargetType="Button" BasedOn="{StaticResource MenuItemStyle}"/>
+                                <Style TargetType="Button" BasedOn="{StaticResource MenuItemStyle}">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding DataContext.ActiveTab, RelativeSource={RelativeSource AncestorType=Window}}" Value="ThemPhongHoc">
+                                            <Setter Property="Background" Value="{StaticResource SidebarActive}"/>
+                                            <Setter Property="Foreground" Value="White"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
                             </Button.Style>
                         </Button>
 

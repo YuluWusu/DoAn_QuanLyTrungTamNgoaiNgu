@@ -4,6 +4,9 @@ using DoAn_QuanLyTrungTamNgoaiNgu.Views;
 using System.Linq;
 using System.Windows;
 using System.Windows.Input;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Data.Entity;
 
 namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 {
@@ -72,6 +75,12 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         private Visibility _menuTaiKhoan = Visibility.Visible;
         public Visibility MenuTaiKhoan { get => _menuTaiKhoan; set { _menuTaiKhoan = value; OnPropertyChanged(); } }
 
+        private Visibility _menuLoaiKH = Visibility.Visible;
+        public Visibility MenuLoaiKH { get => _menuLoaiKH; set { _menuLoaiKH = value; OnPropertyChanged(); } }
+
+        private Visibility _menuPhongHoc = Visibility.Visible;
+        public Visibility MenuPhongHoc { get => _menuPhongHoc; set { _menuPhongHoc = value; OnPropertyChanged(); } }
+
         private int _soHocVien;
         public int SoHocVien { get => _soHocVien; set { _soHocVien = value; OnPropertyChanged(); } }
 
@@ -83,8 +92,15 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
 
         private int _soGiaoVien;
         public int SoGiaoVien { get => _soGiaoVien; set { _soGiaoVien = value; OnPropertyChanged(); } }
+
+        private ObservableCollection<TodayScheduleItem> _todaySchedule;
+        public ObservableCollection<TodayScheduleItem> TodaySchedule { get => _todaySchedule; set { _todaySchedule = value; OnPropertyChanged(); } }
         public ICommand NavTrangChu {  get; set; }
+        
         public ICommand NavHocVien { get; set; }
+        public ICommand NavThemHocVien { get; set; }
+        public ICommand NavSuaHocVien { get; set; }
+
         public ICommand NavLopHoc { get; set; }
         public ICommand NavDangKyLop { get; set; }
         public ICommand NavDiemDanh { get; set; }
@@ -130,7 +146,37 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 string vaiTro = UserSession.VaiTro ?? VaiTroHienThi ?? "";
                 return vaiTro == "Quản lý" || vaiTro == "Admin" || vaiTro == "Quan ly";
             }, (p) => { NavigateTo(new UC_TaiKhoan(), "TaiKhoan"); });
+            
+            
             NavHocVien = new RelayCommand<object>((p) => true, (p) => { NavigateTo(new UC_HocVien(), "HocVien"); });
+
+           
+            NavThemHocVien = new RelayCommand<object>((p) => true,(p) => { VM_HocVien.NewHVStatic = new HOCVIEN();VM_HocVien.SelectedLopStatic = null; NoiDungHienTai = new UC_ThemHocVien();});
+            NavSuaHocVien = new RelayCommand<object>( (p) => p != null,(p) => { DANGKYLOP dk = p as DANGKYLOP;
+                    if (dk != null)
+                    {
+                     
+                        VM_HocVien.SelectedDKStatic = dk;
+
+                        VM_HocVien.NewHVStatic = new HOCVIEN()
+                        {
+                            MaHV = dk.HOCVIEN.MaHV,
+                            HoTen = dk.HOCVIEN.HoTen,
+                            NgaySinh = dk.HOCVIEN.NgaySinh,
+                            GioiTinh = dk.HOCVIEN.GioiTinh,
+                            DiaChi = dk.HOCVIEN.DiaChi,
+                            SDT = dk.HOCVIEN.SDT,
+                            Email = dk.HOCVIEN.Email,
+                            TrangThai = dk.HOCVIEN.TrangThai
+                        };
+
+                        VM_HocVien.SelectedLopStatic = dk.LOPHOC;
+
+                        NoiDungHienTai = new UC_SuaThongTinHV();
+                    }
+                });
+
+
             NavBaoCao = new RelayCommand<object>((p) => true, (p) => { MessageBox.Show("Tính năng Báo cáo thống kê đang được phát triển!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information); });
 
             NavDangKyLop = new RelayCommand<object>((p) => true, (p) => 
@@ -168,8 +214,14 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 NavigateTo(vmDanhSachHocPhi, "HocPhi"); 
             });
 
-            NavThemLoaiKH = new RelayCommand<object>((p) => true, (p) => { new ThemLoaiKhoaHocWindow().ShowDialog(); });
-            NavThemPhongHoc = new RelayCommand<object>((p) => true, (p) => { new ThemPhongHocWindow().ShowDialog(); });
+            NavThemLoaiKH = new RelayCommand<object>((p) => true, (p) =>
+            {
+                NavigateTo(new UC_LoaiKhoaHoc(), "ThemLoaiKH");
+            });
+            NavThemPhongHoc = new RelayCommand<object>((p) => true, (p) =>
+            {
+                NavigateTo(new UC_PhongHoc(), "ThemPhongHoc");
+            });
         }
 
         private void NavigateTo(object newContent, string tabName = null)
@@ -243,6 +295,9 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                     MenuDiemDanh = Visibility.Collapsed;
                     MenuBaoCao = Visibility.Collapsed;
                     MenuTaiKhoan = Visibility.Collapsed;
+                    // Lễ tân không quản lý danh mục
+                    MenuLoaiKH = Visibility.Collapsed;
+                    MenuPhongHoc = Visibility.Collapsed;
                 }
                 else if (vaiTro.Contains("Kế toán") || vaiTro.Contains("Ke toan"))
                 {
@@ -251,6 +306,8 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                     MenuDangKy = Visibility.Collapsed;
                     MenuDiemDanh = Visibility.Collapsed;
                     MenuTaiKhoan = Visibility.Collapsed;
+                    MenuLoaiKH = Visibility.Collapsed;
+                    MenuPhongHoc = Visibility.Collapsed;
                 }
                 else if (vaiTro.Contains("Giáo viên") || vaiTro.Contains("Giao vien"))
                 {
@@ -259,7 +316,10 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                     MenuHocPhi = Visibility.Collapsed;
                     MenuBaoCao = Visibility.Collapsed;
                     MenuTaiKhoan = Visibility.Collapsed;
+                    MenuLoaiKH = Visibility.Collapsed;
+                    MenuPhongHoc = Visibility.Collapsed;
                 }
+                // Admin / Manager: tất cả menu đều Visible (mặc định)
             }
             
             LoadDashboardData();
@@ -269,18 +329,22 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         {
             using (var db = new QL_TRUNGTAM_TIENGANH())
             {
-                string vaiTro = UserSession.VaiTro ?? VaiTroHienThi ?? "";
-                if (vaiTro.Contains("Giáo viên") || vaiTro.Contains("Giao vien"))
+                int tongHocVien = 0;
+                if (UserSession.ChucVu == "Giáo viên")
                 {
-                    string maGV = UserSession.MaGV;
-                    SoHocVien = db.DANGKYLOPs.Where(dk => dk.LOPHOC.MaGV == maGV).Select(x => x.MaHV).Distinct().Count();
+                    tongHocVien = db.DANGKYLOPs
+                                    .Where(x => x.LOPHOC.MaGV == UserSession.MaGV && (x.TRANGTHAI == "Dang hoc" || x.TRANGTHAI == "Đang học"))
+                                    .Select(x => x.MaHV).Distinct().Count();
                 }
                 else
                 {
-                    SoHocVien = db.DANGKYLOPs.Where(dk => dk.TRANGTHAI == "Dang hoc" || dk.TRANGTHAI == "Đang học").Select(x => x.MaHV).Distinct().Count();
+                    tongHocVien = db.DANGKYLOPs
+                                    .Where(x => x.TRANGTHAI == "Dang hoc" || x.TRANGTHAI == "Đang học")
+                                    .Select(x => x.MaHV).Distinct().Count();
                 }
+                SoHocVien = tongHocVien;
 
-                SoLop = db.LOPHOCs.Count(x => x.TRANGTHAI.Contains("mo") || x.TRANGTHAI.Contains("mở"));
+                SoLop = db.LOPHOCs.Count(x => x.TRANGTHAI == "Dang mo" || x.TRANGTHAI == "Đang mở");
                 
                 int currentMonth = System.DateTime.Now.Month;
                 int currentYear = System.DateTime.Now.Year;
@@ -288,7 +352,42 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 DoanhThu = dt ?? 0;
 
                 SoGiaoVien = db.GIAOVIENs.Count();
+
+                var today = System.DateTime.Today;
+                var listLich = db.LICHOCs
+                                 .Include(x => x.LOPHOC)
+                                 .Include(x => x.LOPHOC.KHOA_HOC)
+                                 .Include(x => x.CAHOC)
+                                 .Include(x => x.PHONGHOC)
+                                 .ToList();
+
+                var scheduleQuery = listLich
+                    .Where(x => x.NGAYHOC.Date == today)
+                    .Select(x => new TodayScheduleItem
+                    {
+                        TenLop = x.LOPHOC.TENLOP,
+                        TenKhoaHoc = x.LOPHOC.KHOA_HOC?.TENKH ?? "",
+                        CaHoc = x.CAHOC != null ? $"{x.CAHOC.TENCA} ({x.CAHOC.GIOBATDAU:hh\\:mm} - {x.CAHOC.GIOKETTHUC:hh\\:mm})" : "Chưa xác định",
+                        PhongHoc = x.PHONGHOC?.TENPHONG ?? "Chưa xếp",
+                        TenGiaoVien = x.LOPHOC.GIAOVIEN?.TenGV ?? "Chưa xếp"
+                    });
+
+                if (UserSession.ChucVu == "Giáo viên")
+                {
+                    scheduleQuery = scheduleQuery.Where(x => x.TenGiaoVien == UserSession.HoTen);
+                }
+
+                TodaySchedule = new ObservableCollection<TodayScheduleItem>(scheduleQuery);
             }
         }
+    }
+
+    public class TodayScheduleItem
+    {
+        public string TenLop { get; set; }
+        public string TenKhoaHoc { get; set; }
+        public string CaHoc { get; set; }
+        public string PhongHoc { get; set; }
+        public string TenGiaoVien { get; set; }
     }
 }

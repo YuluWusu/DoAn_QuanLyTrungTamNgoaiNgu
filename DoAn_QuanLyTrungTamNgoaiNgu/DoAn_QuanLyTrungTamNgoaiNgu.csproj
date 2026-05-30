@@ -57,6 +57,9 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Logo HUIT-01.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll</HintPath>
@@ -194,6 +197,8 @@
     <Compile Include="ViewModels\VM_ThemLoaiKhoaHoc.cs" />
     <Compile Include="ViewModels\VM_ThemPhongHoc.cs" />
     <Compile Include="ViewModels\VM_TrangChu.cs" />
+    <Compile Include="ViewModels\VM_LoaiKhoaHoc.cs" />
+    <Compile Include="ViewModels\VM_PhongHoc.cs" />
     <Compile Include="ViewModels\VM_DanhSachDiemDanh.Extended.cs" />
     <Compile Include="Views\DangNhap.xaml.cs">
       <DependentUpon>DangNhap.xaml</DependentUpon>
@@ -233,6 +238,18 @@
     </Compile>
     <Compile Include="Views\UC_ThemHocVien.xaml.cs">
       <DependentUpon>UC_ThemHocVien.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_LoaiKhoaHoc.xaml.cs">
+      <DependentUpon>UC_LoaiKhoaHoc.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_PhongHoc.xaml.cs">
+      <DependentUpon>UC_PhongHoc.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SuaLoaiKhoaHocWindow.xaml.cs">
+      <DependentUpon>SuaLoaiKhoaHocWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SuaPhongHocWindow.xaml.cs">
+      <DependentUpon>SuaPhongHocWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UC_TrangChu.xaml.cs">
       <DependentUpon>UC_TrangChu.xaml</DependentUpon>
@@ -329,6 +346,22 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\SuaLoaiKhoaHocWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SuaPhongHocWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UC_LoaiKhoaHoc.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\UC_PhongHoc.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\UC_ThemHocVien.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -339,6 +372,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Logo HUIT-01.ico" />
     <Content Include="Models\QuanLyTrungTamModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>QuanLyTrungTamModel.edmx</DependentUpon>

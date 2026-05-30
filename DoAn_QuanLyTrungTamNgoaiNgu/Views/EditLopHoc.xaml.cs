@@ -149,11 +149,15 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Views
                     cmd.Parameters.Add(new SqlParameter("@T6", chkT6.IsChecked == true ? 1 : 0));
                     cmd.Parameters.Add(new SqlParameter("@T7", chkT7.IsChecked == true ? 1 : 0));
                     cmd.Parameters.Add(new SqlParameter("@CN", chkCN.IsChecked == true ? 1 : 0));
-                  
+
+                    int? soBuoi = null;
+                    if (int.TryParse(txtSoBuoi.Text, out int sb) && sb > 0)
+                        soBuoi = sb;
+                    cmd.Parameters.Add(new SqlParameter("@SoBuoi", soBuoi.HasValue ? (object)soBuoi.Value : DBNull.Value));
                     cmd.ExecuteNonQuery();
                 }
 
-                // Cập nhật sĩ số (SP không handle field này)
+                
                 var lopMoi = DataProvider.Ins.DB.LOPHOCs.Find(txtMaLop.Text.Trim());
                 if (lopMoi != null) { lopMoi.SISO_TOIDA = siSo; DataProvider.Ins.DB.SaveChanges(); }
 

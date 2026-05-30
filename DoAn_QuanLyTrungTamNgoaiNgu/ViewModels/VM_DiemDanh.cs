@@ -101,18 +101,21 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                     {
                         foreach (var item in ListDiemDanh)
                         {
-                            var idHV = item.MaHV.Trim();
+                            var idHV = item.MaHV?.Trim();
                             var idLop = SelectedLop.MALOP.Trim();
                             var date = SelectedDate.Date;
-                            
+
                             string sql = "IF EXISTS (SELECT 1 FROM DIEMDANH WHERE MaHV = {0} AND MALOP = {1} AND NGAYDD = {2}) " +
                                          "UPDATE DIEMDANH SET TRANGTHAI = {3}, GHICHU = {4} WHERE MaHV = {0} AND MALOP = {1} AND NGAYDD = {2} " +
                                          "ELSE INSERT INTO DIEMDANH (MaHV, MALOP, NGAYDD, TRANGTHAI, GHICHU) VALUES ({0}, {1}, {2}, {3}, {4})";
-                            
+
                             db.Database.ExecuteSqlCommand(sql, idHV, idLop, date, item.TRANGTHAI ?? "Co mat", item.GHICHU ?? "");
                         }
                     }
-                    RefreshDiemDanh();
+
+                    
+                    LoadHocVien();
+
                     MessageBox.Show("Lưu thông tin điểm danh thành công!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
                 catch (Exception ex)
@@ -124,10 +127,15 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         void LoadDanhSachLop()
         {
             var date = SelectedDate.Date;
+            var LopCoLichHoc = DataProvider.Ins.DB.LICHOCs
+                .Where(x => x.NGAYHOC == date)
+                .Select(x => x.MALOP)
+                .ToList();
             var rawData = DataProvider.Ins.DB.LOPHOCs
                 .Where(x => x.TRANGTHAI == "Dang mo"
-                && x.NGAYBATDAU <= date
-                && x.NGAYKETTHUC >= date)
+                    && x.NGAYBATDAU <= date
+                    && x.NGAYKETTHUC >= date
+                    && LopCoLichHoc.Contains(x.MALOP))
                 .OrderBy(x => x.TENLOP)
                 .ToList();
             ListLop = new ObservableCollection<LOPHOC>(rawData);
@@ -147,25 +155,27 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             if (SelectedLop == null) return;
 
             var rawDangKy = DataProvider.Ins.DB.DANGKYLOPs
+                .AsNoTracking()
                 .Include("HOCVIEN")
                 .Where(x => x.MALOP == SelectedLop.MALOP)
-                .ToList(); // Ép thực thi query và mang dữ liệu về RAM ở đây
+                .ToList();
             var rawDiemDanh = DataProvider.Ins.DB.DIEMDANHs
                 .AsNoTracking()
                 .Where(x => x.MALOP == SelectedLop.MALOP
                 && x.NGAYDD == SelectedDate.Date)
                 .ToList();
 
-            var result = rawDangKy.Select(x=>new VW_DanhSachDiemDanh
-            {
-
-                MaHV = x.MaHV,
-                HoTen = x.HOCVIEN.HoTen,
-                MALOP = x.MALOP,
-                NGAYDD = SelectedDate.Date,
-                TRANGTHAI = rawDiemDanh.FirstOrDefault(d => d.MaHV == x.MaHV)
-                                       ?.TRANGTHAI ?? "Co mat",
-                GHICHU = rawDiemDanh.FirstOrDefault(d=>d.MaHV == x.MaHV)?.GHICHU
+            var result = rawDangKy.Select(x => {
+                var dd = rawDiemDanh.FirstOrDefault(d => d.MaHV == x.MaHV);
+                return new VW_DanhSachDiemDanh
+                {
+                    MaHV = x.MaHV,
+                    HoTen = x.HOCVIEN.HoTen,
+                    MALOP = x.MALOP,
+                    NGAYDD = SelectedDate.Date,
+                    TRANGTHAI = dd?.TRANGTHAI ?? "Co mat",
+                    GHICHU = dd?.GHICHU
+                };
             }).ToList();
             ListDiemDanh = new ObservableCollection<VW_DanhSachDiemDanh>(result);
             RefreshDiemDanh();

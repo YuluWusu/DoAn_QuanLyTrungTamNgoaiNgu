@@ -166,17 +166,30 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             {
                 using (var db = new QL_TRUNGTAM_TIENGANH())
                 {
+                    var allHocVien = db.HOCVIENs.ToList();
                     var allDk = db.DANGKYLOPs
-                        .Include(x => x.HOCVIEN)
                         .Include(x => x.LOPHOC)
                         .Include(x => x.LOPHOC.KHOA_HOC)
                         .ToList();
 
-                    var uniqueDk = allDk.GroupBy(x => x.MaHV)
-                        .Select(g => g.OrderByDescending(x => x.NGAYDK).FirstOrDefault())
-                        .ToList();
+                    var mappedDk = allHocVien.Select(hv =>
+                    {
+                        var latestDk = allDk.Where(x => x.MaHV == hv.MaHV)
+                                            .OrderByDescending(x => x.NGAYDK)
+                                            .FirstOrDefault();
+                        return new DANGKYLOP
+                        {
+                            MaHV = hv.MaHV,
+                            MALOP = latestDk?.MALOP,
+                            NGAYDK = latestDk != null ? latestDk.NGAYDK : DateTime.Now,
+                            HOCPHI = latestDk != null ? latestDk.HOCPHI : 0,
+                            TRANGTHAI = latestDk != null ? latestDk.TRANGTHAI : "Chưa học",
+                            HOCVIEN = hv,
+                            LOPHOC = latestDk?.LOPHOC
+                        };
+                    }).ToList();
 
-                    dsHV = new ObservableCollection<DANGKYLOP>(uniqueDk);
+                    dsHV = new ObservableCollection<DANGKYLOP>(mappedDk);
                     dsHVView = CollectionViewSource.GetDefaultView(dsHV);
                     dsLop = new ObservableCollection<LOPHOC>(db.LOPHOCs.ToList());
                 }
@@ -266,11 +279,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                         return;
                     }
 
-                    if (SelectedLop == null)
-                    {
-                        MessageBox.Show("Vui lòng chọn lớp học!");
-                        return;
-                    }
+
 
                     string ma = TaoMaHV(db);
 
@@ -279,11 +288,6 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                         db.Database.ExecuteSqlCommand(
                             "EXEC SP_ThemHocVien {0}, {1}, {2}, {3}, {4}, {5}, {6}",
                             ma, NewHV.HoTen, NewHV.NgaySinh, NewHV.GioiTinh, NewHV.DiaChi, NewHV.SDT, NewHV.Email
-                        );
-                        
-                        db.Database.ExecuteSqlCommand(
-                            "INSERT INTO DANGKYLOP(MaHV, MALOP, NGAYDK, HOCPHI, TRANGTHAI) VALUES({0}, {1}, {2}, {3}, {4})",
-                            ma, SelectedLop.MALOP, DateTime.Now, 0, "Dang hoc"
                         );
                     }
                     catch (Exception ex)
