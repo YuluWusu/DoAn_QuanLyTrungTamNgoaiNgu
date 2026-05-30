@@ -176,8 +176,8 @@ CREATE TABLE TAIKHOAN
     MATK        CHAR(6)      PRIMARY KEY,
     TENDANGNHAP VARCHAR(50)  NOT NULL UNIQUE,
     MATKHAU     VARCHAR(255) NOT NULL,
-    MaNV        CHAR(6)      NULL REFERENCES NHANVIEN(MaNV),
-    MaGV        CHAR(6)      NULL REFERENCES GIAOVIEN(MaGV),
+    MaNV        CHAR(6)      NULL UNIQUE REFERENCES NHANVIEN(MaNV),
+    MaGV        CHAR(6)      NULL UNIQUE REFERENCES GIAOVIEN(MaGV),
     TRANGTHAI   BIT          NOT NULL DEFAULT 1,
     NGAYTAO     DATETIME     NOT NULL DEFAULT GETDATE(),
     CHECK (
@@ -204,44 +204,6 @@ CREATE TABLE TAIKHOAN_QUYEN
     FOREIGN KEY (MAQUYEN) REFERENCES QUYEN(MAQUYEN)
 )
 GO
--- ============================================================
--- PHAN 2: Nhap Lieu (INSERT INTO)
--- ============================================================
--- ============================================================
--- PHAN 2: NHAP LIEU MAU (INSERT INTO)
--- ============================================================
-
--- 1. LOAI_KHOAHOC
-INSERT INTO LOAI_KHOAHOC (MALOAI_KH, TENLOAI) VALUES
-('L0001', N'Tiếng Anh trẻ em'),
-('L0002', N'Tiếng Anh giao tiếp'),
-('L0003', N'Tiếng Anh học thuật'),
-('L0004', N'Luyện thi chứng chỉ'),
-('L0005', N'Tiếng Anh doanh nghiệp');
-
--- 2. KHOA_HOC
-INSERT INTO KHOA_HOC (MAKH, TENKH, SOBUOI, HOCPHI_GD, MALOAI_KH) VALUES
-('KH001', N'Kids Starter', 20, 2500000, 'L0001'),
-('KH002', N'Kids Mover', 24, 3000000, 'L0001'),
-('KH003', N'Kids Flyer', 24, 3200000, 'L0001'),
-('KH004', N'Giao tiếp cơ bản', 30, 4500000, 'L0002'),
-('KH005', N'Giao tiếp nâng cao', 30, 5500000, 'L0002'),
-('KH006', N'IELTS Foundation', 40, 8000000, 'L0004'),
-('KH007', N'IELTS Target 6.5+', 48, 12000000, 'L0004'),
-('KH008', N'TOEIC 4 kỹ năng', 36, 7500000, 'L0004'),
-('KH009', N'Academic Writing', 20, 5000000, 'L0003'),
-('KH010', N'Business English', 24, 6000000, 'L0005');
-
--- 3. GIAOVIEN
-INSERT INTO GIAOVIEN (MaGV, TenGV, SDT, Email, DiaChi, TrinhDo, NgayVaoLam) VALUES
-('GV0001', N'Nguyễn Thị Lan Anh', '0901234001', 'lananh.nguyen@center.edu', N'123 Nguyễn Trãi, Q1, TP.HCM', N'Thac si', '2020-01-15'),
-('GV0002', N'Trần Văn Bình', '0901234002', 'binh.tran@center.edu', N'456 Lê Lợi, Q3, TP.HCM', N'Cu nhan', '2020-03-20'),
-('GV0003', N'Lê Thị Cẩm Tú', '0901234003', 'camtu.le@center.edu', N'789 Phạm Ngũ Lão, Q1, TP.HCM', N'Thac si', '2019-06-10'),
-('GV0004', N'Phạm Quốc Hùng', '0901234004', 'quochung.pham@center.edu', N'321 Điện Biên Phủ, Bình Thạnh', N'Tien si', '2018-09-01'),
-('GV0005', N'Hoàng Thị Mai', '0901234005', 'mai.hoang@center.edu', N'555 Cách Mạng Tháng 8, Q10', N'Cu nhan', '2021-02-14'),
-('GV0006', N'Đỗ Minh Tuấn', '0901234006', 'minhtuan.do@center.edu', N'888 Võ Văn Kiệt, Q5', N'Thac si', '2020-07-20'),
-('GV0007', N'Vũ Thị Hương', '0901234007', 'huong.vu@center.edu', N'222 Lê Văn Sỹ, Q3', N'Cu nhan', '2021-11-01'),
-('GV0008', N'Ngô Văn Thành', '0901234008', 'thanh.ngo@center.edu', N'777 Trường Chinh, Tân Bình', N'Tien si', '2019-03-15');
 -- ============================================================
 -- PHAN 2: NHAP LIEU MAU (INSERT INTO)
 -- ============================================================
@@ -785,62 +747,80 @@ END
 GO
 
 CREATE OR ALTER PROCEDURE SP_MoLopMoi
-    @MaLop     CHAR(5),
-    @TenLop    NVARCHAR(50),
-    @MaKH      CHAR(5),
-    @MaGV      CHAR(6),
+    @MaLop      CHAR(5),
+    @TenLop     NVARCHAR(50),
+    @MaKH       CHAR(5),
+    @MaGV       CHAR(6),
     @NgayBatDau DATE,
-    @MaPhong   CHAR(5),
-    @MaCa      CHAR(5),
+    @MaPhong    CHAR(5),
+    @MaCa       CHAR(5),
     @T2 BIT, @T3 BIT, @T4 BIT,
-    @T5 BIT, @T6 BIT, @T7 BIT, @CN BIT
+    @T5 BIT, @T6 BIT, @T7 BIT, @CN BIT,
+    @SoBuoi     INT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
-    SET DATEFIRST 1;
+    
+    DECLARE @SoBuoiThucTe INT;
+    IF @SoBuoi IS NOT NULL AND @SoBuoi > 0
+        SET @SoBuoiThucTe = @SoBuoi;
+    ELSE
+        SELECT @SoBuoiThucTe = SOBUOI FROM KHOA_HOC WHERE MAKH = @MaKH;
 
-    DECLARE @SoBuoi INT;
-    SELECT @SoBuoi = SOBUOI FROM KHOA_HOC WHERE MAKH = @MaKH;
-    IF @SoBuoi IS NULL
+    IF @SoBuoiThucTe IS NULL
     BEGIN
-        PRINT N'Khoa hoc khong ton tai.';
+        PRINT N'Khóa học không tồn tại hoặc chưa xác định số buổi.';
         RETURN;
     END
+
 
     INSERT INTO LOPHOC (MALOP, TENLOP, MAKH, MaGV, NGAYBATDAU, NGAYKETTHUC, TRANGTHAI)
     VALUES (@MaLop, @TenLop, @MaKH, @MaGV, @NgayBatDau, @NgayBatDau, N'Dang mo');
 
-    DECLARE @Dem     INT  = 0;
-    DECLARE @NgayCoi DATE = @NgayBatDau;
-    DECLARE @NgayCuoi DATE = NULL;
-    DECLARE @MaxLoop INT  = 730;
 
-    WHILE @Dem < @SoBuoi AND @MaxLoop > 0
+    DECLARE @Dem      INT  = 0;
+    DECLARE @NgayCoi  DATE = @NgayBatDau;
+    DECLARE @NgayCuoi DATE = NULL;
+    DECLARE @MaxLoop  INT  = 730; -- Tránh lặp vô hạn 
+
+
+    SET DATEFIRST 1; 
+
+    WHILE @Dem < @SoBuoiThucTe AND @MaxLoop > 0
     BEGIN
         DECLARE @W INT = DATEPART(WEEKDAY, @NgayCoi);
-        IF (@W=2 AND @T2=1) OR (@W=3 AND @T3=1) OR (@W=4 AND @T4=1)
-        OR (@W=5 AND @T5=1) OR (@W=6 AND @T6=1) OR (@W=7 AND @T7=1)
-        OR (@W=1 AND @CN=1)
+        
+
+        IF (@W = 1 AND @T2 = 1) OR (@W = 2 AND @T3 = 1) OR 
+           (@W = 3 AND @T4 = 1) OR (@W = 4 AND @T5 = 1) OR 
+           (@W = 5 AND @T6 = 1) OR (@W = 6 AND @T7 = 1) OR 
+           (@W = 7 AND @CN = 1)
         BEGIN
+           
             IF dbo.FN_KiemTraPhongTrong(@MaPhong, @MaCa, @NgayCoi) = 1
             BEGIN
                 INSERT INTO LICHOC (MALOP, NGAYHOC, MAPHONG, MACA)
                 VALUES (@MaLop, @NgayCoi, @MaPhong, @MaCa);
-                SET @Dem    = @Dem + 1;
+                
+                SET @Dem      = @Dem + 1;
                 SET @NgayCuoi = @NgayCoi;
             END
             ELSE
-                PRINT N'Phong bi trung ngay ' + CONVERT(NVARCHAR(10), @NgayCoi, 103);
+            BEGIN
+                PRINT N'Cảnh báo: Phòng bị trùng vào ngày ' + CONVERT(NVARCHAR(10), @NgayCoi, 103);
+            END
         END
-        SET @NgayCoi  = DATEADD(DAY, 1, @NgayCoi);
-        SET @MaxLoop  = @MaxLoop - 1;
+        
+   
+        SET @NgayCoi = DATEADD(DAY, 1, @NgayCoi);
+        SET @MaxLoop = @MaxLoop - 1;
     END
 
     UPDATE LOPHOC
     SET NGAYKETTHUC = ISNULL(@NgayCuoi, @NgayBatDau)
     WHERE MALOP = @MaLop;
 
-    PRINT N'Da tao lop ' + @MaLop + N' voi ' + CAST(@Dem AS VARCHAR) + N' buoi.';
+    PRINT N'Đã tạo lớp ' + @MaLop + N' với ' + CAST(@Dem AS VARCHAR) + N' buổi học thành công.';
 END
 GO
 
@@ -863,81 +843,21 @@ BEGIN
     PRINT N'Da huy lop va xoa lich hoc tuong lai.';
 END
 GO
-
-CREATE OR ALTER TRIGGER TRG_TuDongKetThucLop
-ON LOPHOC
-AFTER UPDATE, INSERT
-AS
-BEGIN
-    SET NOCOUNT ON;
-    UPDATE L
-    SET TRANGTHAI = N'Da ket thuc'
-    FROM LOPHOC L
-    JOIN INSERTED i ON L.MALOP = i.MALOP
-    WHERE L.NGAYKETTHUC < CAST(GETDATE() AS DATE)
-      AND L.TRANGTHAI   = N'Dang mo';
-END
-GO
-CREATE OR ALTER PROCEDURE SP_MoLopMoi
-    @MaLop     CHAR(5),
-    @TenLop    NVARCHAR(50),
-    @MaKH      CHAR(5),
-    @MaGV      CHAR(6),
-    @NgayBatDau DATE,
-    @MaPhong   CHAR(5),
-    @MaCa      CHAR(5),
-    @T2 BIT, @T3 BIT, @T4 BIT,
-    @T5 BIT, @T6 BIT, @T7 BIT, @CN BIT
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    DECLARE @SoBuoi INT;
-    SELECT @SoBuoi = SOBUOI FROM KHOA_HOC WHERE MAKH = @MaKH;
-    IF @SoBuoi IS NULL
-    BEGIN
-        PRINT N'Khoa hoc khong ton tai.';
-        RETURN;
-    END
-
-    INSERT INTO LOPHOC (MALOP, TENLOP, MAKH, MaGV, NGAYBATDAU, NGAYKETTHUC, TRANGTHAI)
-    VALUES (@MaLop, @TenLop, @MaKH, @MaGV, @NgayBatDau, @NgayBatDau, N'Dang mo');
-
-    DECLARE @Dem     INT  = 0;
-    DECLARE @NgayCoi DATE = @NgayBatDau;
-    DECLARE @NgayCuoi DATE = NULL;
-    DECLARE @MaxLoop INT  = 730;
-
-    WHILE @Dem < @SoBuoi AND @MaxLoop > 0
-    BEGIN
-        DECLARE @TenThu NVARCHAR(20) = DATENAME(WEEKDAY, @NgayCoi);
-			IF (@TenThu = 'Monday'   AND @T2=1)
-			OR (@TenThu = 'Tuesday'  AND @T3=1)
-			OR (@TenThu = 'Wednesday'AND @T4=1)
-			OR (@TenThu = 'Thursday' AND @T5=1)
-			OR (@TenThu = 'Friday'   AND @T6=1)
-			OR (@TenThu = 'Saturday' AND @T7=1)
-			OR (@TenThu = 'Sunday'   AND @CN=1)
-        BEGIN
-            IF dbo.FN_KiemTraPhongTrong(@MaPhong, @MaCa, @NgayCoi) = 1
-            BEGIN
-                INSERT INTO LICHOC (MALOP, NGAYHOC, MAPHONG, MACA)
-                VALUES (@MaLop, @NgayCoi, @MaPhong, @MaCa);
-                SET @Dem    = @Dem + 1;
-                SET @NgayCuoi = @NgayCoi;
-            END
-            ELSE
-                PRINT N'Phong bi trung ngay ' + CONVERT(NVARCHAR(10), @NgayCoi, 103);
-        END
-        SET @NgayCoi  = DATEADD(DAY, 1, @NgayCoi);
-        SET @MaxLoop  = @MaxLoop - 1;
-    END
-
-    UPDATE LOPHOC
-    SET NGAYKETTHUC = ISNULL(@NgayCuoi, @NgayBatDau)
-    WHERE MALOP = @MaLop;
-
-    PRINT N'Da tao lop ' + @MaLop + N' voi ' + CAST(@Dem AS VARCHAR) + N' buoi.';
+CREATE OR ALTER TRIGGER TRG_TuDongKetThucLop  
+ON LOPHOC  
+AFTER UPDATE, INSERT  
+AS  
+BEGIN  
+    SET NOCOUNT ON;  
+    
+    -- Tự động chuyển trạng thái sang 'Da ket thuc' nếu ngày hiện tại vượt quá ngày bế giảng
+    UPDATE L  
+    SET TRANGTHAI = N'Da ket thuc'  
+    FROM LOPHOC L  
+    JOIN INSERTED i ON L.MALOP = i.MALOP  
+    WHERE L.NGAYKETTHUC < CAST(GETDATE() AS DATE)  
+      AND L.TRANGTHAI = N'Dang mo'
+      AND L.NGAYKETTHUC != L.NGAYBATDAU; -- Ràng buộc an toàn tránh lỗi lúc vừa mở lớp
 END
 GO
 CREATE OR ALTER VIEW VW_DanhSachDiemDanh
@@ -953,89 +873,6 @@ FROM DANGKYLOP DK
 JOIN HOCVIEN HV ON DK.MaHV = HV.MaHV
 LEFT JOIN DIEMDANH DD ON DK.MaHV = DD.MaHV AND DK.MALOP = DD.MALOP
 GO
-
--- sửa procedure và trigger tự động kết thúc lớp
-
-ALTER TRIGGER TRG_TuDongKetThucLop  
-ON LOPHOC  
-AFTER UPDATE, INSERT  
-AS  
-BEGIN  
-    SET NOCOUNT ON;  
-    UPDATE L  
-    SET TRANGTHAI = N'Da ket thuc'  
-    FROM LOPHOC L  
-    JOIN INSERTED i ON L.MALOP = i.MALOP  
-    WHERE L.NGAYKETTHUC < CAST(GETDATE() AS DATE)  
-      AND L.TRANGTHAI = N'Dang mo'
-      AND L.NGAYKETTHUC != L.NGAYBATDAU;
-END
-
-
-ALTER   PROCEDURE [dbo].[SP_MoLopMoi]
-    @MaLop     CHAR(5),
-    @TenLop    NVARCHAR(50),
-    @MaKH      CHAR(5),
-    @MaGV      CHAR(6),
-    @NgayBatDau DATE,
-    @MaPhong   CHAR(5),
-    @MaCa      CHAR(5),
-    @T2 BIT, @T3 BIT, @T4 BIT,
-    @T5 BIT, @T6 BIT, @T7 BIT, @CN BIT,
-	@SoBuoi INT = NULL
-AS
-BEGIN
-    SET NOCOUNT ON;
-
-    DECLARE @SoBuoiThucTe INT;
-    
-    IF @SoBuoi IS NOT NULL AND @SoBuoi>0
-		SET @SoBuoiThucTe = @SoBuoi
-	ELSE
-		SELECT @SoBuoiThucTe = SOBUOI FROM KHOA_HOC WHERE MAKH = @MaKH;
-
-    INSERT INTO LOPHOC (MALOP, TENLOP, MAKH, MaGV, NGAYBATDAU, NGAYKETTHUC, TRANGTHAI)
-    VALUES (@MaLop, @TenLop, @MaKH, @MaGV, @NgayBatDau, @NgayBatDau, N'Dang mo');
-
-    DECLARE @Dem     INT  = 0;
-    DECLARE @NgayCoi DATE = @NgayBatDau;
-    DECLARE @NgayCuoi DATE = NULL;
-    DECLARE @MaxLoop INT  = 730;
-
-    WHILE @Dem < @SoBuoiThucTe AND @MaxLoop > 0
-    BEGIN
-        DECLARE @TenThu NVARCHAR(20) = DATENAME(WEEKDAY, @NgayCoi);
-			IF (@TenThu = 'Monday'   AND @T2=1)
-			OR (@TenThu = 'Tuesday'  AND @T3=1)
-			OR (@TenThu = 'Wednesday'AND @T4=1)
-			OR (@TenThu = 'Thursday' AND @T5=1)
-			OR (@TenThu = 'Friday'   AND @T6=1)
-			OR (@TenThu = 'Saturday' AND @T7=1)
-			OR (@TenThu = 'Sunday'   AND @CN=1)
-        BEGIN
-            IF dbo.FN_KiemTraPhongTrong(@MaPhong, @MaCa, @NgayCoi) = 1
-            BEGIN
-                INSERT INTO LICHOC (MALOP, NGAYHOC, MAPHONG, MACA)
-                VALUES (@MaLop, @NgayCoi, @MaPhong, @MaCa);
-                SET @Dem    = @Dem + 1;
-                SET @NgayCuoi = @NgayCoi;
-            END
-            ELSE
-                PRINT N'Phong bi trung ngay ' + CONVERT(NVARCHAR(10), @NgayCoi, 103);
-        END
-        SET @NgayCoi  = DATEADD(DAY, 1, @NgayCoi);
-        SET @MaxLoop  = @MaxLoop - 1;
-    END
-
-    UPDATE LOPHOC
-    SET NGAYKETTHUC = ISNULL(@NgayCuoi, @NgayBatDau)
-    WHERE MALOP = @MaLop;
-
-    PRINT N'Da tao lop ' + @MaLop + N' voi ' + CAST(@Dem AS VARCHAR) + N' buoi.';
-END
-
-
-
 
 -- ============================================================
 -- Hồng Vũ
