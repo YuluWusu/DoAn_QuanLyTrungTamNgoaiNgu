@@ -1226,6 +1226,320 @@ BEGIN
 END
 GO
 
+-- =================================================================================
+-- HỆ QUẢN TRỊ CƠ SỞ DỮ LIỆU - TRƯỜNG ĐẠI HỌC/CAO ĐẲNG
+-- ĐỀ TÀI: QUẢN LÝ TRUNG TÂM TIẾNG ANH (QL_TRUNGTAM_TIENGANH)
+-- SCRIPT: CẤU HÌNH TÀI KHOẢN ĐĂNG NHẬP (LOGINS), NGƯỜI DÙNG (USERS) VÀ PHÂN QUYỀN (CẬP NHẬT) Phần này do THANH TẤN phụ trách
+-- =================================================================================
+
+/*
+=================================================================================
+ Danh sách tài khoản đăng nhập (SQL Server Logins & Database Users) được khởi tạo:
+---------------------------------------------------------------------------------
+ STT | Tên Login | Tên Database User | Mật khẩu mặc định | Nhóm bảng được phân quyền thao tác toàn quyền
+---------------------------------------------------------------------------------
+  1  | tan       | tan               | tan123            | QUYEN, TAIKHOAN, TAIKHOAN_QUYEN, NHANVIEN
+  2  | long      | long              | long123           | Tất cả các bảng (Toàn quyền db_owner)
+  3  | duyen     | duyen             | duyen123          | GIAOVIEN, HOCVIEN
+  4  | quan      | quan              | quan123           | PHONGHOC, LOPHOC, CAHOC, LICHOC, KHOA_HOC, LOAI_KHOAHOC
+  5  | vu        | vu                | vu123             | DANGKYLOP, PHIEUTHU, DIEMDANH
+=================================================================================
+*/
+
+USE master;
+GO
+
+-- Kiểm tra và tạo Database nếu chưa tồn tại
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'QL_TRUNGTAM_TIENGANH')
+BEGIN
+    CREATE DATABASE QL_TRUNGTAM_TIENGANH;
+END
+GO
+
+USE QL_TRUNGTAM_TIENGANH;
+GO
+
+-- =================================================================================
+-- PHẦN 1: DỌN DẸP HỆ THỐNG (XÓA LOGIN/USER CŨ NẾU CÓ)
+-- =================================================================================
+
+-- 1. Xóa các Database Users cũ
+IF DATABASE_PRINCIPAL_ID('user_tan') IS NOT NULL DROP USER user_tan;
+IF DATABASE_PRINCIPAL_ID('user_long') IS NOT NULL DROP USER user_long;
+IF DATABASE_PRINCIPAL_ID('user_duyen') IS NOT NULL DROP USER user_duyen;
+IF DATABASE_PRINCIPAL_ID('user_quan') IS NOT NULL DROP USER user_quan;
+IF DATABASE_PRINCIPAL_ID('user_vu') IS NOT NULL DROP USER user_vu;
+
+IF DATABASE_PRINCIPAL_ID('tan') IS NOT NULL DROP USER tan;
+IF DATABASE_PRINCIPAL_ID('long') IS NOT NULL DROP USER long;
+IF DATABASE_PRINCIPAL_ID('duyen') IS NOT NULL DROP USER duyen;
+IF DATABASE_PRINCIPAL_ID('quan') IS NOT NULL DROP USER quan;
+IF DATABASE_PRINCIPAL_ID('vu') IS NOT NULL DROP USER vu;
+GO
+
+-- 2. Xóa các Server Logins cũ
+USE master;
+GO
+IF EXISTS (SELECT * FROM sys.server_principals WHERE name = 'login_tan') DROP LOGIN login_tan;
+IF EXISTS (SELECT * FROM sys.server_principals WHERE name = 'login_long') DROP LOGIN login_long;
+IF EXISTS (SELECT * FROM sys.server_principals WHERE name = 'login_duyen') DROP LOGIN login_duyen;
+IF EXISTS (SELECT * FROM sys.server_principals WHERE name = 'login_quan') DROP LOGIN login_quan;
+IF EXISTS (SELECT * FROM sys.server_principals WHERE name = 'login_vu') DROP LOGIN login_vu;
+
+IF EXISTS (SELECT * FROM sys.server_principals WHERE name = 'tan') DROP LOGIN tan;
+IF EXISTS (SELECT * FROM sys.server_principals WHERE name = 'long') DROP LOGIN long;
+IF EXISTS (SELECT * FROM sys.server_principals WHERE name = 'duyen') DROP LOGIN duyen;
+IF EXISTS (SELECT * FROM sys.server_principals WHERE name = 'quan') DROP LOGIN quan;
+IF EXISTS (SELECT * FROM sys.server_principals WHERE name = 'vu') DROP LOGIN vu;
+GO
+
+
+-- =================================================================================
+-- PHẦN 2: TẠO TÀI KHOẢN ĐĂNG NHẬP (LOGINS) MỚI Ở CẤP ĐỘ SERVER
+-- =================================================================================
+-- Lưu ý: CHECK_POLICY = OFF được sử dụng để cho phép mật khẩu đơn giản (ví dụ: tan123)
+-- mà không bị ràng buộc bởi chính sách mật khẩu phức tạp của Windows Active Directory.
+
+CREATE LOGIN tan WITH PASSWORD = 'tan123', DEFAULT_DATABASE = QL_TRUNGTAM_TIENGANH, CHECK_POLICY = OFF;
+PRINT N'Đã tạo Server Login: tan (pass: tan123)';
+
+CREATE LOGIN long WITH PASSWORD = 'long123', DEFAULT_DATABASE = QL_TRUNGTAM_TIENGANH, CHECK_POLICY = OFF;
+PRINT N'Đã tạo Server Login: long (pass: long123)';
+
+CREATE LOGIN duyen WITH PASSWORD = 'duyen123', DEFAULT_DATABASE = QL_TRUNGTAM_TIENGANH, CHECK_POLICY = OFF;
+PRINT N'Đã tạo Server Login: duyen (pass: duyen123)';
+
+CREATE LOGIN quan WITH PASSWORD = 'quan123', DEFAULT_DATABASE = QL_TRUNGTAM_TIENGANH, CHECK_POLICY = OFF;
+PRINT N'Đã tạo Server Login: quan (pass: quan123)';
+
+CREATE LOGIN vu WITH PASSWORD = 'vu123', DEFAULT_DATABASE = QL_TRUNGTAM_TIENGANH, CHECK_POLICY = OFF;
+PRINT N'Đã tạo Server Login: vu (pass: vu123)';
+GO
+
+
+-- =================================================================================
+-- PHẦN 3: TẠO NGƯỜI DÙNG CƠ SỞ DỮ LIỆU (DATABASE USERS) MỚI TRONG DATABASE
+-- =================================================================================
+USE QL_TRUNGTAM_TIENGANH;
+GO
+
+CREATE USER tan FOR LOGIN tan;
+PRINT N'Đã tạo Database User: tan';
+
+CREATE USER long FOR LOGIN long;
+PRINT N'Đã tạo Database User: long';
+
+CREATE USER duyen FOR LOGIN duyen;
+PRINT N'Đã tạo Database User: duyen';
+
+CREATE USER quan FOR LOGIN quan;
+PRINT N'Đã tạo Database User: quan';
+
+CREATE USER vu FOR LOGIN vu;
+PRINT N'Đã tạo Database User: vu';
+GO
+
+
+-- =================================================================================
+-- PHẦN 4: KHỞI TẠO VÀ CẤU HÌNH CÁC VAI TRÒ (DATABASE ROLES) ĐỂ QUẢN LÝ PHÂN QUYỀN
+-- =================================================================================
+
+-- Xóa các Role cũ nếu tồn tại để cập nhật sạch
+IF DATABASE_PRINCIPAL_ID('role_quanly_taikhoan') IS NOT NULL
+    DROP ROLE role_quanly_taikhoan;
+IF DATABASE_PRINCIPAL_ID('role_quanly_giao_hoc') IS NOT NULL
+    DROP ROLE role_quanly_giao_hoc;
+IF DATABASE_PRINCIPAL_ID('role_quanly_phong_lop_ca') IS NOT NULL
+    DROP ROLE role_quanly_phong_lop_ca;
+IF DATABASE_PRINCIPAL_ID('role_quanly_dangky_thuphi_diemdanh') IS NOT NULL
+    DROP ROLE role_quanly_dangky_thuphi_diemdanh;
+GO
+
+-- Tạo mới các Role
+CREATE ROLE role_quanly_taikhoan;
+CREATE ROLE role_quanly_giao_hoc;
+CREATE ROLE role_quanly_phong_lop_ca;
+CREATE ROLE role_quanly_dangky_thuphi_diemdanh;
+GO
+
+
+-- =================================================================================
+-- PHẦN 5: PHÂN QUYỀN CHI TIẾT CHO TỪNG ROLE (GRANT PRIVILEGES)
+-- =================================================================================
+
+-- ---------------------------------------------------------------------------------
+-- 5.1. PHÂN QUYỀN CHO TẤN (role_quanly_taikhoan):
+-- Bảng được giao toàn quyền (SELECT, INSERT, UPDATE, DELETE): 
+-- -> QUYEN, TAIKHOAN, TAIKHOAN_QUYEN, NHANVIEN (Bảng nhân viên được giao cho Tấn vì liên quan trực tiếp đến tài khoản)
+-- ---------------------------------------------------------------------------------
+GRANT SELECT, INSERT, UPDATE, DELETE ON TAIKHOAN TO role_quanly_taikhoan;
+GRANT SELECT, INSERT, UPDATE, DELETE ON QUYEN TO role_quanly_taikhoan;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TAIKHOAN_QUYEN TO role_quanly_taikhoan;
+GRANT SELECT, INSERT, UPDATE, DELETE ON NHANVIEN TO role_quanly_taikhoan;
+
+-- Các Stored Procedure, Function & View liên quan
+GRANT EXECUTE ON SP_TaoTaiKhoan TO role_quanly_taikhoan;
+GRANT EXECUTE ON SP_DoiMatKhau TO role_quanly_taikhoan;
+GRANT EXECUTE ON SP_KhoaMoTaiKhoan TO role_quanly_taikhoan;
+GRANT EXECUTE ON FN_KiemTraQuyen TO role_quanly_taikhoan;
+GRANT SELECT ON VW_TaiKhoan_Quyen TO role_quanly_taikhoan;
+
+-- Cấp quyền SELECT bổ trợ
+GRANT SELECT ON GIAOVIEN TO role_quanly_taikhoan; -- Cần để VIEW VW_TaiKhoan_Quyen thực hiện JOIN
+
+PRINT N'--> Đã cấp toàn quyền nhóm bảng Tài khoản - Nhân viên cho role_quanly_taikhoan (Tấn)';
+GO
+
+
+-- ---------------------------------------------------------------------------------
+-- 5.2. PHÂN QUYỀN CHO DUYÊN (role_quanly_giao_hoc):
+-- Bảng được giao toàn quyền (SELECT, INSERT, UPDATE, DELETE): 
+-- -> GIAOVIEN, HOCVIEN
+-- ---------------------------------------------------------------------------------
+GRANT SELECT, INSERT, UPDATE, DELETE ON GIAOVIEN TO role_quanly_giao_hoc;
+GRANT SELECT, INSERT, UPDATE, DELETE ON HOCVIEN TO role_quanly_giao_hoc;
+
+-- Các Stored Procedure, Function & View liên quan
+GRANT EXECUTE ON SP_ThemHocVien TO role_quanly_giao_hoc;
+GRANT EXECUTE ON SP_CapNhatTrangThaiHocVien TO role_quanly_giao_hoc;
+GRANT EXECUTE ON FN_TinhTuoi TO role_quanly_giao_hoc;
+GRANT SELECT ON VW_GiaoVien_SoLop TO role_quanly_giao_hoc;
+
+-- Cấp quyền SELECT bổ trợ
+GRANT SELECT ON LOPHOC TO role_quanly_giao_hoc; -- Cần để VIEW VW_GiaoVien_SoLop thực hiện JOIN
+
+PRINT N'--> Đã cấp toàn quyền nhóm bảng Giáo viên - Học viên cho role_quanly_giao_hoc (Duyên)';
+GO
+
+
+-- ---------------------------------------------------------------------------------
+-- 5.3. PHÂN QUYỀN CHO QUÂN (role_quanly_phong_lop_ca):
+-- Bảng được giao toàn quyền (SELECT, INSERT, UPDATE, DELETE): 
+-- -> PHONGHOC, LOPHOC, CAHOC, LICHOC, KHOA_HOC, LOAI_KHOAHOC 
+-- (Cấp thêm Khóa học và Loại khóa học cho Quân vì liên quan trực tiếp đến Lớp học)
+-- ---------------------------------------------------------------------------------
+GRANT SELECT, INSERT, UPDATE, DELETE ON PHONGHOC TO role_quanly_phong_lop_ca;
+GRANT SELECT, INSERT, UPDATE, DELETE ON LOPHOC TO role_quanly_phong_lop_ca;
+GRANT SELECT, INSERT, UPDATE, DELETE ON CAHOC TO role_quanly_phong_lop_ca;
+GRANT SELECT, INSERT, UPDATE, DELETE ON LICHOC TO role_quanly_phong_lop_ca;
+GRANT SELECT, INSERT, UPDATE, DELETE ON KHOA_HOC TO role_quanly_phong_lop_ca;
+GRANT SELECT, INSERT, UPDATE, DELETE ON LOAI_KHOAHOC TO role_quanly_phong_lop_ca;
+
+-- Các Stored Procedure, Function & View liên quan
+GRANT EXECUTE ON SP_MoLopMoi TO role_quanly_phong_lop_ca;
+GRANT EXECUTE ON SP_HuyLop TO role_quanly_phong_lop_ca;
+GRANT EXECUTE ON SP_ThemKhoaHoc TO role_quanly_phong_lop_ca;
+GRANT EXECUTE ON SP_ThongKeLopTheoKhoaHoc TO role_quanly_phong_lop_ca;
+GRANT EXECUTE ON FN_KiemTraPhongTrong TO role_quanly_phong_lop_ca;
+GRANT EXECUTE ON FN_LayHocPhiGoc TO role_quanly_phong_lop_ca;
+GRANT SELECT ON VW_DanhSachDiemDanh TO role_quanly_phong_lop_ca;
+GRANT SELECT ON VW_KhoaHoc_ThongKe TO role_quanly_phong_lop_ca;
+
+-- Cấp quyền SELECT bổ trợ
+GRANT SELECT ON HOCVIEN TO role_quanly_phong_lop_ca;
+GRANT SELECT ON DANGKYLOP TO role_quanly_phong_lop_ca;
+GRANT SELECT ON DIEMDANH TO role_quanly_phong_lop_ca;
+GRANT SELECT ON GIAOVIEN TO role_quanly_phong_lop_ca;
+
+PRINT N'--> Đã cấp toàn quyền nhóm bảng Phòng - Lớp - Ca - Khóa học cho role_quanly_phong_lop_ca (Quân)';
+GO
+
+
+-- ---------------------------------------------------------------------------------
+-- 5.4. PHÂN QUYỀN CHO VŨ (role_quanly_dangky_thuphi_diemdanh):
+-- Bảng được giao toàn quyền (SELECT, INSERT, UPDATE, DELETE): 
+-- -> DANGKYLOP, PHIEUTHU, DIEMDANH
+-- ---------------------------------------------------------------------------------
+GRANT SELECT, INSERT, UPDATE, DELETE ON DANGKYLOP TO role_quanly_dangky_thuphi_diemdanh;
+GRANT SELECT, INSERT, UPDATE, DELETE ON PHIEUTHU TO role_quanly_dangky_thuphi_diemdanh;
+GRANT SELECT, INSERT, UPDATE, DELETE ON DIEMDANH TO role_quanly_dangky_thuphi_diemdanh;
+
+-- Các Stored Procedure, Function & View liên quan
+GRANT EXECUTE ON SP_DangKyLop TO role_quanly_dangky_thuphi_diemdanh;
+GRANT EXECUTE ON SP_ThuHocPhi TO role_quanly_dangky_thuphi_diemdanh;
+GRANT EXECUTE ON FN_TiLeChuyenCan TO role_quanly_dangky_thuphi_diemdanh;
+GRANT EXECUTE ON SP_CanhBaoVangNhieu TO role_quanly_dangky_thuphi_diemdanh;
+
+-- Cấp quyền SELECT bổ trợ để phục vụ nghiệp vụ kiểm tra chéo
+GRANT SELECT ON HOCVIEN TO role_quanly_dangky_thuphi_diemdanh;
+GRANT SELECT ON LOPHOC TO role_quanly_dangky_thuphi_diemdanh;
+GRANT SELECT ON LICHOC TO role_quanly_dangky_thuphi_diemdanh;
+GRANT SELECT ON KHOA_HOC TO role_quanly_dangky_thuphi_diemdanh;
+
+PRINT N'--> Đã cấp toàn quyền nhóm bảng Đăng ký - Thu phí - Điểm danh cho role_quanly_dangky_thuphi_diemdanh (Vũ)';
+GO
+
+
+-- =================================================================================
+-- PHẦN 6: GÁN NGƯỜI DÙNG VÀO VAI TRÒ (ADD USERS TO ROLES)
+-- =================================================================================
+
+-- 1. Gán user tan vào role_quanly_taikhoan
+ALTER ROLE role_quanly_taikhoan ADD MEMBER tan;
+PRINT N'Đã gán User tan vào role_quanly_taikhoan';
+
+-- 2. Gán user duyen vào role_quanly_giao_hoc
+ALTER ROLE role_quanly_giao_hoc ADD MEMBER duyen;
+PRINT N'Đã gán User duyen vào role_quanly_giao_hoc';
+
+-- 3. Gán user quan vào role_quanly_phong_lop_ca
+ALTER ROLE role_quanly_phong_lop_ca ADD MEMBER quan;
+PRINT N'Đã gán User quan vào role_quanly_phong_lop_ca';
+
+-- 4. Gán user vu vào role_quanly_dangky_thuphi_diemdanh
+ALTER ROLE role_quanly_dangky_thuphi_diemdanh ADD MEMBER vu;
+PRINT N'Đã gán User vu vào role_quanly_dangky_thuphi_diemdanh';
+
+-- 5. Gán user long vào role db_owner (Quyền quản trị toàn database)
+ALTER ROLE db_owner ADD MEMBER long;
+PRINT N'Đã gán User long vào role db_owner';
+GO
+
+
+-- =================================================================================
+-- PHẦN 7: SCRIPT KIỂM THỬ NHANH QUYỀN HẠN (DÀNH CHO ĐỐI TƯỢNG GIẢ LẬP)
+-- =================================================================================
+/*
+Chạy đoạn code sau để kiểm tra xem phân quyền hoạt động chính xác:
+
+-- 1. Kiểm tra tài khoản TẤN (tan):
+EXECUTE AS USER = 'tan';
+SELECT * FROM TAIKHOAN;  -- THÀNH CÔNG
+SELECT * FROM NHANVIEN;  -- THÀNH CÔNG (Đã được giao thêm toàn quyền)
+-- SELECT * FROM HOCVIEN; -- THẤT BẠI (Không có quyền)
+REVERT;
+
+-- 2. Kiểm tra tài khoản DUYÊN (duyen):
+EXECUTE AS USER = 'duyen';
+SELECT * FROM GIAOVIEN;  -- THÀNH CÔNG
+SELECT * FROM HOCVIEN;   -- THÀNH CÔNG
+-- SELECT * FROM TAIKHOAN; -- THẤT BẠI (Không có quyền)
+REVERT;
+
+-- 3. Kiểm tra tài khoản QUÂN (quan):
+EXECUTE AS USER = 'quan';
+SELECT * FROM LOPHOC;      -- THÀNH CÔNG
+SELECT * FROM KHOA_HOC;    -- THÀNH CÔNG (Đã được giao thêm toàn quyền)
+SELECT * FROM LOAI_KHOAHOC;-- THÀNH CÔNG (Đã được giao thêm toàn quyền)
+-- SELECT * FROM PHIEUTHU; -- THẤT BẠI (Không có quyền)
+REVERT;
+
+-- 4. Kiểm tra tài khoản VŨ (vu):
+EXECUTE AS USER = 'vu';
+SELECT * FROM DANGKYLOP; -- THÀNH CÔNG
+SELECT * FROM PHIEUTHU;  -- THÀNH CÔNG
+SELECT * FROM DIEMDANH;  -- THÀNH CÔNG
+-- SELECT * FROM GIAOVIEN;-- THẤT BẠI (Không có quyền)
+REVERT;
+
+-- 5. Kiểm tra tài khoản LONG (long):
+EXECUTE AS USER = 'long';
+SELECT * FROM TAIKHOAN;  -- THÀNH CÔNG (Quyền db_owner)
+SELECT * FROM KHOA_HOC;  -- THÀNH CÔNG (Quyền db_owner)
+REVERT;
+*/
+GO
+
 -------------------------------------------
 -- PHẦN SAO LƯU & PHỤC HỒI (PHI LONG) -----
 -------------------------------------------
