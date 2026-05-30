@@ -116,7 +116,7 @@
                     <TextBlock Text="Ngày Đăng Ký" FontWeight="SemiBold" Margin="0,0,0,5"/>
                     <DatePicker Height="40" VerticalContentAlignment="Center" IsEnabled="True" 
                                 SelectedDate="{Binding NgayDK, UpdateSourceTrigger=PropertyChanged}"
-                                DisplayDateMax="{x:Static System:DateTime.Today}" Margin="0,0,0,15"
+                                DisplayDateEnd="{x:Static System:DateTime.Today}" Margin="0,0,0,15"
                                 xmlns:System="clr-namespace:System;assembly=mscorlib"/>
 
                     <!-- Học Phí -->
