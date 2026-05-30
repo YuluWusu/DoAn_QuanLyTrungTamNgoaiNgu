@@ -7,6 +7,73 @@
              xmlns:vm="clr-namespace:DoAn_QuanLyTrungTamNgoaiNgu.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="600" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="16" ShadowDepth="2" Direction="270" Color="#1E293B" Opacity="0.06"/>
+        <SolidColorBrush x:Key="PrimaryBrush"      Color="#4F46E5"/>
+        <SolidColorBrush x:Key="PrimaryLightBrush" Color="#EEF2FF"/>
+        <SolidColorBrush x:Key="BorderBrush"        Color="#E2E8F0"/>
+        <SolidColorBrush x:Key="TextPrimaryBrush"   Color="#1E293B"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#64748B"/>
+
+        <!-- ===== COMBOBOX STYLE ===== -->
+        <Style x:Key="ModernComboBox" TargetType="ComboBox">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1.5"/>
+            <Setter Property="Padding" Value="10,6"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <Border x:Name="Border"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    CornerRadius="8">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ContentPresenter x:Name="ContentSite"
+                                                      IsHitTestVisible="False"
+                                                      Content="{TemplateBinding SelectionBoxItem}"
+                                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                                      Margin="10,0,0,0"
+                                                      VerticalAlignment="Center"/>
+                                    <Path Grid.Column="1" Data="M0,0 L4,4 L8,0" Stroke="{StaticResource TextSecondaryBrush}"
+                                          StrokeThickness="1.5" Margin="0,0,10,0" VerticalAlignment="Center"
+                                          StrokeLineJoin="Round" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                                </Grid>
+                            </Border>
+                            <ToggleButton Focusable="False" IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                                          Background="Transparent" BorderThickness="0" Opacity="0"/>
+                            <Popup x:Name="Popup" IsOpen="{TemplateBinding IsDropDownOpen}" Placement="Bottom" AllowsTransparency="True" Focusable="False">
+                                <Border Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8"
+                                        MinWidth="{TemplateBinding ActualWidth}" MaxHeight="200"
+                                        Effect="{StaticResource CardShadow}">
+                                    <ScrollViewer>
+                                        <StackPanel IsItemsHost="True"/>
+                                    </ScrollViewer>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsDropDownOpen" Value="True">
+                                <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
     <Grid Margin="30">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -33,21 +100,23 @@
                 <StackPanel HorizontalAlignment="Stretch">
                     <!-- Chọn Học Viên -->
                     <TextBlock Text="Chọn Học Viên *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <ComboBox Height="40" VerticalContentAlignment="Center" Margin="0,0,0,15"
+                    <ComboBox Style="{StaticResource ModernComboBox}" Margin="0,0,0,15"
                               ItemsSource="{Binding ListHocVien}"
                               SelectedItem="{Binding SelectedHocVien}"
                               DisplayMemberPath="HoTen"/>
 
                     <!-- Chọn Lớp Học -->
                     <TextBlock Text="Chọn Lớp Học *" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <ComboBox Height="40" VerticalContentAlignment="Center" Margin="0,0,0,15"
+                    <ComboBox Style="{StaticResource ModernComboBox}" Margin="0,0,0,15"
                               ItemsSource="{Binding ListLopHoc}"
                               SelectedItem="{Binding SelectedLopHoc}"
                               DisplayMemberPath="TENLOP"/>
 
                     <!-- Ngày Đăng Ký -->
-                    <TextBlock Text="Ngày Đăng Ký (Tự động cập nhật)" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <DatePicker Height="40" VerticalContentAlignment="Center" IsEnabled="False" SelectedDate="{x:Static System:DateTime.Now}" Margin="0,0,0,15"
+                    <TextBlock Text="Ngày Đăng Ký" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <DatePicker Height="40" VerticalContentAlignment="Center" IsEnabled="True" 
+                                SelectedDate="{Binding NgayDK, UpdateSourceTrigger=PropertyChanged}"
+                                DisplayDateMax="{x:Static System:DateTime.Today}" Margin="0,0,0,15"
                                 xmlns:System="clr-namespace:System;assembly=mscorlib"/>
 
                     <!-- Học Phí -->
@@ -57,7 +126,7 @@
 
                     <!-- Trạng Thái Ban Đầu -->
                     <TextBlock Text="Trạng Thái Ban Đầu" FontWeight="SemiBold" Margin="0,0,0,5"/>
-                    <ComboBox Height="40" VerticalContentAlignment="Center" Margin="0,0,0,15"
+                    <ComboBox Style="{StaticResource ModernComboBox}" Margin="0,0,0,15"
                               SelectedValuePath="Content"
                               SelectedValue="{Binding TrangThai, UpdateSourceTrigger=PropertyChanged}">
                         <ComboBoxItem Content="Cho dong tien"/>
