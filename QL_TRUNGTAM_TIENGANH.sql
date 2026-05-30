@@ -934,6 +934,89 @@ JOIN HOCVIEN HV ON DK.MaHV = HV.MaHV
 LEFT JOIN DIEMDANH DD ON DK.MaHV = DD.MaHV AND DK.MALOP = DD.MALOP
 GO
 
+-- sửa procedure và trigger tự động kết thúc lớp
+
+ALTER TRIGGER TRG_TuDongKetThucLop  
+ON LOPHOC  
+AFTER UPDATE, INSERT  
+AS  
+BEGIN  
+    SET NOCOUNT ON;  
+    UPDATE L  
+    SET TRANGTHAI = N'Da ket thuc'  
+    FROM LOPHOC L  
+    JOIN INSERTED i ON L.MALOP = i.MALOP  
+    WHERE L.NGAYKETTHUC < CAST(GETDATE() AS DATE)  
+      AND L.TRANGTHAI = N'Dang mo'
+      AND L.NGAYKETTHUC != L.NGAYBATDAU;
+END
+
+
+ALTER   PROCEDURE [dbo].[SP_MoLopMoi]
+    @MaLop     CHAR(5),
+    @TenLop    NVARCHAR(50),
+    @MaKH      CHAR(5),
+    @MaGV      CHAR(6),
+    @NgayBatDau DATE,
+    @MaPhong   CHAR(5),
+    @MaCa      CHAR(5),
+    @T2 BIT, @T3 BIT, @T4 BIT,
+    @T5 BIT, @T6 BIT, @T7 BIT, @CN BIT,
+	@SoBuoi INT = NULL
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @SoBuoiThucTe INT;
+    
+    IF @SoBuoi IS NOT NULL AND @SoBuoi>0
+		SET @SoBuoiThucTe = @SoBuoi
+	ELSE
+		SELECT @SoBuoiThucTe = SOBUOI FROM KHOA_HOC WHERE MAKH = @MaKH;
+
+    INSERT INTO LOPHOC (MALOP, TENLOP, MAKH, MaGV, NGAYBATDAU, NGAYKETTHUC, TRANGTHAI)
+    VALUES (@MaLop, @TenLop, @MaKH, @MaGV, @NgayBatDau, @NgayBatDau, N'Dang mo');
+
+    DECLARE @Dem     INT  = 0;
+    DECLARE @NgayCoi DATE = @NgayBatDau;
+    DECLARE @NgayCuoi DATE = NULL;
+    DECLARE @MaxLoop INT  = 730;
+
+    WHILE @Dem < @SoBuoiThucTe AND @MaxLoop > 0
+    BEGIN
+        DECLARE @TenThu NVARCHAR(20) = DATENAME(WEEKDAY, @NgayCoi);
+			IF (@TenThu = 'Monday'   AND @T2=1)
+			OR (@TenThu = 'Tuesday'  AND @T3=1)
+			OR (@TenThu = 'Wednesday'AND @T4=1)
+			OR (@TenThu = 'Thursday' AND @T5=1)
+			OR (@TenThu = 'Friday'   AND @T6=1)
+			OR (@TenThu = 'Saturday' AND @T7=1)
+			OR (@TenThu = 'Sunday'   AND @CN=1)
+        BEGIN
+            IF dbo.FN_KiemTraPhongTrong(@MaPhong, @MaCa, @NgayCoi) = 1
+            BEGIN
+                INSERT INTO LICHOC (MALOP, NGAYHOC, MAPHONG, MACA)
+                VALUES (@MaLop, @NgayCoi, @MaPhong, @MaCa);
+                SET @Dem    = @Dem + 1;
+                SET @NgayCuoi = @NgayCoi;
+            END
+            ELSE
+                PRINT N'Phong bi trung ngay ' + CONVERT(NVARCHAR(10), @NgayCoi, 103);
+        END
+        SET @NgayCoi  = DATEADD(DAY, 1, @NgayCoi);
+        SET @MaxLoop  = @MaxLoop - 1;
+    END
+
+    UPDATE LOPHOC
+    SET NGAYKETTHUC = ISNULL(@NgayCuoi, @NgayBatDau)
+    WHERE MALOP = @MaLop;
+
+    PRINT N'Da tao lop ' + @MaLop + N' voi ' + CAST(@Dem AS VARCHAR) + N' buoi.';
+END
+
+
+
+
 -- ============================================================
 -- Hồng Vũ
 -- Procedure: Đăng ký học viên vào lớp (kiểm tra sĩ số tối đa, không trùng lịch)
