@@ -21,14 +21,14 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         public string FilterSearchQuery
         {
             get => _filterSearchQuery;
-            set { _filterSearchQuery = value; OnPropertyChanged(); }
+            set { _filterSearchQuery = value; OnPropertyChanged(); ExecuteFilter(); }
         }
 
         private string _filterTrangThai = "-- Tất cả --";
         public string FilterTrangThai
         {
             get => _filterTrangThai;
-            set { _filterTrangThai = value; OnPropertyChanged(); }
+            set { _filterTrangThai = value; OnPropertyChanged(); ExecuteFilter(); }
         }
 
         public Action OnRequestAddRegistration { get; set; }
@@ -185,6 +185,8 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 var result = MessageBox.Show("Bạn đang trong chế độ chỉnh sửa. Nếu làm mới, các thay đổi chưa lưu sẽ bị hủy. Bạn có muốn tiếp tục?", "Xác nhận làm mới", MessageBoxButton.YesNo, MessageBoxImage.Question);
                 if (result == MessageBoxResult.No) return;
             }
+            FilterSearchQuery = string.Empty;
+            FilterTrangThai = "-- Tất cả --";
             CancelEdits();
         }
 

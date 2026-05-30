@@ -32,7 +32,7 @@
                     <TextBlock Text="Loại khóa học" FontSize="13" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,0,0,8"/>
                     <Border Background="#F9FAFB" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1">
                         <ComboBox Height="42" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="10,0"
-                                  ItemsSource="{Binding ListLoaiKhoaHoc}" SelectedItem="{Binding FilterLoaiKH}" DisplayMemberPath="TENLOAI"/>
+                                  ItemsSource="{Binding ListLoaiKhoaHoc}" SelectedItem="{Binding FilterLoaiKH, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="TENLOAI"/>
                     </Border>
                 </StackPanel>
 
@@ -40,7 +40,7 @@
                 <StackPanel Width="150" Margin="0,0,20,0">
                     <TextBlock Text="Số buổi (tối đa)" FontSize="13" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,0,0,8"/>
                     <Border Background="#F9FAFB" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1">
-                        <TextBox Height="42" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="12,0" Text="{Binding FilterSoBuoi}"/>
+                        <TextBox Height="42" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="12,0" Text="{Binding FilterSoBuoi, UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </StackPanel>
 
@@ -48,7 +48,7 @@
                 <StackPanel Width="180" Margin="0,0,20,0">
                     <TextBlock Text="Học phí (tối đa)" FontSize="13" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,0,0,8"/>
                     <Border Background="#F9FAFB" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1">
-                        <TextBox Height="42" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="12,0" Text="{Binding FilterHocPhi}"/>
+                        <TextBox Height="42" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="12,0" Text="{Binding FilterHocPhi, UpdateSourceTrigger=PropertyChanged}"/>
                     </Border>
                 </StackPanel>
 

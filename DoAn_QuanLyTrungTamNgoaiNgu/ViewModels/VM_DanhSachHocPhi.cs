@@ -56,21 +56,21 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
         public LOAI_KHOAHOC FilterLoaiKH
         {
             get => _filterLoaiKH;
-            set { _filterLoaiKH = value; OnPropertyChanged(); }
+            set { _filterLoaiKH = value; OnPropertyChanged(); ExecuteFilter(); }
         }
 
         private string _filterSoBuoi;
         public string FilterSoBuoi
         {
             get => _filterSoBuoi;
-            set { _filterSoBuoi = value; OnPropertyChanged(); }
+            set { _filterSoBuoi = value; OnPropertyChanged(); ExecuteFilter(); }
         }
 
         private string _filterHocPhi;
         public string FilterHocPhi
         {
             get => _filterHocPhi;
-            set { _filterHocPhi = value; OnPropertyChanged(); }
+            set { _filterHocPhi = value; OnPropertyChanged(); ExecuteFilter(); }
         }
 
         public RelayCommand FilterCommand { get; set; }
