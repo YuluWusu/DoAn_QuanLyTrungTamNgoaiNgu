@@ -488,6 +488,7 @@ warning 6002: The table/view 'QL_TRUNGTAM_TIENGANH.dbo.VW_TaiKhoan_Quyen' does n
           <Parameter Name="T6" Type="bit" Mode="In" />
           <Parameter Name="T7" Type="bit" Mode="In" />
           <Parameter Name="CN" Type="bit" Mode="In" />
+          <Parameter Name="SoBuoi" Type="int" Mode="In" />
         </Function>
         <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -1157,6 +1158,7 @@ warning 6002: The table/view 'QL_TRUNGTAM_TIENGANH.dbo.VW_TaiKhoan_Quyen' does n
             <Parameter Name="T6" Mode="In" Type="Boolean" />
             <Parameter Name="T7" Mode="In" Type="Boolean" />
             <Parameter Name="CN" Mode="In" Type="Boolean" />
+            <Parameter Name="SoBuoi" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="sp_renamediagram">
             <Parameter Name="diagramname" Mode="In" Type="String" />

@@ -206,7 +206,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_KhoaMoTaiKhoan", tENDANGNHAPParameter, tRANGTHAIParameter);
         }
     
-        public virtual int SP_MoLopMoi(string maLop, string tenLop, string maKH, string maGV, Nullable<System.DateTime> ngayBatDau, string maPhong, string maCa, Nullable<bool> t2, Nullable<bool> t3, Nullable<bool> t4, Nullable<bool> t5, Nullable<bool> t6, Nullable<bool> t7, Nullable<bool> cN)
+        public virtual int SP_MoLopMoi(string maLop, string tenLop, string maKH, string maGV, Nullable<System.DateTime> ngayBatDau, string maPhong, string maCa, Nullable<bool> t2, Nullable<bool> t3, Nullable<bool> t4, Nullable<bool> t5, Nullable<bool> t6, Nullable<bool> t7, Nullable<bool> cN, Nullable<int> soBuoi)
         {
             var maLopParameter = maLop != null ?
                 new ObjectParameter("MaLop", maLop) :
@@ -264,7 +264,11 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Models
                 new ObjectParameter("CN", cN) :
                 new ObjectParameter("CN", typeof(bool));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_MoLopMoi", maLopParameter, tenLopParameter, maKHParameter, maGVParameter, ngayBatDauParameter, maPhongParameter, maCaParameter, t2Parameter, t3Parameter, t4Parameter, t5Parameter, t6Parameter, t7Parameter, cNParameter);
+            var soBuoiParameter = soBuoi.HasValue ?
+                new ObjectParameter("SoBuoi", soBuoi) :
+                new ObjectParameter("SoBuoi", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_MoLopMoi", maLopParameter, tenLopParameter, maKHParameter, maGVParameter, ngayBatDauParameter, maPhongParameter, maCaParameter, t2Parameter, t3Parameter, t4Parameter, t5Parameter, t6Parameter, t7Parameter, cNParameter, soBuoiParameter);
         }
     
         public virtual int sp_renamediagram(string diagramname, Nullable<int> owner_id, string new_diagramname)
