@@ -188,7 +188,11 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 {
                     var vmDangKyMoi = new VM_DangKyMoi();
                     
-                    vmDangKyMoi.RequestNavigateBack = () => NavigateTo(vmDangKy);
+                    vmDangKyMoi.RequestNavigateBack = () => 
+                    {
+                        vmDangKy.LoadData();
+                        NavigateTo(vmDangKy);
+                    };
                     NavigateTo(vmDangKyMoi);
                 };
         
