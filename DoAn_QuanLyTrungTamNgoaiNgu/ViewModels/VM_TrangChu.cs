@@ -177,7 +177,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 });
 
 
-            NavBaoCao = new RelayCommand<object>((p) => true, (p) => { MessageBox.Show("Tính năng Báo cáo thống kê đang được phát triển!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Information); });
+            NavBaoCao = new RelayCommand<object>((p) => true, (p) => { NavigateTo(new UC_BaoCaoTaiChinh(), "BaoCao"); });
 
             NavDangKyLop = new RelayCommand<object>((p) => true, (p) => 
             { 
@@ -301,6 +301,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 }
                 else if (vaiTro.Contains("Kế toán") || vaiTro.Contains("Ke toan"))
                 {
+                    MenuBaoCao = Visibility.Collapsed;
                     MenuHocVien = Visibility.Collapsed;
                     MenuLopHoc = Visibility.Collapsed;
                     MenuDangKy = Visibility.Collapsed;

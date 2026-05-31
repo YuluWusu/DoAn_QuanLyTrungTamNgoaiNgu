@@ -37,6 +37,8 @@
         <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__TAIKHOAN__MaNV__68487DD7" ManuallyRouted="false" />
         <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.TAIKHOAN_QUYEN" ManuallyRouted="false" />
         <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.VW_DanhSachDiemDanh" Width="1.5" PointX="8.375" PointY="12.75" />
+        <EntityTypeShape EntityType="QL_TRUNGTAM_TIENGANHModel.PHIEUCHI" Width="1.5" PointX="6" PointY="0.75" />
+        <AssociationConnector Association="QL_TRUNGTAM_TIENGANHModel.FK__PHIEUCHI__MANV_L__2A164134" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

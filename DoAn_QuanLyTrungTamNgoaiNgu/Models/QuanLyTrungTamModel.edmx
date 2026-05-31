@@ -113,6 +113,16 @@
           <Property Name="Email" Type="varchar" MaxLength="100" />
           <Property Name="NgayVaoLam" Type="date" />
         </EntityType>
+        <EntityType Name="PHIEUCHI">
+          <Key>
+            <PropertyRef Name="MAPC" />
+          </Key>
+          <Property Name="MAPC" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="NGAYCHI" Type="date" Nullable="false" />
+          <Property Name="SOTIEN" Type="money" Nullable="false" />
+          <Property Name="NOIDUNG" Type="nvarchar" MaxLength="255" />
+          <Property Name="MANV_LAP" Type="char" MaxLength="6" Nullable="false" />
+        </EntityType>
         <EntityType Name="PHIEUTHU">
           <Key>
             <PropertyRef Name="MAPHIEU" />
@@ -344,6 +354,18 @@ warning 6002: The table/view 'QL_TRUNGTAM_TIENGANH.dbo.VW_TaiKhoan_Quyen' does n
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK__PHIEUCHI__MANV_L__2A164134">
+          <End Role="NHANVIEN" Type="Self.NHANVIEN" Multiplicity="1" />
+          <End Role="PHIEUCHI" Type="Self.PHIEUCHI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NHANVIEN">
+              <PropertyRef Name="MaNV" />
+            </Principal>
+            <Dependent Role="PHIEUCHI">
+              <PropertyRef Name="MANV_LAP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK__PHIEUTHU__59FA5E80">
           <End Role="DANGKYLOP" Type="Self.DANGKYLOP" Multiplicity="1" />
           <End Role="PHIEUTHU" Type="Self.PHIEUTHU" Multiplicity="*" />
@@ -431,6 +453,10 @@ warning 6002: The table/view 'QL_TRUNGTAM_TIENGANH.dbo.VW_TaiKhoan_Quyen' does n
           <Parameter Name="owner_id" Type="int" Mode="In" />
           <Parameter Name="version" Type="int" Mode="In" />
           <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        </Function>
+        <Function Name="SP_BaoCaoTaiChinhThang" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Thang" Type="int" Mode="In" />
+          <Parameter Name="Nam" Type="int" Mode="In" />
         </Function>
         <Function Name="SP_CanhBaoVangNhieu" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="SP_CapNhatTrangThaiHocVien" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -541,6 +567,7 @@ warning 6002: The table/view 'QL_TRUNGTAM_TIENGANH.dbo.VW_TaiKhoan_Quyen' does n
           <EntitySet Name="LOAI_KHOAHOC" EntityType="Self.LOAI_KHOAHOC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LOPHOC" EntityType="Self.LOPHOC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="NHANVIEN" EntityType="Self.NHANVIEN" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PHIEUCHI" EntityType="Self.PHIEUCHI" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PHIEUTHU" EntityType="Self.PHIEUTHU" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PHONGHOC" EntityType="Self.PHONGHOC" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="QUYEN" EntityType="Self.QUYEN" Schema="dbo" store:Type="Tables" />
@@ -623,6 +650,10 @@ warning 6002: The table/view 'QL_TRUNGTAM_TIENGANH.dbo.VW_TaiKhoan_Quyen' does n
           <AssociationSet Name="FK__LOPHOC__MAKH__44FF419A" Association="Self.FK__LOPHOC__MAKH__44FF419A">
             <End Role="KHOA_HOC" EntitySet="KHOA_HOC" />
             <End Role="LOPHOC" EntitySet="LOPHOC" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PHIEUCHI__MANV_L__2A164134" Association="Self.FK__PHIEUCHI__MANV_L__2A164134">
+            <End Role="NHANVIEN" EntitySet="NHANVIEN" />
+            <End Role="PHIEUCHI" EntitySet="PHIEUCHI" />
           </AssociationSet>
           <AssociationSet Name="FK__PHIEUTHU__59FA5E80" Association="Self.FK__PHIEUTHU__59FA5E80">
             <End Role="DANGKYLOP" EntitySet="DANGKYLOP" />
@@ -776,6 +807,7 @@ warning 6002: The table/view 'QL_TRUNGTAM_TIENGANH.dbo.VW_TaiKhoan_Quyen' does n
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="NgayVaoLam" Type="DateTime" Precision="0" />
           <NavigationProperty Name="TAIKHOANs" Relationship="Self.FK__TAIKHOAN__MaNV__68487DD7" FromRole="NHANVIEN" ToRole="TAIKHOAN" />
+          <NavigationProperty Name="PHIEUCHIs" Relationship="QL_TRUNGTAM_TIENGANHModel.FK__PHIEUCHI__MANV_L__2A164134" FromRole="NHANVIEN" ToRole="PHIEUCHI" />
         </EntityType>
         <EntityType Name="PHIEUTHU">
           <Key>
@@ -1201,6 +1233,15 @@ warning 6002: The table/view 'QL_TRUNGTAM_TIENGANH.dbo.VW_TaiKhoan_Quyen' does n
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
           <EntitySet Name="VW_DanhSachDiemDanh" EntityType="QL_TRUNGTAM_TIENGANHModel.VW_DanhSachDiemDanh" />
+          <EntitySet Name="PHIEUCHIs" EntityType="QL_TRUNGTAM_TIENGANHModel.PHIEUCHI" />
+          <AssociationSet Name="FK__PHIEUCHI__MANV_L__2A164134" Association="QL_TRUNGTAM_TIENGANHModel.FK__PHIEUCHI__MANV_L__2A164134">
+            <End Role="NHANVIEN" EntitySet="NHANVIENs" />
+            <End Role="PHIEUCHI" EntitySet="PHIEUCHIs" />
+          </AssociationSet>
+          <FunctionImport Name="SP_BaoCaoTaiChinhThang" ReturnType="Collection(QL_TRUNGTAM_TIENGANHModel.SP_BaoCaoTaiChinhThang_Result)">
+            <Parameter Name="Thang" Mode="In" Type="Int32" />
+            <Parameter Name="Nam" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="SP_CanhBaoVangNhieu_Result">
           <Property Type="String" Name="TenLop" Nullable="true" MaxLength="50" />
@@ -1241,6 +1282,34 @@ warning 6002: The table/view 'QL_TRUNGTAM_TIENGANH.dbo.VW_TaiKhoan_Quyen' does n
           <Property Name="TRANGTHAI" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="GHICHU" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="PHIEUCHI">
+          <Key>
+            <PropertyRef Name="MAPC" />
+          </Key>
+          <Property Name="MAPC" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="NGAYCHI" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="SOTIEN" Type="Decimal" Nullable="false" Precision="19" Scale="4" />
+          <Property Name="NOIDUNG" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="MANV_LAP" Type="String" Nullable="false" MaxLength="6" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="NHANVIEN" Relationship="QL_TRUNGTAM_TIENGANHModel.FK__PHIEUCHI__MANV_L__2A164134" FromRole="PHIEUCHI" ToRole="NHANVIEN" />
+        </EntityType>
+        <Association Name="FK__PHIEUCHI__MANV_L__2A164134">
+          <End Type="QL_TRUNGTAM_TIENGANHModel.NHANVIEN" Role="NHANVIEN" Multiplicity="1" />
+          <End Type="QL_TRUNGTAM_TIENGANHModel.PHIEUCHI" Role="PHIEUCHI" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="NHANVIEN">
+              <PropertyRef Name="MaNV" />
+            </Principal>
+            <Dependent Role="PHIEUCHI">
+              <PropertyRef Name="MANV_LAP" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <ComplexType Name="SP_BaoCaoTaiChinhThang_Result">
+          <Property Type="Decimal" Name="TongThu" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="TongChi" Nullable="true" Precision="19" />
+          <Property Type="Decimal" Name="LoiNhuanRong" Nullable="true" Precision="19" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1529,6 +1598,26 @@ warning 6002: The table/view 'QL_TRUNGTAM_TIENGANH.dbo.VW_TaiKhoan_Quyen' does n
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="PHIEUCHIs">
+            <EntityTypeMapping TypeName="QL_TRUNGTAM_TIENGANHModel.PHIEUCHI">
+              <MappingFragment StoreEntitySet="PHIEUCHI">
+                <ScalarProperty Name="MANV_LAP" ColumnName="MANV_LAP" />
+                <ScalarProperty Name="NOIDUNG" ColumnName="NOIDUNG" />
+                <ScalarProperty Name="SOTIEN" ColumnName="SOTIEN" />
+                <ScalarProperty Name="NGAYCHI" ColumnName="NGAYCHI" />
+                <ScalarProperty Name="MAPC" ColumnName="MAPC" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_BaoCaoTaiChinhThang" FunctionName="QL_TRUNGTAM_TIENGANHModel.Store.SP_BaoCaoTaiChinhThang">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="QL_TRUNGTAM_TIENGANHModel.SP_BaoCaoTaiChinhThang_Result">
+                <ScalarProperty Name="TongThu" ColumnName="TongThu" />
+                <ScalarProperty Name="TongChi" ColumnName="TongChi" />
+                <ScalarProperty Name="LoiNhuanRong" ColumnName="LoiNhuanRong" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

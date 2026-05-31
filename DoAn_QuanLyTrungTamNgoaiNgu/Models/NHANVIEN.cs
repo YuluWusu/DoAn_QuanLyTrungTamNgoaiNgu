@@ -18,6 +18,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Models
         public NHANVIEN()
         {
             this.TAIKHOANs = new HashSet<TAIKHOAN>();
+            this.PHIEUCHIs = new HashSet<PHIEUCHI>();
         }
     
         public string MaNV { get; set; }
@@ -29,5 +30,7 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TAIKHOAN> TAIKHOANs { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PHIEUCHI> PHIEUCHIs { get; set; }
     }
 }

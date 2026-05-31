@@ -417,5 +417,18 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.Models
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
         }
+    
+        public virtual ObjectResult<SP_BaoCaoTaiChinhThang_Result> SP_BaoCaoTaiChinhThang1(Nullable<int> thang, Nullable<int> nam)
+        {
+            var thangParameter = thang.HasValue ?
+                new ObjectParameter("Thang", thang) :
+                new ObjectParameter("Thang", typeof(int));
+    
+            var namParameter = nam.HasValue ?
+                new ObjectParameter("Nam", nam) :
+                new ObjectParameter("Nam", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_BaoCaoTaiChinhThang_Result>("SP_BaoCaoTaiChinhThang", thangParameter, namParameter);
+        }
     }
 }
