@@ -83,7 +83,7 @@
 
         <!-- Tiêu đề -->
         <StackPanel Grid.Row="0" Margin="0,0,0,20">
-            <TextBlock Text="ĐĂNG KÝ HỌC VIÊN MỚI" FontSize="22" FontWeight="Bold" Foreground="#2D3748"/>
+            <TextBlock Text="ĐĂNG KÝ KHÓA HỌC MỚI" FontSize="22" FontWeight="Bold" Foreground="#2D3748"/>
             <TextBlock Text="Vui lòng nhập đầy đủ thông tin để ghi danh vào lớp học" Foreground="#718096"/>
         </StackPanel>
 
