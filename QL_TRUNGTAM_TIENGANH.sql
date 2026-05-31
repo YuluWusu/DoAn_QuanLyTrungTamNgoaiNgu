@@ -171,6 +171,18 @@ CREATE TABLE NHANVIEN
     NgayVaoLam DATE         CHECK (NgayVaoLam <= GETDATE())
 )
 GO
+
+CREATE TABLE PHIEUCHI
+(
+    MAPC       VARCHAR(10)  PRIMARY KEY,
+    NGAYCHI    DATE         NOT NULL,
+    SOTIEN     MONEY        NOT NULL CHECK (SOTIEN > 0),
+    NOIDUNG    NVARCHAR(255),
+    MANV_LAP   CHAR(6)      NOT NULL,
+    FOREIGN KEY (MANV_LAP) REFERENCES NHANVIEN(MaNV)
+)
+GO
+
 CREATE TABLE TAIKHOAN
 (
     MATK        CHAR(6)      PRIMARY KEY,
@@ -358,7 +370,15 @@ INSERT INTO NHANVIEN (MaNV, HoTen, ChucVu, SDT, Email, NgayVaoLam) VALUES
 ('NV0004', N'Nguyễn Hoàng Anh', N'Ke toan', '0902001004', 'hoanganh.nguyen@center.edu', '2020-09-01'),
 ('NV0005', N'Vũ Thị Hồng', N'Ke toan', '0902001005', 'hong.vu@center.edu', '2022-02-14');
 
--- 13. QUYEN
+-- 13. PHIEUCHI
+INSERT INTO PHIEUCHI (MAPC, NGAYCHI, SOTIEN, NOIDUNG, MANV_LAP) VALUES
+('PC00000001', '2024-01-10', 5000000, N'Thanh toán tiền điện nước tháng 1', 'NV0004'),
+('PC00000002', '2024-01-15', 15000000, N'Mua sắm thiết bị văn phòng và máy in', 'NV0005'),
+('PC00000003', '2024-02-05', 3500000, N'Chi phí in ấn tài liệu giáo trình', 'NV0004'),
+('PC00000004', '2024-02-28', 45000000, N'Thanh toán lương giáo viên tháng 2', 'NV0005'),
+('PC00000005', '2024-03-10', 5200000, N'Thanh toán tiền điện nước tháng 2', 'NV0004');
+
+-- 14. QUYEN
 INSERT INTO QUYEN (MAQUYEN, TENQUYEN, MOTA) VALUES
 ('Q0001', 'VIEW_STUDENT', N'Xem danh sách học viên'),
 ('Q0002', 'EDIT_STUDENT', N'Thêm/sửa/xóa học viên'),
@@ -373,7 +393,7 @@ INSERT INTO QUYEN (MAQUYEN, TENQUYEN, MOTA) VALUES
 ('Q0011', 'VIEW_REPORT', N'Xem báo cáo thống kê'),
 ('Q0012', 'MANAGE_USER', N'Quản lý tài khoản người dùng');
 
--- 14. TAIKHOAN (SỬA: đảm bảo không có NULL trùng)
+-- 15. TAIKHOAN (SỬA: đảm bảo không có NULL trùng)
 INSERT INTO TAIKHOAN (MATK, TENDANGNHAP, MATKHAU, MaNV, MaGV, TRANGTHAI, NGAYTAO) VALUES
 ('TK0001', 'admin', 'admin123', 'NV0001', NULL, 1, '2024-01-01 00:00:00'),
 ('TK0002', 'tam.tran', 'password123', 'NV0001', NULL, 1, '2024-01-01 00:00:00'),
@@ -386,7 +406,7 @@ INSERT INTO TAIKHOAN (MATK, TENDANGNHAP, MATKHAU, MaNV, MaGV, TRANGTHAI, NGAYTAO
 ('TK0009', 'camtu.le', 'gv123', NULL, 'GV0003', 1, '2024-01-01 00:00:00'),
 ('TK0010', 'quochung.pham', 'gv123', NULL, 'GV0004', 1, '2024-01-01 00:00:00');
 
--- 15. TAIKHOAN_QUYEN
+-- 16. TAIKHOAN_QUYEN
 INSERT INTO TAIKHOAN_QUYEN (MATK, MAQUYEN) VALUES
 ('TK0001', 'Q0001'), ('TK0001', 'Q0002'), ('TK0001', 'Q0003'), ('TK0001', 'Q0004'),
 ('TK0001', 'Q0005'), ('TK0001', 'Q0006'), ('TK0001', 'Q0007'), ('TK0001', 'Q0008'),
@@ -540,6 +560,7 @@ GO
 -- Procedure: Thống kê số lớp đang mở theo từng khóa học
 -- Function: Lấy học phí gốc của một khóa học
 -- View: Danh sách khóa học kèm số lớp + tổng học viên đang học
+-- Procedure: Báo cáo tài chính (bổ sung)
 -- ============================================================
 
 CREATE OR ALTER PROCEDURE SP_ThemKhoaHoc
@@ -636,6 +657,32 @@ LEFT JOIN DANGKYLOP DK     ON LH.MALOP    = DK.MALOP
 GROUP BY KH.MAKH, KH.TENKH, LK.TENLOAI, KH.SOBUOI, KH.HOCPHI_GD;
 GO
 
+-- ============================================================
+-- SP Bổ sung: Báo cáo tài chính
+-- ============================================================
+CREATE OR ALTER PROCEDURE SP_BaoCaoTaiChinhThang
+    @Thang INT,
+    @Nam   INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    DECLARE @TongThu MONEY = 0;
+    DECLARE @TongChi MONEY = 0;
+    DECLARE @LoiNhuan MONEY = 0;
+
+    SELECT @TongThu = ISNULL(SUM(SOTIEN), 0)
+    FROM PHIEUTHU
+    WHERE MONTH(NGAYTHU) = @Thang AND YEAR(NGAYTHU) = @Nam;
+
+    SELECT @TongChi = ISNULL(SUM(SOTIEN), 0)
+    FROM PHIEUCHI
+    WHERE MONTH(NGAYCHI) = @Thang AND YEAR(NGAYCHI) = @Nam;
+
+    SET @LoiNhuan = @TongThu - @TongChi;
+
+    SELECT @TongThu AS TongThu, @TongChi AS TongChi, @LoiNhuan AS LoiNhuanRong;
+END
+GO
 
 -- ============================================================
 -- Hương Duyên
@@ -1280,7 +1327,6 @@ GRANT SELECT ON GIAOVIEN TO role_quanly_phong_lop_ca;
 
 PRINT N'--> Đã cấp toàn quyền nhóm bảng Phòng - Lớp - Ca - Khóa học cho role_quanly_phong_lop_ca (Quân)';
 GO
-
 
 -- ---------------------------------------------------------------------------------
 -- 5.4. PHÂN QUYỀN CHO VŨ (role_quanly_dangky_thuphi_diemdanh):
