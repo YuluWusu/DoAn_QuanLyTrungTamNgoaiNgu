@@ -73,8 +73,8 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 LoadData();
                 FilterCommand = new RelayCommand(_ => ExecuteFilter());
                 AddCommand = new RelayCommand((p) => { OnRequestAddRegistration?.Invoke(); });
-                EditCommand = new RelayCommand(_ => ExecuteEdit());
-                DeleteCommand = new RelayCommand(_ => ExecuteDelete());
+                EditCommand = new RelayCommand(p => ExecuteEdit(p));
+                DeleteCommand = new RelayCommand(p => ExecuteDelete(p));
                 RefreshCommand = new RelayCommand(_ => ExecuteRefresh());
             }
             catch (Exception ex)
@@ -116,7 +116,9 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 {
                     string search = FilterSearchQuery.ToLower();
                     query = query.Where(x => x.MaHV.ToLower().Contains(search)
-                                          || x.MALOP.ToLower().Contains(search));
+                                          || x.MALOP.ToLower().Contains(search)
+                                          || x.HOCVIEN.HoTen.ToLower().Contains(search)
+                                          || x.LOPHOC.TENLOP.ToLower().Contains(search));
                 }
 
                 if (!string.IsNullOrEmpty(FilterTrangThai) && FilterTrangThai != "-- Tất cả --")
@@ -132,8 +134,13 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             }
         }
 
-        private void ExecuteEdit()
+        private void ExecuteEdit(object parameter = null)
         {
+            if (parameter is DANGKYLOP dk)
+            {
+                SelectedItem = dk;
+            }
+
             if (SelectedItem == null && !IsEditing)
             {
                 MessageBox.Show("Vui lòng chọn đăng ký cần sửa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -190,8 +197,13 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             CancelEdits();
         }
 
-        private void ExecuteDelete()
+        private void ExecuteDelete(object parameter = null)
         {
+            if (parameter is DANGKYLOP dk)
+            {
+                SelectedItem = dk;
+            }
+
             if (IsEditing) return; // Do not delete while editing
             if (SelectedItem == null)
             {
