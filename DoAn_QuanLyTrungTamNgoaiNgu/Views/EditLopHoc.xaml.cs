@@ -1,4 +1,4 @@
-﻿using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
+using DoAn_QuanLyTrungTamNgoaiNgu.Helpers;
 using DoAn_QuanLyTrungTamNgoaiNgu.Models;
 using System;
 using System.Data.SqlClient;

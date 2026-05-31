@@ -1,7 +1,7 @@
 <Window x:Class="DoAn_QuanLyTrungTamNgoaiNgu.Views.SuaLoaiKhoaHocWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Sửa Loại Khóa Học" Height="220" Width="420"
+        Title="Sửa Loại Khóa Học" Height="350" Width="420"
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
         x:Name="WindowSuaLoaiKH">
     <Grid Background="#F1F5F9" Margin="10">

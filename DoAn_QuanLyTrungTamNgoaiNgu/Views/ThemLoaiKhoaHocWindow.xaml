@@ -1,13 +1,8 @@
 <Window x:Class="DoAn_QuanLyTrungTamNgoaiNgu.Views.ThemLoaiKhoaHocWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="clr-namespace:DoAn_QuanLyTrungTamNgoaiNgu.ViewModels"
-        Title="Thêm Loại Khóa Học" Height="250" Width="400"
-        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        x:Name="WindowAddLoaiKh">
-    <Window.DataContext>
-        <vm:VM_ThemLoaiKhoaHoc/>
-    </Window.DataContext>
+        Title="Thêm Loại Khóa Học" Height="350" Width="420"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
     <Grid Background="#F1F5F9" Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -15,20 +10,30 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="THÊM LOẠI KHÓA HỌC" FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,10" Foreground="#1E293B"/>
+        <TextBlock Text="THÊM LOẠI KHÓA HỌC" FontSize="16" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,10" Foreground="#1E293B"/>
 
         <StackPanel Grid.Row="1" Margin="20,10">
-            <TextBlock Text="Tên Loại Khóa Học:" FontSize="13" Foreground="#64748B" Margin="0,0,0,5" FontWeight="SemiBold"/>
-            <TextBox Text="{Binding TenLoai, UpdateSourceTrigger=PropertyChanged}" Height="35" Padding="5,0" VerticalContentAlignment="Center" FontSize="14">
-                <TextBox.BorderBrush>
-                    <SolidColorBrush Color="#E2E8F0"/>
-                </TextBox.BorderBrush>
-            </TextBox>
+            <TextBlock Text="Mã Loại Khóa Học:" FontSize="13" Foreground="#64748B"
+                       Margin="0,0,0,5" FontWeight="SemiBold"/>
+            <TextBox x:Name="txtMaLoai" Height="38" Padding="10,0"
+                     VerticalContentAlignment="Center" FontSize="14"
+                     BorderBrush="#E2E8F0" Margin="0,0,0,12"/>
+                     
+            <TextBlock Text="Tên Loại Khóa Học:" FontSize="13" Foreground="#64748B"
+                       Margin="0,0,0,5" FontWeight="SemiBold"/>
+            <TextBox x:Name="txtTenLoai" Height="38" Padding="10,0"
+                     VerticalContentAlignment="Center" FontSize="14"
+                     BorderBrush="#E2E8F0"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="20,10,20,20">
-            <Button Content="Hủy" Command="{Binding CancelCommand}" CommandParameter="{Binding ElementName=WindowAddLoaiKh}" Width="80" Height="35" Background="White" Foreground="#64748B" Margin="0,0,10,0"/>
-            <Button Content="Lưu" Command="{Binding SaveCommand}" CommandParameter="{Binding ElementName=WindowAddLoaiKh}" Width="100" Height="35" Background="#4F46E5" Foreground="White" FontWeight="Bold"/>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right"
+                    Margin="20,10,20,20">
+            <Button Content="Hủy" Click="btnHuy_Click"
+                    Width="80" Height="36" Background="White"
+                    Foreground="#64748B" Margin="0,0,10,0"/>
+            <Button Content="Lưu thông tin" Click="btnLuu_Click"
+                    Width="130" Height="36" Background="#1E6FB5" Foreground="White" FontWeight="Bold"/>
         </StackPanel>
     </Grid>
 </Window>

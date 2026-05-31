@@ -298,7 +298,7 @@
                                    Foreground="{StaticResource TextMuted}"
                                    Margin="28,16,0,8" FontWeight="SemiBold"/>
 
-                        <Button Content="📊  Báo cáo"
+                        <Button Content="📊  Báo cáo Tài chính"
                                 Visibility="{Binding MenuBaoCao}"
                                 Command="{Binding NavBaoCao}"
                                 CommandParameter="BaoCao">

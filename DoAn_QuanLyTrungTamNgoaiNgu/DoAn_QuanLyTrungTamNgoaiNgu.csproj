@@ -134,6 +134,13 @@
     <Compile Include="Models\PHIEUTHU.cs">
       <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PHIEUCHI.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SP_BaoCaoTaiChinhThang_Result.cs">
+      <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\QL_TRUNGTAM_TIENGANH_Extension.cs" />
     <Compile Include="Models\PHONGHOC.cs">
       <DependentUpon>QuanLyTrungTamModel.tt</DependentUpon>
     </Compile>
@@ -199,6 +206,7 @@
     <Compile Include="ViewModels\VM_TrangChu.cs" />
     <Compile Include="ViewModels\VM_LoaiKhoaHoc.cs" />
     <Compile Include="ViewModels\VM_PhongHoc.cs" />
+    <Compile Include="ViewModels\VM_BaoCaoTaiChinh.cs" />
     <Compile Include="ViewModels\VM_DanhSachDiemDanh.Extended.cs" />
     <Compile Include="Views\DangNhap.xaml.cs">
       <DependentUpon>DangNhap.xaml</DependentUpon>
@@ -241,6 +249,18 @@
     </Compile>
     <Compile Include="Views\UC_LoaiKhoaHoc.xaml.cs">
       <DependentUpon>UC_LoaiKhoaHoc.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\UC_BaoCaoTaiChinh.xaml.cs">
+      <DependentUpon>UC_BaoCaoTaiChinh.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ThemPhieuChiWindow.xaml.cs">
+      <DependentUpon>ThemPhieuChiWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ThemLoaiKhoaHocWindow.xaml.cs">
+      <DependentUpon>ThemLoaiKhoaHocWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ThemPhongHocWindow.xaml.cs">
+      <DependentUpon>ThemPhongHocWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\UC_PhongHoc.xaml.cs">
       <DependentUpon>UC_PhongHoc.xaml</DependentUpon>
@@ -358,6 +378,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\UC_BaoCaoTaiChinh.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ThemPhieuChiWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+
     <Page Include="Views\UC_PhongHoc.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
