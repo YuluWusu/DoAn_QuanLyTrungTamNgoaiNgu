@@ -12,7 +12,6 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <!-- 1. Tiêu đề -->
@@ -22,55 +21,64 @@
         </StackPanel>
 
         <!-- 2. Bộ lọc -->
-        <Border Grid.Row="1" Background="White" CornerRadius="12" Padding="20,20" Margin="0,0,0,20" >
+        <Border Grid.Row="1" Background="White" CornerRadius="12" Padding="20" Margin="0,0,0,20">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" ShadowDepth="1" Color="#000000" Opacity="0.05"/>
             </Border.Effect>
-            <StackPanel Orientation="Horizontal">
-                <!-- Lọc Loại Khóa Học -->
-                <StackPanel Width="220" Margin="0,0,20,0">
-                    <TextBlock Text="Loại khóa học" FontSize="13" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,0,0,8"/>
-                    <Border Background="#F9FAFB" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1">
-                        <ComboBox Height="42" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="10,0"
-                                  ItemsSource="{Binding ListLoaiKhoaHoc}" SelectedItem="{Binding FilterLoaiKH, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="TENLOAI"/>
-                    </Border>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <!-- Lọc Loại Khóa Học -->
+                    <StackPanel Width="200" Margin="0,0,15,0">
+                        <TextBlock Text="Loại khóa học" FontSize="13" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,0,0,8"/>
+                        <Border Background="#F9FAFB" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1">
+                            <ComboBox Height="40" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="10,0"
+                                      ItemsSource="{Binding ListLoaiKhoaHoc}" SelectedItem="{Binding FilterLoaiKH, UpdateSourceTrigger=PropertyChanged}" DisplayMemberPath="TENLOAI"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Lọc Số Buổi -->
+                    <StackPanel Width="120" Margin="0,0,15,0">
+                        <TextBlock Text="Số buổi (tối đa)" FontSize="13" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,0,0,8"/>
+                        <Border Background="#F9FAFB" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1">
+                            <TextBox Height="40" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="12,0" Text="{Binding FilterSoBuoi, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Border>
+                    </StackPanel>
+
+                    <!-- Lọc Học Phí -->
+                    <StackPanel Width="150" Margin="0,0,15,0">
+                        <TextBlock Text="Học phí (tối đa)" FontSize="13" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,0,0,8"/>
+                        <Border Background="#F9FAFB" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1">
+                            <TextBox Height="40" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="12,0" Text="{Binding FilterHocPhi, UpdateSourceTrigger=PropertyChanged}"/>
+                        </Border>
+                    </StackPanel>
+
+                    <Button Content="Xóa bộ lọc" Width="100" Height="40" Margin="0,25,0,0" 
+                            Background="#3182CE" Foreground="White" FontWeight="Bold" BorderThickness="0" Command="{Binding ClearFilterCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="8"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
                 </StackPanel>
 
-                <!-- Lọc Số Buổi -->
-                <StackPanel Width="150" Margin="0,0,20,0">
-                    <TextBlock Text="Số buổi (tối đa)" FontSize="13" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,0,0,8"/>
-                    <Border Background="#F9FAFB" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1">
-                        <TextBox Height="42" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="12,0" Text="{Binding FilterSoBuoi, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </StackPanel>
-
-                <!-- Lọc Học Phí -->
-                <StackPanel Width="180" Margin="0,0,20,0">
-                    <TextBlock Text="Học phí (tối đa)" FontSize="13" FontWeight="SemiBold" Foreground="#4A5568" Margin="0,0,0,8"/>
-                    <Border Background="#F9FAFB" CornerRadius="8" BorderBrush="#E5E7EB" BorderThickness="1">
-                        <TextBox Height="42" Background="Transparent" BorderThickness="0" VerticalContentAlignment="Center" Padding="12,0" Text="{Binding FilterHocPhi, UpdateSourceTrigger=PropertyChanged}"/>
-                    </Border>
-                </StackPanel>
-
-                <Button Content="Lọc Dữ Liệu" Width="120" Height="42" Margin="0,25,10,0" 
-                        Background="#2D3748" Foreground="White" FontWeight="Bold" BorderThickness="0" Command="{Binding FilterCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}">
+                <Button Grid.Column="1" Command="{Binding AddCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}" Content="+ THÊM KHÓA HỌC" Width="160" Height="40" Margin="0,25,0,0" 
+                        Background="#1E6FB5" Foreground="White" FontWeight="Bold" BorderThickness="0" VerticalAlignment="Center">
                     <Button.Resources>
                         <Style TargetType="Border">
                             <Setter Property="CornerRadius" Value="8"/>
                         </Style>
                     </Button.Resources>
+                    <Button.Effect>
+                        <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.2" Color="#1E6FB5"/>
+                    </Button.Effect>
                 </Button>
-
-                <Button Content="Xóa bộ lọc" Width="120" Height="42" Margin="0,25,10,0" 
-                        Background="Transparent" BorderBrush="#2D3748" BorderThickness="1" Foreground="#2D3748" FontWeight="Bold" Command="{Binding ClearFilterCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="8"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
-
-            </StackPanel>
+            </Grid>
         </Border>
  
          <!-- 3. DataGrid Khóa Học (Đã chỉnh sửa giống file UC_HocVien) -->
@@ -148,42 +156,28 @@
                              </DataTemplate>
                          </DataGridTemplateColumn.CellEditingTemplate>
                      </DataGridTemplateColumn>
+
+                     <DataGridTemplateColumn Header="THAO TÁC" Width="120">
+                          <DataGridTemplateColumn.CellTemplate>
+                              <DataTemplate>
+                                  <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                      <Button Content="✏️" ToolTip="Sửa" 
+                                      Background="Transparent" BorderThickness="0" Margin="0,0,15,0" 
+                                      FontSize="16" Cursor="Hand"
+                                      Command="{Binding DataContext.EditCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      CommandParameter="{Binding}"/>
+
+                                      <Button Content="🗑️" ToolTip="Xóa" 
+                                      Background="Transparent" BorderThickness="0" 
+                                      FontSize="16" Cursor="Hand"
+                                      Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                      CommandParameter="{Binding}"/>
+                                  </StackPanel>
+                              </DataTemplate>
+                          </DataGridTemplateColumn.CellTemplate>
+                      </DataGridTemplateColumn>
                  </DataGrid.Columns>
              </DataGrid>
          </Border>
- 
-         <!-- 4. Nút Thao tác -->
-         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
-             <Button Content="Xóa" Width="100" Height="42" Background="Transparent" Foreground="#E53E3E" 
-                     BorderBrush="#FED7D7" BorderThickness="1" Margin="0,0,10,0" FontWeight="SemiBold" Command="{Binding DeleteCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}">
-                 <Button.Resources>
-                     <Style TargetType="Border">
-                         <Setter Property="CornerRadius" Value="8"/>
-                     </Style>
-                 </Button.Resources>
-             </Button>
- 
-             <Button Content="{Binding EditButtonText}" Width="120" Height="42" Background="White" Foreground="#D69E2E" 
-                     BorderBrush="#FEFCBF" BorderThickness="1" Margin="0,0,20,0" FontWeight="SemiBold" Command="{Binding EditCommand}">
-                 <Button.Resources>
-                     <Style TargetType="Border">
-                         <Setter Property="CornerRadius" Value="8"/>
-                     </Style>
-                 </Button.Resources>
-             </Button>
- 
-             <!-- Nút gọi Emit sang màn hình thêm -->
-             <Button Command="{Binding AddCommand}" IsEnabled="{Binding IsOtherButtonsEnabled}" Content="+ THÊM KHÓA HỌC" Width="160" Height="42" 
-                     Background="#1E6FB5" Foreground="White" FontWeight="Bold" BorderThickness="0">
-                <Button.Resources>
-                    <Style TargetType="Border">
-                        <Setter Property="CornerRadius" Value="8"/>
-                    </Style>
-                </Button.Resources>
-                <Button.Effect>
-                    <DropShadowEffect BlurRadius="8" ShadowDepth="2" Opacity="0.2" Color="#1E6FB5"/>
-                </Button.Effect>
-            </Button>
-        </StackPanel>
     </Grid>
 </UserControl>

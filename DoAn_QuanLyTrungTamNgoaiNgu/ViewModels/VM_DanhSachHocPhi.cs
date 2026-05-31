@@ -94,8 +94,8 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
                 OnRequestAddKhoaHoc?.Invoke();
             });
 
-            EditCommand = new RelayCommand(p => ExecuteEdit());
-            DeleteCommand = new RelayCommand(p => ExecuteDelete());
+            EditCommand = new RelayCommand(p => ExecuteEdit(p));
+            DeleteCommand = new RelayCommand(p => ExecuteDelete(p));
             ClearFilterCommand = new RelayCommand(p => ExecuteClearFilter());
             RefreshCommand = new RelayCommand(p => ExecuteRefresh());
         }
@@ -143,14 +143,19 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             CancelEdits();
         }
 
-        private void ExecuteEdit()
+        private void ExecuteEdit(object p = null)
         {
+            if (p is KHOA_HOC kh)
+            {
+                SelectedKhoaHoc = kh;
+            }
+
             if (SelectedKhoaHoc == null && !IsEditing)
             {
                 MessageBox.Show("Vui lòng chọn khóa học cần sửa!", "Thông báo", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
-
+ 
             if (!IsEditing)
             {
                 IsEditing = true;
@@ -193,8 +198,13 @@ namespace DoAn_QuanLyTrungTamNgoaiNgu.ViewModels
             LoadData();
         }
 
-        private void ExecuteDelete()
+        private void ExecuteDelete(object p = null)
         {
+            if (p is KHOA_HOC kh)
+            {
+                SelectedKhoaHoc = kh;
+            }
+
             if (IsEditing) return;
             if (SelectedKhoaHoc == null)
             {
